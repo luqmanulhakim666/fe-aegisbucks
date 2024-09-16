@@ -24,8 +24,8 @@
       <general-form-text-field
         required
         v-model.trim="form.password"
-        label="Kata Sandi"
-        placeholder="Generate Kata Sandi"
+        label="Password"
+        placeholder="Password"
         appendButton
         appendName="Generate"
         outlined
@@ -77,9 +77,6 @@ export default {
   }),
 
   computed: {
-    passwordRule() {
-      return this.form?.password?.length >= 8 || "Password min 8 characters";
-    },
     confirmPasswordRule() {
       return (
         this.confirm_password === this.form.password || "Password not match"
