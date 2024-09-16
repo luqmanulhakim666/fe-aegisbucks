@@ -73,11 +73,11 @@
     />
   </div>
 </template>
-
 <script>
+import utils from "@/mixins/utils";
 import rules from "@/mixins/rules";
 export default {
-  mixins: [rules],
+  mixins: [rules, utils],
   props: {
     form: Object,
   },

@@ -29,7 +29,9 @@
 </template>
 
 <script>
+import rules from "@/mixins/rules";
 export default {
+  mixins: [rules],
   middleware: "unauthenticated",
   layout: "empty",
   data: () => ({
@@ -62,9 +64,11 @@ export default {
 
   methods: {
     async onSubmit() {
-      await this.$refs.form.validate();
-      this.state.isLoading = true;
-      await this.$store.dispatch("auth/login", this.form);
+      const valid = await this.$refs.form.validate();
+      if (valid) {
+        this.state.isLoading = true;
+        await this.$store.dispatch("auth/login", this.form);
+      }
       this.state.isLoading = false;
     },
 

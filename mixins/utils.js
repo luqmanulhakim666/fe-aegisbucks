@@ -26,14 +26,6 @@ export default {
   },
 
   methods: {
-    async validate(isValid) {
-      await this.$refs.form.validate();
-      if (!isValid) {
-        this.$vuetify.goTo(`.v-messages__message`, { offset: 100 });
-        return false;
-      }
-      return true;
-    },
     onDigits(event) {
       let keyCode = event.keyCode;
       if (keyCode < 48 || keyCode > 57) {

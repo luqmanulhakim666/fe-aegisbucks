@@ -76,8 +76,9 @@
 
 <script>
 import rules from "@/mixins/rules";
+import utils from "@/mixins/utils";
 export default {
-  mixins: [rules],
+  mixins: [rules, utils],
   props: {
     form: Object,
   },

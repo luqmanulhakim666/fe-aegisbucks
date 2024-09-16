@@ -54,8 +54,10 @@
 <script>
 import { SORT } from "@/data/general";
 import debounce from "lodash/debounce";
+import screen from "@/mixins/screen";
 
 export default {
+  mixins: [screen],
   props: {
     body: Object,
     label: String,
