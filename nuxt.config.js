@@ -28,15 +28,6 @@ module.exports = {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    // { src: "@/plugins/mixins/alert", ssr: false },
-    { src: "@/plugins/mixins", ssr: true },
-    // { src: "@/plugins/mixins/media", ssr: false },
-    // { src: "@/plugins/mixins/meta", ssr: false },
-    // { src: "@/plugins/mixins/pipe", ssr: false },
-    // { src: "@/plugins/mixins/routes", ssr: false },
-    // { src: "@/plugins/mixins/rules", ssr: false },
-    // { src: "@/plugins/mixins/screen", ssr: false },
-    // { src: "@/plugins/mixins/utils", ssr: false },
     "@/plugins/api",
     "@/plugins/axios",
     {
@@ -147,7 +138,6 @@ module.exports = {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: ["mixins"],
     extend(config, ctx) {
       if (ctx.dev && ctx.isClient) {
         config.module.rules.push({

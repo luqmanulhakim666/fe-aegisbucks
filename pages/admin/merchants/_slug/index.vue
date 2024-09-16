@@ -42,7 +42,9 @@
 </template>
 
 <script>
+import rules from "@/mixins/rules";
 export default {
+  mixins: [rules],
   middleware: ["authenticated", "authorized"],
   meta: {
     page: "admin",
