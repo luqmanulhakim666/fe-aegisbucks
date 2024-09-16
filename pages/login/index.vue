@@ -39,8 +39,8 @@ export default {
       image: "path/to/image.jpg",
     },
     form: {
-      email: "admin@letsbuyasia.id",
-      password: "@Admin12345",
+      email: "",
+      password: "",
     },
     state: {
       isValid: true,
