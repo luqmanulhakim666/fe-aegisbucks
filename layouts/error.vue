@@ -1,45 +1,75 @@
 <template>
   <v-app dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
-    <NuxtLink to="/">
-      Home page
-    </NuxtLink>
+    <div class="error_page background-gradient-1">
+      <div class="error_page__content">
+        <div class="d-flex mx-auto">
+          <general-logo-lpdb :max_width="200" class="mr-2" />
+          <general-logo-ridi :max_width="100" class="ml-2" />
+        </div>
+        <h4 class="h4--default text-center secondary--text mt-8 mb-4">
+          {{ message }}
+        </h4>
+
+        <v-btn
+          @click="goBack()"
+          block
+          class="primary-create-btn h4--default"
+          depressed
+          >Kembali</v-btn
+        >
+      </div>
+    </div>
+    <snackbar />
   </v-app>
 </template>
 
 <script>
 export default {
-  name: 'EmptyLayout',
-  layout: 'empty',
+  layout: "empty",
   props: {
     error: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
+  data() {
     return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
-    }
+      pageNotFound: "404 Not Found",
+      otherError: "An error occurred",
+    };
   },
-  head () {
+  head() {
     const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+      this.error.statusCode === 404 ? this.pageNotFound : this.otherError;
     return {
-      title
-    }
-  }
-}
+      title,
+    };
+  },
+  computed: {
+    message() {
+      let pageNotFound = this.error.statusCode === 404;
+      return pageNotFound ? "Halaman Tidak Ditemukan" : "An Error Occured";
+    },
+  },
+
+  methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
+  },
+};
 </script>
 
-<style scoped>
-h1 {
-  font-size: 20px;
+<style lang="scss" scoped>
+.error_page {
+  height: 100vh;
+  overflow: hidden;
+  &__content {
+    position: fixed;
+    text-align: center;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
 }
 </style>
