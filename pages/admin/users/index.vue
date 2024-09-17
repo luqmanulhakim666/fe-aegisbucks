@@ -91,6 +91,7 @@
 
 <script>
 import meta from "@/mixins/meta";
+import routes from "@/mixins/routes";
 import { ROLES } from "@/data/general";
 
 export default {
@@ -99,7 +100,7 @@ export default {
     page: "admin",
   },
 
-  mixins: [meta],
+  mixins: [meta, routes],
   data: () => ({
     meta: {
       title: "Users",
