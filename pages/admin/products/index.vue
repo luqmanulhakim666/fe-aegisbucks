@@ -79,9 +79,10 @@
 
 <script>
 import media from "@/mixins/media";
+import routes from "@/mixins/routes";
 
 export default {
-  mixins: [media],
+  mixins: [media, routes],
   middleware: ["authenticated", "authorized"],
   meta: {
     page: "admin",
@@ -103,7 +104,6 @@ export default {
       selectedId: null,
     },
     items: [],
-
     headers: [
       {
         text: "No",

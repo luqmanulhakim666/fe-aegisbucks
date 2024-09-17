@@ -72,7 +72,9 @@
 </template>
 
 <script>
+import routes from "@/mixins/routes";
 export default {
+  mixins: [routes],
   middleware: ["authenticated", "authorized"],
   meta: {
     page: "admin",

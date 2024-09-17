@@ -3,9 +3,7 @@
     <general-table-header
       label="Brand"
       actionCreate="/admin/partners/create"
-      :filterCandidate="filters.filterCandidate"
       @on:sort="onSort"
-      @on:filterCandidate="onFilterCandidate"
       @on:search="onSearch"
     />
 
@@ -78,10 +76,9 @@
 
 <script>
 import media from "@/mixins/media";
-import debounce from "lodash/debounce";
-
+import routes from "@/mixins/routes";
 export default {
-  mixins: [media],
+  mixins: [media, routes],
   middleware: ["authenticated", "authorized"],
   meta: {
     page: "admin",
@@ -103,13 +100,6 @@ export default {
       selectedId: null,
     },
     items: [],
-    filters: {
-      filterCandidate: [
-        { key: "", name: "Semua" },
-        { key: "incubator", name: "Inkubator" },
-        { key: "tenant", name: "Tenant" },
-      ],
-    },
     headers: [
       {
         text: "No",
