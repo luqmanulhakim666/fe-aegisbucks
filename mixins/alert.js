@@ -14,8 +14,8 @@ export default {
 
     setFailedAlert(res) {
       this.$store.dispatch("snack", [
-        res.error.message,
-        "error",
+        res.error?.message || res.message,
+        "error lighten-2",
         "mdi-close-circle",
       ]);
     },

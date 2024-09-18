@@ -28,7 +28,11 @@ export const SUPER_ADMIN = [
         icon: "mdi-bullhorn",
         path: "/admin/campaigns",
       },
-      { text: "Template", icon: "mdi-hammer-screwdriver", path: "/templates" },
+      {
+        text: "Template",
+        icon: "mdi-hammer-screwdriver",
+        path: "/admin/templates",
+      },
     ],
   },
   {

@@ -40,15 +40,19 @@
           <v-list>
             <v-list-item @click="onEdit(item.id)">
               <v-list-item-title class="d-flex align-center">
-                <v-icon size="16" class="mr-3 dark--text"> mdi-pencil </v-icon>
-                <span class="text--small">Ubah </span>
+                <v-icon size="16" class="mr-3 primary--text">
+                  mdi-pencil
+                </v-icon>
+                <span class="h8--supersmall primary--text h8--supersmall"
+                  >Ubah
+                </span>
               </v-list-item-title>
             </v-list-item>
 
             <v-list-item @click="handleDialogDelete(item.id)">
               <v-list-item-title class="d-flex align-center">
-                <v-icon size="16" class="mr-3 dark--text"> mdi-delete </v-icon>
-                <span class="text--small dark--text">Hapus</span>
+                <v-icon size="16" class="mr-3 error--text"> mdi-delete </v-icon>
+                <span class="h8--supersmall error--text">Hapus</span>
               </v-list-item-title>
             </v-list-item>
           </v-list>

@@ -12,8 +12,7 @@ export default {
       email: (v) => /.+@.+/.test(v) || "E-mail tidak valid",
       number: (v) => /^[0-9]*$/.test(v) || "Hanya menerima input angka",
       passwordRule: (v) =>
-        (/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&])/.test(v) && v.length >= 8) ||
-        "*Your password must contain at least one lowercase, uppercase, special character (@$!%*#?&) & must be at least  8 characters.",
+        v.length >= 8 || "*Your password must be at least  8 characters.",
     };
   },
 

@@ -21,18 +21,29 @@
     />
 
     <template v-if="isCreated">
-      <general-form-text-field
-        required
-        v-model.trim="form.password"
-        label="Password"
-        placeholder="Password"
-        appendButton
-        appendName="Generate"
-        outlined
-        bold
-        :rules="[required, passwordRule]"
-        @on:append-click="onGeneratePassword"
-      />
+      <div class="d-flex align-center">
+        <general-form-text-field
+          class="full-width"
+          outlined
+          v-model.trim="form.password"
+          bold
+          label="Password"
+          required
+          placeholder="Password"
+          :rules="[required, passwordRule]"
+          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="showPassword ? 'text' : 'password'"
+          @click:append="showPassword = !showPassword"
+        />
+
+        <v-btn
+          @click="onGeneratePassword()"
+          class="primary h7--xxsmall text-capitalize ml-4"
+          depressed
+        >
+          Generate
+        </v-btn>
+      </div>
 
       <!-- <general-form-text-field
         v-model="confirm_password"
@@ -69,9 +80,7 @@ export default {
   },
 
   data: () => ({
-    state: {
-      showUpload: false,
-    },
+    showPassword: false,
     confirm_password: "",
     password_generate: "",
   }),
@@ -96,7 +105,7 @@ export default {
         password += charset[randomIndex];
       }
 
-      this.form.password = "@" + password;
+      this.form.password = password;
       return;
     },
   },
