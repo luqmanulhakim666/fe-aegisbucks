@@ -7,7 +7,7 @@
     >
       <v-btn link to="/login" icon><v-icon>mdi-arrow-left</v-icon></v-btn>
       <general-logo class="d-flex mx-auto mb-4" :max_width="80" />
-      <h4 class="h4--default mb-6 text-center">Forgor Password</h4>
+      <h4 class="h4--default mb-6 text-center">Forgot Password</h4>
 
       <v-form v-model="state.isValid" ref="form">
         <general-form-text-field
