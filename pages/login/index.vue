@@ -9,12 +9,11 @@
       <v-form v-model="state.isValid" ref="form">
         <form-auth-login :form="form" @on:submit="onSubmit()" />
       </v-form>
-      <!-- <div class="d-flex justify-end mt-4">
-              <nuxt-link to="/auth/forgot-password" class="text--default"
-                >Lupa Kata Sandi?</nuxt-link
-              >
-            </div> -->
-      <!-- :disabled="!state.isValid" -->
+      <div class="d-flex justify-end mb-4">
+        <nuxt-link to="/auth/forgot-password" class="text--default"
+          >Forgot Password?</nuxt-link
+        >
+      </div>
       <v-btn
         :loading="state.isLoading"
         class="text-capitalize mt-6 primary"
@@ -35,31 +34,18 @@ export default {
   middleware: "unauthenticated",
   layout: "empty",
   data: () => ({
-    meta: {
-      title: "Masuk",
-      description: "Page description goes here",
-      image: "path/to/image.jpg",
-    },
     form: {
       email: "",
       password: "",
     },
+    // form: {
+    //   email: "admin@letsbuyasia.id",
+    //   password: "@Admin12345",
+    // },
     state: {
       isValid: true,
       isLoading: false,
     },
-    register_menu: [
-      {
-        text: "Daftar Sebagai Inkubator",
-        icon: "mdi-account-circle",
-        path: "/register/inkubator",
-      },
-      {
-        text: "Daftar Sebagai Tenant",
-        icon: "mdi-account-circle",
-        path: "/register/tenant",
-      },
-    ],
   }),
 
   methods: {
@@ -70,10 +56,6 @@ export default {
         await this.$store.dispatch("auth/login", this.form);
       }
       this.state.isLoading = false;
-    },
-
-    onRedirect(val) {
-      this.$router.push(val);
     },
   },
 };

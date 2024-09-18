@@ -3,7 +3,7 @@
     <general-form-text-field
       outlined
       v-model="form.email"
-      prepend-inner-icon="mdi-account"
+      prepend-inner-icon="mdi-email-outline"
       placeholder="Email"
       :rules="[required, email]"
       @keypress.enter="onEmitSubmit()"

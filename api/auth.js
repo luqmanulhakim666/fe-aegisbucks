@@ -18,37 +18,15 @@ export default (ctx) => {
     },
 
     async forgotPassword(email) {
-      return await $axios.get(`${url}/password/forgot/${email}`);
+      return await $axios.post("/auth/password/forgot", email);
     },
 
     async resetPassword(body) {
-      return await $axios.post(`${url}/password/reset`, body);
+      return await $axios.put("/auth/password/reset", body);
     },
 
     async changePassword(body) {
       return await $axios.post(`${url}/password/change`, body);
-    },
-
-    updateProfile: {
-      async admin(body) {
-        return await $axios.put("/admin", body);
-      },
-      async incubator(body) {
-        return await $axios.put("/incubator", body);
-      },
-      async tenant(body) {
-        return await $axios.put("/tenant", body);
-      },
-    },
-
-    register: {
-      async incubator(body) {
-        return await $axios.post(`${url}/register/incubator`, body);
-      },
-
-      async tenant(body) {
-        return await $axios.post(`${url}/register/tenant`, body);
-      },
     },
   };
 };

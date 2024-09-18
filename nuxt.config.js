@@ -30,6 +30,7 @@ module.exports = {
   plugins: [
     "@/plugins/api",
     "@/plugins/axios",
+    "@/plugins/mixins",
     {
       src: "@plugins/nuxt-quill-plugin",
       ssr: false,
