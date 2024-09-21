@@ -7,9 +7,38 @@
       :accept="acceptFile"
       @change="onFilePicked"
     />
-    <p v-if="label" class="h6--xsmall dark--text mb-2">
-      {{ label }}
-    </p>
+    <div class="d-flex align-center mb-2">
+      <p
+        class="text-capitalize label-text"
+        v-if="label"
+        v-bind:class="{
+          'h6--xsmall': bold,
+          'text--default': !bold,
+        }"
+      >
+        {{ label }}
+      </p>
+      <p
+        class="text-capitalize label-text ml-1 error--text"
+        v-if="required"
+        v-bind:class="{
+          'h6--xsmall': bold,
+          'text--default': !bold,
+        }"
+      >
+        *
+      </p>
+      <p
+        class="text-capitalize label-text ml-1 info--text text--lighten-2"
+        v-if="optional"
+        v-bind:class="{
+          'h6--xsmall': bold,
+          'text--default': !bold,
+        }"
+      >
+        (Opsional)
+      </p>
+    </div>
 
     <div
       v-if="getMediaName()"
@@ -54,14 +83,26 @@
 </template>
 
 <script>
-import media from '@/mixins/media'
-import alert from '@/mixins/alert'
+import media from "@/mixins/media";
+import alert from "@/mixins/alert";
 export default {
   mixins: [media, alert],
   props: {
     removeAble: {
       type: Boolean,
-      default: true
+      default: true,
+    },
+    required: {
+      type: Boolean,
+      default: () => false,
+    },
+    optional: {
+      type: Boolean,
+      default: () => false,
+    },
+    bold: {
+      type: Boolean,
+      default: () => false,
     },
     form: Object,
     mediaId: [String, Object],
@@ -69,31 +110,31 @@ export default {
     icon: String,
     acceptFile: {
       type: [String, Array],
-      default: '/*'
+      default: "/*",
     },
     actionLabel: {
       type: String,
-      default: 'Pilih File'
-    }
+      default: "Pilih File",
+    },
   },
 
   methods: {
     onEmitRemove() {
-      this.$emit('on:remove')
+      this.$emit("on:remove");
     },
     getMediaName() {
-      return this.form?.image?.name || null
+      return this.form?.image?.name || null;
     },
 
     onPreview() {
-      let url = this.form?.image?.url
-      window.open(url)
-    }
+      let url = this.form?.image?.url;
+      window.open(url);
+    },
   },
   watch: {
-    'mixins.state.media'(val) {
-      this.form.image = val
-    }
-  }
-}
+    "mixins.state.media"(val) {
+      this.form.image = val;
+    },
+  },
+};
 </script>

@@ -2,16 +2,32 @@
   <div>
     <div class="d-flex align-center mb-2">
       <p
-        class="text-capitalize dark--text"
+        class="text-capitalize label-text"
         v-if="label"
-        v-bind:class="{ 'h6--xsmall': bold, 'text--default ': !bold }"
+        v-bind:class="{
+          'h6--xsmall': bold,
+          'text--default': !bold,
+        }"
       >
         {{ label }}
       </p>
       <p
-        class="text-capitalize info--text text--lighten-2 ml-1"
+        class="text-capitalize label-text ml-1 error--text"
+        v-if="required"
+        v-bind:class="{
+          'h6--xsmall': bold,
+          'text--default': !bold,
+        }"
+      >
+        *
+      </p>
+      <p
+        class="text-capitalize label-text ml-1 info--text text--lighten-2"
         v-if="optional"
-        v-bind:class="{ 'h6--xsmall': bold, 'text--default ': !bold }"
+        v-bind:class="{
+          'h6--xsmall': bold,
+          'text--default': !bold,
+        }"
       >
         (Opsional)
       </p>
@@ -33,34 +49,38 @@ export default {
   props: {
     bold: {
       type: Boolean,
-      default: false
+      default: false,
+    },
+    required: {
+      type: Boolean,
+      default: false,
     },
     optional: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    label: String
+    label: String,
   },
 
   data: () => ({
     editorOption: {
-      theme: 'snow',
+      theme: "snow",
       modules: {
         toolbar: [
-          ['bold', 'italic', 'underline', 'strike'],
-          ['blockquote', 'code-block'],
-          ['link'],
+          ["bold", "italic", "underline", "strike"],
+          ["blockquote", "code-block"],
+          ["link"],
           [
-            { align: '' },
-            { align: 'center' },
-            { align: 'right' },
-            { align: 'justify' }
-          ]
-        ]
-      }
-    }
-  })
-}
+            { align: "" },
+            { align: "center" },
+            { align: "right" },
+            { align: "justify" },
+          ],
+        ],
+      },
+    },
+  }),
+};
 </script>
 
 <style lang="scss" scoped>

@@ -17,7 +17,7 @@
           prepend-inner-icon="mdi-email-outline"
           placeholder="Email"
           :rules="[required, email]"
-          @keypress.enter="onEmitSubmit()"
+          @keypress.enter.prevent="onSubmit()"
         />
       </v-form>
 

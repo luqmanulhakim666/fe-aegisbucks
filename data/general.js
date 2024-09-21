@@ -7,3 +7,5 @@ export const ROLES = [
   { name: "Admin", key: "admin" },
   { name: "Customer", key: "customer" },
 ];
+
+export const AUTH_SETTINGS = ["gmail", "whatsapp"];

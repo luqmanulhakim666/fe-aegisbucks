@@ -19,7 +19,7 @@ export default {
   computed: {
     arrayRule() {
       return (val) => {
-        return val?.length > 0 || "*Wajib Diisi";
+        return val?.length > 0 || "*Required";
       };
     },
   },

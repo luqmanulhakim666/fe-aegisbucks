@@ -1,368 +1,333 @@
 <template>
   <div>
-    <h1 class="mb-6">Campaigns</h1>
+    <general-table-header
+      sort
+      actionCreate="/admin/campaigns/create"
+      @on:search="onSearch"
+    />
 
-    <v-row>
-      <v-col cols="12" md="3" lg="3" xl="2">
-        <div class="white rounded-xl">
-          <h5 class="h4--default pa-4 dark--text text--lighten-5">Fields</h5>
-          <v-divider />
-          <draggable
-            class="dragArea list-group"
-            :list="items.fields"
-            :option="dragOptions"
-            :group="{ name: 'people', pull: 'clone', put: false }"
-          >
-            <div
-              v-for="(item, index) in items.fields"
-              :key="index"
-              class="pointer"
-              @click="onAddField(item)"
+    <v-data-table
+      :headers="headers"
+      :items="items.campaigns"
+      :loading="state.isLoading"
+      hide-default-footer
+      no-data-text="No Data"
+      class="mt-4 mb-6"
+    >
+      <template v-slot:[`item.budget`]="{ item }">
+        {{ decimal(item.budget) }}
+      </template>
+
+      <template v-slot:[`item.brand`]="{ item }">
+        {{ item.brandId }}
+      </template>
+
+      <template v-slot:[`item.createdAt`]="{ item }">
+        {{ fullDateTime(item.createdAt, "-") }}
+      </template>
+
+      <template v-slot:[`item.publishedAt`]="{ item }">
+        {{ fullDateTime(item.publishedAt, "-") }}
+      </template>
+
+      <template v-slot:[`item.published`]="{ item }">
+        <div class="d-flex align-center pa-4">
+          <v-switch
+            color="success lighten-2"
+            inset
+            :ripple="false"
+            v-model="item.active"
+            @click="onUpdateStatus(item)"
+          />
+          <!-- <general-chips-status
+            :label="item.active ? 'Active' : 'Inactive'"
+            :color="item.active ? 'success lighten-2' : 'error lighten-2'"
+            textColor="white--text"
+            width="100"
+          /> -->
+        </div>
+      </template>
+
+      <template v-slot:[`item.action`]="{ item }">
+        <v-menu offset-y rounded="lg">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              depressed
+              text
+              rounded
+              fab
+              x-small
+              v-bind="attrs"
+              v-on="on"
+              v-if="preventDelete(item.id)"
             >
-              <v-divider v-if="index > 0" />
-              <div class="d-flex pa-4">
-                <v-icon class="mr-2">{{ item.icon }}</v-icon>
-                <p class="text--default">{{ item.name }}</p>
-              </div>
-            </div>
-          </draggable>
-        </div>
-      </v-col>
-      <v-col cols="12" md="6" lg="7" xl="6">
-        <div class="white rounded-xl form fill-height">
-          <div class="d-flex align-center justify-space-between">
-            <div>
-              <h4 class="h4--default pa-4 dark--text text--lighten-5">Form</h4>
-            </div>
-
-            <div>
-              <v-tabs v-model="tab">
-                <v-tab>
-                  <v-icon size="22">mdi-file-cog</v-icon>
-                  <!-- <p class="text--small text-capitalize ml-2">Setting</p> -->
-                </v-tab>
-                <v-tab>
-                  <v-icon size="22">mdi-file-eye</v-icon>
-                  <!-- <p class="text--small text-capitalize ml-2">Preview</p> -->
-                </v-tab>
-              </v-tabs>
-            </div>
-          </div>
-
-          <v-divider />
-
-          <div class="pa-6">
-            <template v-if="tab === 0">
-              <draggable
-                class="dragArea list-group"
-                :list="items.selectedFields"
-                group="people"
-                :animation="500"
-                tag="transition-group"
-                handle=".handle"
-                @change="log"
+              <v-icon> mdi-dots-vertical </v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item-group>
+              <v-list-item
+                v-for="(menu, i) of items.actions"
+                :key="i"
+                @click="onAction(menu.key, item.id)"
               >
-                <div
-                  class="list-group-item d-flex align-start"
-                  v-for="(element, index) in items.selectedFields"
-                  :key="index"
-                  @click="selectField(element, index)"
-                >
-                  <v-icon class="mr-2 mt-6 handle" size="24"
-                    >mdi-drag-horizontal-variant</v-icon
+                <v-list-item-icon class="mr-2">
+                  <v-icon
+                    size="14"
+                    :color="menu.key === 'edit' ? 'primary ' : 'error'"
+                    >{{ menu.icon }}</v-icon
                   >
-                  <v-expansion-panels
-                    flat
-                    class="mb-4 border-thin rounded-lg"
-                    focusable
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title
+                    :class="[
+                      menu.key === 'edit' ? 'primary--text ' : 'error--text',
+                      'h8--supersmall',
+                    ]"
+                    >{{ menu.text }}</v-list-item-title
                   >
-                    <v-expansion-panel>
-                      <v-expansion-panel-header>
-                        <p class="h6--xsmall">
-                          {{ element.name }}
-                        </p>
-                      </v-expansion-panel-header>
-                      <v-expansion-panel-content>
-                        <general-form-text-field
-                          v-model="element.name"
-                          :rules="[required]"
-                          class="mt-6"
-                          label="Field Name"
-                          outlined
-                        />
-                        <general-form-text-field
-                          v-model="element.placeholder"
-                          label="Placeholder"
-                          outlined
-                        />
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-menu>
+      </template>
+    </v-data-table>
 
-                        <template
-                          v-if="
-                            element.component === 'checkbox' ||
-                            element.component === 'radio' ||
-                            element.component === 'select'
-                          "
-                        >
-                          <p class="h6--xsmall mb-2">Options</p>
-                          <v-divider class="mb-4" />
-                          <div
-                            v-for="(option, i) in element.options"
-                            :key="i"
-                            class="d-flex justify-space-between mb-4 align-center"
-                          >
-                            <div class="d-flex full-width align-center">
-                              <p class="text--default">{{ i + 1 }}.</p>
-                              <general-form-text-field
-                                class="full-width ml-2 mr-4"
-                                v-model="element.options[i]['name']"
-                                outlined
-                                hide-details="auto"
-                              />
-                            </div>
-                            <v-btn
-                              icon
-                              x-small
-                              color="error"
-                              @click="onRemoveOption(index, i)"
-                            >
-                              <v-icon small>mdi-close</v-icon>
-                            </v-btn>
-                          </div>
-                          <v-btn
-                            x-small
-                            depressed
-                            class="text-capitalize primary-create-btn h8--supersmall mb-6"
-                            @click="onAddNewOption(index)"
-                          >
-                            <v-icon small>mdi-plus</v-icon> Add
-                          </v-btn>
-                        </template>
-                      </v-expansion-panel-content>
-                    </v-expansion-panel>
-                  </v-expansion-panels>
-                  <v-btn
-                    icon
-                    x-small
-                    class="ml-2 mt-2"
-                    @click="onRemoveItem(index)"
-                    ><v-icon color="error">mdi-close-circle</v-icon></v-btn
-                  >
-                </div>
-              </draggable>
-            </template>
-
-            <template v-if="tab === 1">
-              <div
-                v-for="(element, index) in items.selectedFields"
-                :key="index"
-                @click="selectField(element, index)"
-              >
-                <template v-if="element.component === 'text-field'">
-                  <general-form-text-field
-                    bold
-                    outlined
-                    :label="element.name"
-                    :placeholder="element.placeholder"
-                  />
-                </template>
-
-                <template v-if="element.component === 'select'">
-                  <general-form-select
-                    :label="element.name"
-                    bold
-                    className="text-capitalize"
-                    outlined
-                    item-text="name"
-                    item-value="value"
-                    :items="element['options']"
-                  />
-                </template>
-
-                <template v-if="element.component === 'checkbox'">
-                  <div class="mb-6">
-                    <p class="h6--xsmall">
-                      {{ element.name }}
-                    </p>
-                    <div v-for="(option, i) in element.options" :key="i">
-                      <v-checkbox
-                        dense
-                        multiple
-                        hide-details
-                        :label="option.name"
-                        :ripple="false"
-                      />
-                    </div>
-                  </div>
-                </template>
-
-                <template v-if="element.component === 'text-area'">
-                  <general-form-text-area bold :label="element.name" outlined />
-                </template>
-
-                <template v-if="element.component === 'number'">
-                  <general-form-text-field
-                    bold
-                    :label="element.name"
-                    outlined
-                  />
-                </template>
-              </div>
-            </template>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+    <general-dialog-delete
+      :dialog="state.isDeleteDialog"
+      :loading="state.isLoading"
+      @on:close="onCloseDialog"
+      @on:delete="onDelete"
+    />
+    <general-pagination
+      :perPage="body.limit"
+      :total="items.paging.count"
+      :totalPage="items.paging.totalPage"
+      :paging="items.paging"
+      @on:change="onChangePagination"
+    />
   </div>
 </template>
 
 <script>
-import draggable from "vuedraggable";
-import rules from "@/mixins/rules";
+import meta from "@/mixins/meta";
+import routes from "@/mixins/routes";
+import utils from "@/mixins/utils";
+import pipe from "@/mixins/pipe";
 
 export default {
-  mixins: [rules],
-  components: {
-    draggable,
+  mixins: [meta, routes, utils, pipe],
+  middleware: ["authenticated", "authorized"],
+  meta: {
+    page: "admin",
   },
 
   data: () => ({
-    tab: 0,
-    selectedItemIndex: 0,
+    meta: {
+      title: "Campaigns",
+    },
+
+    body: {
+      page: 1,
+      limit: 10,
+      keyword: "",
+    },
+
+    state: {
+      isLoading: false,
+      isDeleteDialog: false,
+    },
+
+    headers: [
+      {
+        text: "No",
+        value: "no",
+        sortable: false,
+        class: "dark--text h7--xxsmall ",
+      },
+      {
+        text: "Campaign Name",
+        value: "name",
+        sortable: false,
+        class: "dark--text h7--xxsmall ",
+      },
+      {
+        text: "Brand",
+        value: "brand",
+        sortable: false,
+        class: "dark--text h7--xxsmall ",
+      },
+      {
+        text: "Budget",
+        value: "budget",
+        sortable: false,
+        class: "dark--text h7--xxsmall ",
+      },
+      {
+        text: "Flight Date",
+        value: "flightDate",
+        sortable: false,
+        class: "dark--text h7--xxsmall ",
+      },
+      {
+        text: "Created Date",
+        value: "createdAt",
+        sortable: false,
+        class: "dark--text h7--xxsmall ",
+      },
+      {
+        text: "Go Live Date",
+        value: "publishedAt",
+        sortable: false,
+        class: "dark--text h7--xxsmall ",
+      },
+      {
+        text: "Status",
+        value: "published",
+        sortable: false,
+        class: "dark--text h7--xxsmall ",
+      },
+      {
+        text: "Action",
+        value: "action",
+        align: "center",
+        sortable: false,
+        class: "dark--text h7--xxsmall ",
+      },
+    ],
+
     items: {
-      fields: [
+      campaigns: [],
+      actions: [
         {
-          name: "Checkbox Group",
-          icon: "mdi-check",
-          component: "checkbox",
-          placeholder: "",
-          options: [],
+          key: "edit",
+          text: "Ubah",
+          icon: "mdi-pencil",
         },
         {
-          name: "Number",
-          icon: "mdi-numeric",
-          component: "number",
-          placeholder: "",
-          options: [],
-        },
-        {
-          name: "Select",
-          icon: "mdi-form-dropdown",
-          component: "select",
-          placeholder: "",
-          options: [],
-        },
-        {
-          name: "Text Field",
-          icon: "mdi-form-textbox",
-          component: "text-field",
-          placeholder: "",
-          options: [],
-        },
-        {
-          name: "Text Area",
-          icon: "mdi-form-textarea",
-          component: "text-area",
-          placeholder: "",
-          options: [],
-        },
-        {
-          name: "Radio Button",
-          icon: "mdi-radiobox-marked",
-          component: "radio",
-          placeholder: "",
-          options: [],
+          key: "delete",
+          text: "Hapus",
+          icon: "mdi-delete",
         },
       ],
-      selectedFields: [
-        {
-          name: "Checkbox Group",
-          icon: "mdi-check",
-          component: "checkbox",
-          placeholder: "",
-          options: [],
-        },
-        {
-          name: "Number",
-          icon: "mdi-numeric",
-          component: "number",
-          placeholder: "",
-          options: [],
-        },
-        {
-          name: "Select",
-          icon: "mdi-form-dropdown",
-          component: "select",
-          placeholder: "",
-          options: [],
-        },
-        {
-          name: "Text Field",
-          icon: "mdi-form-textbox",
-          component: "text-field",
-          placeholder: "",
-          options: [],
-        },
-        {
-          name: "Text Area",
-          icon: "mdi-form-textarea",
-          component: "text-area",
-          placeholder: "",
-          options: [],
-        },
-      ],
+      paging: {},
     },
   }),
 
-  computed: {
-    dragOptions() {
-      return {
-        animation: 200,
-        ghostClass: "ghost",
-      };
-    },
+  created() {
+    this.setMeta(this.meta.title, false);
+    this.setQuery(this.queryParams);
+
+    this.fetch();
   },
 
   methods: {
-    onAddField(val) {
-      this.items.selectedFields.push(val);
-    },
-    onRemoveItem(index) {
-      this.items.selectedFields.splice(index, 1);
-    },
-    selectField(val, index) {
-      console.log("index", index);
-      this.selectedItemIndex = index;
-    },
-    onAddNewOption(parentIndex) {
-      let item = { name: "", value: "" };
-      this.items.selectedFields[parentIndex].options.push(item);
+    setQuery(val) {
+      if (val) {
+        this.body.page = Number(val.page) || this.body.page;
+        this.body.limit = Number(val.limit) || this.body.limit;
+        this.body.keyword = val.keyword || "";
+      }
     },
 
-    onRemoveOption(parentIndex, childIndex) {
-      this.items.selectedFields[parentIndex].options?.splice(childIndex, 1);
+    async onUpdateStatus(val) {
+      const res = await this.$api.campaigns.update(val.id, {
+        published: val.active,
+      });
+
+      if (res.success) {
+        this.setSuccessAlert("Status has been changed");
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
     },
-    log: function (evt) {
-      window.console.log(evt);
+    async fetch() {
+      this.state.isLoading = true;
+
+      const res = await this.$api.campaigns.getList({ ...this.body });
+
+      if (res.success) {
+        this.items.campaigns = res.data.list?.map((x, index) => ({
+          no: (this.body.page - 1) * this.body.limit + index + 1,
+          ...x,
+        }));
+        this.items.paging = res.data.paging;
+
+        this.items.paging["totalPage"] = Math.ceil(
+          this.items.paging?.count / this.body.limit
+        );
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.state.isLoading = false;
+    },
+
+    onSearch(val) {
+      this.body.keyword = val || "";
+      this.body.page = 1;
+      this.fetch();
+      this.pushQuery("keyword", val);
+    },
+
+    onChangeRole(val) {
+      this.body.role = val;
+      this.body.page = 1;
+      this.body.keyword = "";
+      this.fetch();
+      this.pushQuery("role", val);
+    },
+
+    onChangePagination(val) {
+      this.body.page = val;
+      this.fetch();
+    },
+
+    onAction(val, id) {
+      switch (val) {
+        case "delete":
+          this.state.isDeleteDialog = true;
+          this.state.user_id = id;
+          break;
+
+        default:
+          this.$router.push(`/admin/campaigns/${id}`);
+          break;
+      }
+    },
+
+    onCloseDialog() {
+      this.state.isDeleteDialog = false;
+    },
+
+    async onDelete() {
+      this.state.isLoading = true;
+
+      const res = await this.$api.campaigns.delete(this.state.user_id);
+
+      if (res.success) {
+        this.fetch();
+        this.setSuccessAlert("Data has been deleted");
+        this.onCloseDialog();
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.state.isLoading = false;
+    },
+
+    preventDelete(val) {
+      const id = this.$store.getters["auth/profile"]["id"];
+      return id !== val;
     },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.flip-list-move {
-  transition: transform 0.5s;
-}
-
-.no-move {
-  transition: transform 0s;
-}
-
-.ghost {
-  opacity: 0.5;
-  background: #00557c15;
-}
-
-.list-group-item {
-  cursor: move;
-}
-</style>

@@ -66,14 +66,16 @@ export default {
     },
     items: {
       breadcrumbs: [
-        { text: "Brands", slug: "/admin/brands" },
-        { text: "Create New Brand", slug: "" },
+        { text: "Retail Partners", slug: "/admin/brands" },
+        { text: "Create New Retail Partner", slug: "" },
       ],
     },
   }),
 
   created() {
-    this.meta.title = this.isCreated ? "Buat Berita Baru" : "Ubah Berita";
+    this.meta.title = this.isCreated
+      ? "Create New Retail Partner"
+      : "Edit Retail Partner";
 
     if (!this.isCreated) {
       this.getOne();
@@ -103,7 +105,7 @@ export default {
 
       if (res.success) {
         this.form = res.data;
-        this.form.image = res.data.logo;
+        this.form.image = res.data.image;
         this.form.agreementDate =
           this.$dayjs(this.form.agreementDate).format("YYYY-MM-DD") || "";
 

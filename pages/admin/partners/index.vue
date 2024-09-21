@@ -89,7 +89,7 @@ export default {
   },
   data: () => ({
     meta: {
-      title: "Berita",
+      title: "Retail Partners",
     },
     body: {
       page: 1,
@@ -161,7 +161,7 @@ export default {
 
   created() {
     let appBar = {
-      title: "Brand",
+      title: "Retail Partners",
       child: false,
     };
 

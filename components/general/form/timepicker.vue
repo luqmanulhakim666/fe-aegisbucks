@@ -24,34 +24,35 @@ export default {
   props: {
     label: {
       type: String,
-      default: () => ''
+      default: () => "",
     },
     bold: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     required: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     placeholder: {
       type: String,
-      default: () => 'Type Here'
+      default: () => "Type Here",
     },
     prepend: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     prependName: {
       type: String,
-      default: () => ''
-    }
-  }
-}
+      default: () => "",
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 ::v-deep .vue__time-picker input.display-time {
   border-radius: 6px;
+  height: 40px;
 }
 </style>

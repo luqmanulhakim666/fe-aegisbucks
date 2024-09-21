@@ -8,7 +8,7 @@
           'h6--xsmall': bold,
           'text--default': !bold,
           'white--text': labelWhite,
-          'dark--text': !labelWhite
+          'dark--text': !labelWhite,
         }"
       >
         {{ label }}
@@ -48,70 +48,70 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
+import debounce from "lodash/debounce";
 export default {
   props: {
     form: Object,
     items: {
-      type: Array
+      type: Array,
     },
     itemText: String,
-    itemValue: String,  
+    itemValue: String,
 
     bold: {
       type: Boolean,
-      default: false
+      default: false,
     },
     label: {
       type: String,
-      default: () => ''
+      default: () => "",
     },
     required: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     optional: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     placeholder: {
       type: String,
-      default: () => 'Ketik disini'
+      default: () => "Type here",
     },
     labelWhite: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     prepend: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     prependName: {
       type: String,
-      default: () => ''
-    }
+      default: () => "",
+    },
   },
 
   data: () => ({
-    search: ''
+    search: "",
   }),
 
   computed: {
     rules() {
       return [
-        this.form.tags.length > 0 || '*Setidaknya satu item harus dipilih'
-      ]
-    }
+        this.form.tags.length > 0 || "*Setidaknya satu item harus dipilih",
+      ];
+    },
   },
 
   methods: {
     onSearch: debounce(function (val) {
-      this.$emit('on:search', val)
+      this.$emit("on:search", val);
     }, 500),
 
     onRemoveItem(item) {
-      this.$emit('on:remove-item', item)
-    }
-  }
-}
+      this.$emit("on:remove-item", item);
+    },
+  },
+};
 </script>

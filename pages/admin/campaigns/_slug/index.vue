@@ -1,185 +1,307 @@
 <template>
   <div>
-    <input
-      class="d-none"
-      ref="input"
-      type="file"
-      accept="image/*"
-      @change="onFilePicked"
-    />
-    <general-breadcrumbs :lists="items.breadcrumbs" class="mb-9" />
+    <template v-if="state.fetchLoading">
+      <general-loading />
+    </template>
 
-    <v-form v-model="state.isValid" ref="form">
-      <form-users
-        :form="form"
-        :roles="items.roles"
-        :progress="mixins.state.progress"
-        :uploadLoading="mixins.state.isLoading"
-        :avatarUrl="getAvatar"
-        :isCreated="isCreated"
-        @on:upload="onOpenFile"
-      />
-    </v-form>
+    <template v-if="!state.fetchLoading">
+      <v-tabs show-arrows grow v-model="state.tab" centered icons-and-text>
+        <v-tab
+          class="header"
+          active-class="header-active"
+          v-for="(header, index) in items.tab_headers"
+          :key="index"
+        >
+          <p class="h8--supersmall text-capitalize">
+            {{ header.name }}
+          </p>
 
-    <div class="d-flex justify-end mt-8">
-      <v-btn
-        class="primary-create-btn text-capitalize h7--xxsmall"
-        depressed
-        :loading="state.isLoading.cancle"
-        @click="goBack()"
-      >
-        Batal
-      </v-btn>
-      <v-btn
-        class="secondary lighten-5 text-capitalize ml-2 h7--xxsmall"
-        depressed
-        :loading="state.isLoading.submit"
-        @click="onSubmit()"
-      >
-        Simpan
-      </v-btn>
-    </div>
+          <v-icon class="mb-1">{{ header.icon }}</v-icon>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items class="mt-10 transparent" v-model="state.tab">
+        <v-tab-item>
+          <form-campaign-general
+            :form="form"
+            :users="items.users"
+            :brands="items.brands"
+            :loading="state.isLoading"
+            @on:next="onNext"
+            @set:loading="setLoading"
+          />
+        </v-tab-item>
+
+        <v-tab-item>
+          <form-campaign-products
+            :products="items.products"
+            :form="form"
+            @get:detail="fetchCampaignDetail"
+          />
+        </v-tab-item>
+
+        <v-tab-item>
+          <form-campaign-voucher
+            :products="form.campaignProducts"
+            :partners="items.partners"
+            :form="form"
+          />
+        </v-tab-item>
+        <v-tab-item> template </v-tab-item>
+        <v-tab-item> preview </v-tab-item>
+      </v-tabs-items>
+    </template>
   </div>
 </template>
 
 <script>
+import rules from "@/mixins/rules";
 import meta from "@/mixins/meta";
-import alert from "@/mixins/alert";
-import media from "@/mixins/media";
-
+import utils from "@/mixins/utils";
 export default {
-  mixins: [meta, alert, media],
-  // middleware: ["authenticated", "authorized"],
-  // meta: {
-  //   page: ["admin"],
-  //   permission: ["super_admin"],
-  // },
+  mixins: [rules, meta, utils],
   data: () => ({
-    meta: {
-      title: "",
-    },
-
     form: {
+      userId: "",
       name: "",
-      email: "",
-      phone: "",
-      password: "",
-      permission: "",
-      nip: "",
-      image: {},
-      signature: {},
-    },
-
-    items: {
-      breadcrumbs: [
-        { text: "Pengguna", slug: "/admin/users" },
-        { text: "Buat Pengguna Baru", slug: "" },
-      ],
-    },
-
-    state: {
-      isValid: true,
-      isLoading: {
-        submit: false,
-        cancle: false,
+      brandId: "",
+      termCondition: "",
+      budget: null,
+      description: "",
+      expiredDate: null,
+      enableCaptcha: null,
+      loginGmail: null,
+      loginWhatsapp: null,
+      googleAnalyticScript: "",
+      gmailUsername: "",
+      gmailPassword: "",
+      templateId: null,
+      primaryColor: "",
+      secondaryColor: "",
+      backgroundImageId: "",
+      coverSection: [],
+      headerSection: [],
+      footerSection: [],
+      thanksSection: [],
+      campaignProducts: [],
+      date: "",
+      time: {
+        hh: "",
+        mm: "",
+        ss: "",
       },
+    },
+    state: {
+      isLoading: false,
+      fetchLoading: false,
+      tab: 0,
+    },
+    items: {
+      users: [],
+      brands: [],
+      products: [],
+      partners: [],
+      tab_headers: [
+        {
+          name: "General",
+          icon: "mdi-tune",
+          completed: false,
+        },
+        {
+          name: "Products",
+          icon: "mdi-package-variant-closed",
+          completed: false,
+        },
+        {
+          name: "Voucher",
+          icon: "mdi-ticket-percent-outline",
+          completed: false,
+        },
+        // {
+        //   name: "Rating",
+        //   icon: "mdi-star",
+        //   completed: false,
+        // },
+        {
+          name: "Template",
+          icon: "mdi-hammer-screwdriver",
+          completed: false,
+        },
+        {
+          name: "Preview",
+          icon: "mdi-monitor-eye",
+          completed: false,
+        },
+      ],
     },
   }),
 
   created() {
-    this.meta.title = this.isCreated ? "Buat Pengguna Baru" : "Edit Pengguna";
+    this.fetchUsers();
+    this.fetchBrands();
+    this.fetchRetailPartners();
 
     if (!this.isCreated) {
-      // this.getOne();
+      this.fetchCampaignDetail(this.$route.params.slug);
     }
   },
 
   mounted() {
-    this.$store.commit("SET_META", { title: "Pengguna", child: true });
+    this.setMeta("Campaign");
   },
 
   methods: {
-    async getOne() {
-      this.items.breadcrumbs[1].text = "Edit Pengguna";
-      const id = this.$route?.params?.slug;
-
-      const res = await this.$api.users.getOne(id);
-
-      if (res.success) {
-        this.form = res.data;
-        this.form["phone"] = res.data?.phone?.replace("+62", "0");
-      }
-    },
-
-    async onSubmit() {
-      await this.$refs.form.validate();
-      if (!this.state.isValid) {
-        this.$vuetify.goTo(`.v-messages__message`, { offset: 100 });
-        return;
-      }
-
-      this.onSave();
-    },
-
-    async onSave() {
-      this.state.isLoading.submit = true;
-      this.form.image = this.form?.image?.id;
-      this.form.signature = this.form?.signature?.id;
-      this.form.nip = this.form.nip || null;
-
-      let payload = {
-        ...this.form,
+    async fetchProducts(val) {
+      const payload = {
+        keyword: val || "",
+        limit: 0,
+        page: 1,
+        brandId: this.form.brandId,
       };
-
-      if (!this.isCreated) {
-        delete payload["password"];
-      }
-
-      let res = "";
-
-      if (this.isCreated) {
-        res = await this.$api.users.create(payload);
-      }
-
-      if (!this.isCreated) {
-        res = await this.$api.users.update(this.form.id, payload);
-      }
+      const res = await this.$api.products.getList(payload);
 
       if (res.success) {
-        this.setSuccessAlert(
-          `Berhasil ${this.isCreated ? "membuat" : "mengubah"} user`
-        );
-        this.goBack();
+        this.items.products = res.data.list;
       }
 
       if (!res.success) {
         this.setFailedAlert(res);
       }
+    },
+    async fetchUsers(val) {
+      const payload = {
+        limit: 10,
+        page: 1,
+        keyword: val || "",
+        role: "customer",
+      };
 
-      this.state.isLoading.submit = false;
+      const res = await this.$api.users.getList(payload);
+
+      if (res.success) {
+        this.items.users = res.data.list;
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+    },
+
+    async fetchBrands(val) {
+      const payload = {
+        limit: 10,
+        page: 1,
+        keyword: val || "",
+        role: "customer",
+      };
+
+      const res = await this.$api.brands.getList(payload);
+
+      if (res.success) {
+        this.items.brands = res.data.list;
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+    },
+
+    async fetchRetailPartners(val) {
+      const payload = {
+        limit: 10,
+        page: 1,
+        keyword: val || "",
+      };
+
+      const res = await this.$api.partners.getList(payload);
+
+      if (res.success) {
+        this.items.partners = res.data.list;
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+    },
+
+    async fetchCampaignDetail(id) {
+      this.state.fetchLoading = true;
+      const res = await this.$store.dispatch("campaign/getDetail", id);
+
+      this.form = res.data;
+      this.form.date = this.$dayjs(res.data.expiredDate).format("YYYY-MM-DD");
+      this.form.time = {
+        HH: this.$dayjs(res.data.expiredDate).format("HH"),
+        mm: this.$dayjs(res.data.expiredDate).format("mm"),
+        ss: this.$dayjs(res.data.expiredDate).format("ss"),
+      };
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.state.fetchLoading = false;
     },
 
     goBack() {
-      this.state.isLoading.cancle = true;
-
-      this.$router.go(-1);
+      if (this.state.tab > 0) {
+        this.state.tab -= 1;
+      }
     },
-  },
 
-  computed: {
-    isCreated() {
-      return this.$route?.params?.slug === "add-user";
+    onNext() {
+      if (this.state.tab + 1 < this.items.tab_headers.length) {
+        this.state.tab += 1;
+      }
     },
-    getAvatar() {
-      return this.mixins.state?.media?.id
-        ? this.mixins.state?.media?.url
-        : this.form?.image?.url;
+
+    setLoading(val) {
+      this.state.isLoading = val;
     },
   },
   watch: {
-    "mixins.state.media"(val) {
-      this.form.image = val;
+    "form.brandId": {
+      handler(val) {
+        this.fetchProducts();
+      },
+      immediate: true,
+    },
+    $route: {
+      handler(val) {
+        const q = val?.query?.tab;
+
+        switch (q) {
+          case "general":
+            this.state.tab = 0;
+            break;
+          case "products":
+            this.state.tab = 1;
+            break;
+          case "vouchers":
+            this.state.tab = 2;
+            break;
+          case "templates":
+            this.state.tab = 3;
+            break;
+          case "preview":
+            this.state.tab = 4;
+            break;
+        }
+      },
+      immediate: true,
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.header {
+  // background: #eef5f9 !important;
+  // border: 1px solid red;
+  // margin: 2px;
+}
+.header-active {
+  // color: white;
+  // background: var(--v-primary-base) !important;
+}
+</style>
