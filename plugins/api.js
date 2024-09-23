@@ -6,6 +6,7 @@ import products from "@/api/products";
 import partners from "@/api/partners";
 import merchants from "@/api/merchants";
 import campaigns from "@/api/campaigns";
+import reports from "@/api/reports";
 
 export default (ctx, inject) => {
   let api = {};
@@ -17,5 +18,6 @@ export default (ctx, inject) => {
   api.partners = partners(ctx);
   api.merchants = merchants(ctx);
   api.campaigns = campaigns(ctx);
+  api.reports = reports(ctx);
   inject("api", api);
 };

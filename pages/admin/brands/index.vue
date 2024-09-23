@@ -5,6 +5,7 @@
       actionCreate="/admin/brands/create"
       @on:sort="onSort"
       @on:search="onSearch"
+      @on:export="onExport"
     />
 
     <v-data-table
@@ -256,6 +257,11 @@ export default {
 
     onEdit(id) {
       this.$router.push(`/admin/brands/${id}`);
+    },
+
+    onExport() {
+      const url = this.$api.reports.export("brand", this.body);
+      window.open(url);
     },
   },
 };

@@ -1,110 +1,166 @@
 <template>
   <div>
-    <v-form class="white pa-6 rounded-xl" v-model="state.isValid" ref="form">
-      <v-btn
-        depressed
-        class="secondary lighten-5 h7--xxsmall text-capitalize"
-        x-small
-        @click="handleDialog"
-      >
-        <v-icon class="mr-2" size="14">mdi-plus</v-icon>
-        Add Voucher
-      </v-btn>
+    <template v-if="state.detailMode">
+      <div>
+        <v-btn @click="closeDetailMode()">Back</v-btn>
 
-      <p class="h6--xsmall mt-6 dark--text text--lighten-5">Voucher Partners</p>
+        <v-row>
+          <v-col cols="12" md="4">
+            <div class="shadow-base pa-4 rounded-xl d-inline-block white">
+              <v-img
+                class="rounded-xl"
+                width="200"
+                :src="getImage(state.voucher.campaignProduct.product)"
+              />
 
-      <general-form-text-field
-        class="hide-input mb-2"
-        hide-details="auto"
-        dense
-        v-model="form.termCondition"
-        :rules="[arrayRule]"
-      />
+              <p>
+                {{ state.voucher.campaignProduct.product.name }}
+              </p>
+            </div>
+          </v-col>
+          <v-col cols="12" md="8">
+            <div class="white full-width d-inline-block shadow-base rounded-xl">
+              <apexchart
+                type="pie"
+                height="350"
+                :options="options"
+                :series="options.series"
+              />
+            </div>
+          </v-col>
+        </v-row>
+      </div>
+    </template>
 
-      <v-data-table
-        :headers="headers"
-        :loading="state.isLoading"
-        :items="items.vouchers"
-        hide-default-footer
-        no-data-text="No Data"
-        class="mt-2"
-      >
-        <template v-slot:[`item.no`]="{ index }">
-          {{ index + 1 }}
-        </template>
+    <template v-if="!state.detailMode">
+      <v-form class="white pa-6 rounded-xl" v-model="state.isValid" ref="form">
+        <v-btn
+          depressed
+          class="secondary lighten-5 h7--xxsmall text-capitalize"
+          x-small
+          @click="handleDialog"
+        >
+          <v-icon class="mr-2" size="14">mdi-plus</v-icon>
+          Add Voucher
+        </v-btn>
 
-        <template v-slot:[`item.voucherName`]="{ item }">
-          Voucher {{ item.retail.name }}
-          {{ item.campaignProduct.product.name }}
-        </template>
+        <p class="h6--xsmall mt-6 dark--text text--lighten-5">
+          Voucher Partners
+        </p>
 
-        <template v-slot:[`item.totalCode`]="{ item }">
-          {{ decimal(item.totalCode) }}
-        </template>
+        <general-form-text-field
+          class="hide-input mb-2"
+          hide-details="auto"
+          dense
+          v-model="form.termCondition"
+          :rules="[arrayRule]"
+        />
 
-        <template v-slot:[`item.limit`]="{ item }">
-          {{ decimal(item.limit) }}
-        </template>
+        <v-data-table
+          :headers="headers"
+          :loading="state.isLoading"
+          :items="items.vouchers"
+          hide-default-footer
+          no-data-text="No Data"
+          class="mt-2"
+        >
+          <template v-slot:[`item.no`]="{ index }">
+            {{ index + 1 }}
+          </template>
 
-        <template v-slot:[`item.expiredDate`]="{ item }">
-          {{ fullDateTime(item.expiredDate, "-") }}
-        </template>
+          <template v-slot:[`item.voucherName`]="{ item }">
+            Voucher {{ item.retail.name }}
+            {{ item.campaignProduct.product.name }}
+          </template>
 
-        <template v-slot:[`item.normalPrice`]="{ item }">
-          {{ decimal(item.normalPrice) }}
-        </template>
+          <template v-slot:[`item.totalCode`]="{ item }">
+            {{ decimal(item.totalCode) }}
+          </template>
 
-        <template v-slot:[`item.discount`]="{ item }">
-          {{ decimal(item.discount) }}
-        </template>
+          <template v-slot:[`item.limit`]="{ item }">
+            {{ decimal(item.limit) }}
+          </template>
 
-        <template v-slot:[`item.description`]="{ item }">
-          {{ item.productId.description }}
-        </template>
+          <template v-slot:[`item.expiredDate`]="{ item }">
+            {{ fullDateTime(item.expiredDate, "-") }}
+          </template>
 
-        <template v-slot:[`item.action`]="{ item, index }">
-          <div class="d-flex justify-center">
-            <v-btn
-              icon
-              class="d-flex align-center"
-              @click="handleDialog(item, index)"
-            >
-              <v-icon size="16" class="primary--text"> mdi-pencil </v-icon>
-            </v-btn>
+          <template v-slot:[`item.normalPrice`]="{ item }">
+            {{ decimal(item.normalPrice) }}
+          </template>
 
-            <v-btn
-              icon
-              class="d-flex align-center"
-              @click="handleDialogDelete(item, index)"
-            >
-              <v-icon size="16" class="error--text"> mdi-delete </v-icon>
-            </v-btn>
-          </div>
-        </template>
-      </v-data-table>
-    </v-form>
+          <template v-slot:[`item.discount`]="{ item }">
+            {{ decimal(item.discount) }}
+          </template>
 
-    <div class="d-flex justify-end mt-8">
-      <v-btn
-        @click="goBack()"
-        class="primary-create-btn text-capitalize h7--xxsmall"
-        depressed
-        outlined
-        :disabled="state.isLoading"
-      >
-        Previous
-      </v-btn>
+          <template v-slot:[`item.description`]="{ item }">
+            {{ item.productId.description }}
+          </template>
 
-      <v-btn
-        :loading="state.isLoading"
-        class="secondary lighten-5 text-capitalize ml-2 h7--xxsmall"
-        depressed
-        @click="onSubmit()"
-      >
-        Save
-        <v-icon small class="ml-2">mdi-arrow-right</v-icon>
-      </v-btn>
-    </div>
+          <template v-slot:[`item.action`]="{ item, index }">
+            <v-menu auto offset-x rounded="xxl">
+              <template v-slot:activator="{ on, attrs }">
+                <span v-bind="attrs" v-on="on">
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </span>
+              </template>
+              <v-list>
+                <v-list-item @click="handleDialog(item, index)">
+                  <v-list-item-title class="d-flex align-center">
+                    <v-icon size="16" class="mr-3 primary--text">
+                      mdi-pencil
+                    </v-icon>
+                    <span class="h8--supersmall primary--text h8--supersmall"
+                      >Edit
+                    </span>
+                  </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item @click="handleDialogDelete(item, index)">
+                  <v-list-item-title class="d-flex align-center">
+                    <v-icon size="16" class="mr-3 error--text">
+                      mdi-delete
+                    </v-icon>
+                    <span class="h8--supersmall error--text">Delete</span>
+                  </v-list-item-title>
+                </v-list-item>
+
+                <!-- <v-list-item @click="onVoucherDetail(item.id)">
+                  <v-list-item-title class="d-flex align-center">
+                    <v-icon size="16" class="mr-3 dark--text"> mdi-eye </v-icon>
+                    <span class="h8--supersmall dark--text h8--supersmall"
+                      >Detail
+                    </span>
+                  </v-list-item-title>
+                </v-list-item> -->
+              </v-list>
+            </v-menu>
+          </template>
+        </v-data-table>
+      </v-form>
+
+      <div class="d-flex justify-end mt-8">
+        <v-btn
+          @click="goBack()"
+          class="primary-create-btn text-capitalize h7--xxsmall"
+          depressed
+          outlined
+          :disabled="state.isLoading"
+        >
+          Previous
+        </v-btn>
+
+        <v-btn
+          :loading="state.isLoading"
+          class="secondary lighten-5 text-capitalize ml-2 h7--xxsmall"
+          depressed
+          @click="onSubmit()"
+        >
+          Save
+          <v-icon small class="ml-2">mdi-arrow-right</v-icon>
+        </v-btn>
+      </div>
+    </template>
 
     <general-dialog-delete
       :dialog="state.dialogDelete"
@@ -141,6 +197,16 @@ export default {
     page: "admin",
   },
   data: () => ({
+    options: {
+      legend: {
+        position: "top",
+      },
+      series: [],
+      chart: {
+        type: "pie",
+      },
+      labels: [],
+    },
     headers: [
       {
         text: "No",
@@ -204,6 +270,8 @@ export default {
       selectedItem: {},
       selectedIndex: null,
       isEdited: false,
+      detailMode: false,
+      voucher: {},
     },
     items: {
       vouchers: [],
@@ -281,6 +349,37 @@ export default {
 
       this.state.isLoading = false;
       this.state.selectedIndex = null;
+    },
+
+    async onVoucherDetail(id) {
+      const campaignId = this.$route.params.slug;
+      const voucherId = id;
+
+      const res = await this.$api.campaigns.voucher.getDetail(
+        campaignId,
+        voucherId
+      );
+
+      console.log("res", res);
+
+      if (res.success) {
+        this.state.voucher = res.data;
+        this.options.series[0] = res.data.limit;
+        this.options.series[1] = res.data.totalCode;
+        this.options.labels[0] = "Limit";
+        this.options.labels[1] = "Total";
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.state.detailMode = true;
+    },
+
+    closeDetailMode() {
+      this.state.voucher = {};
+      this.state.detailMode = false;
     },
 
     goBack() {

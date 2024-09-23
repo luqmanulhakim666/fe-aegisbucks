@@ -12,6 +12,16 @@
       @input="onSearch"
     />
 
+    <v-btn
+      class="secondary lighten-5 h7--xxsmall text-capitalize mt-3 mt-md-2 ml-0 ml-md-2"
+      small
+      depressed
+      v-if="exportReport"
+      @click="$emit('on:export')"
+    >
+      <v-icon small class="mr-2" color="white">mdi-file-chart</v-icon> export
+    </v-btn>
+
     <v-spacer></v-spacer>
 
     <!-- SORT YEAR -->
@@ -82,6 +92,11 @@ export default {
     sort: {
       type: Boolean,
       default: false,
+    },
+    reportUrl: String,
+    exportReport: {
+      type: Boolean,
+      default: true,
     },
   },
 
