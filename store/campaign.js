@@ -36,6 +36,26 @@ export const actions = {
     return res;
   },
 
+  async getDetailPublic({ dispatch }, payload) {
+    let res = await this.$api.campaigns.public.getOne(
+      payload.brandSlug,
+      payload.campaignSlug,
+      { __preview: payload.preview }
+    );
+
+    if (!res.success) {
+      this.dispatch("snack", [res.error.message, "error", "mdi-close-circle"]);
+      return res;
+    }
+
+    let { data } = res.data;
+
+    // await dispatch('setToken', 'Bearer ' + accessToken)
+    await dispatch("setCampaign", data);
+
+    return res;
+  },
+
   /**
    * SET Campaign
    *

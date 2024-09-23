@@ -26,6 +26,10 @@ export default (ctx) => {
     },
 
     voucher: {
+      async getList(id) {
+        return await $axios.get(`${url}/${id}/voucher`);
+      },
+
       async upload(body) {
         let formData = new window.FormData();
         formData.append("file", body.file);
@@ -38,8 +42,33 @@ export default (ctx) => {
         return await $axios.post(`${url}/${body.id}/voucher`, formData);
       },
 
-      async getList(id) {
-        return await $axios.get(`${url}/${id}/voucher`);
+      async update(campaignId, voucherId, body) {
+        return await $axios.put(
+          `${url}/${campaignId}/voucher/${voucherId}`,
+          body
+        );
+      },
+
+      async delete(campaignId, voucherId) {
+        return await $axios.delete(`${url}/${campaignId}/voucher/${voucherId}`);
+      },
+    },
+
+    public: {
+      async getOne(brandSlug, campaignSlug, query = {}) {
+        let q = qs.stringify(query);
+
+        return await $axios.get(
+          `${url}/public/${brandSlug}/${campaignSlug}?${q}`
+        );
+      },
+
+      async product(brandSlug, campaignSlug, campaignId, query = {}) {
+        let q = qs.stringify(query);
+
+        return await $axios.get(
+          `${url}/public/${brandSlug}/${campaignSlug}/${campaignId}?${q}`
+        );
       },
     },
   };

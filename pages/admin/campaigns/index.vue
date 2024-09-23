@@ -166,7 +166,7 @@ export default {
         class: "dark--text h7--xxsmall ",
       },
       {
-        text: "Flight Date",
+        text: "Expired Date",
         value: "flightDate",
         sortable: false,
         class: "dark--text h7--xxsmall ",
@@ -178,7 +178,7 @@ export default {
         class: "dark--text h7--xxsmall ",
       },
       {
-        text: "Go Live Date",
+        text: "Published Date",
         value: "publishedAt",
         sortable: false,
         class: "dark--text h7--xxsmall ",

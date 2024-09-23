@@ -42,11 +42,11 @@
     </div>
 
     <div
-      v-if="mediaFile.name"
+      v-if="getMediaName()"
       class="grey lighten-3 secondary--text text--lighten-5 d-flex justify-space-between align-center py-1 px-2 rounded-lg"
     >
       <p class="text--default pointer hover-underline" @click="onPreview()">
-        {{ mediaFile.name }}
+        {{ getMediaName() }}
       </p>
       <v-btn @click="onEmitRemove()" x-small color="secondary lighten-5" icon
         ><v-icon small>mdi-close</v-icon></v-btn
@@ -55,7 +55,7 @@
 
     <template v-if="!mediaFile.isLoading">
       <v-btn
-        v-if="!mediaFile.name"
+        v-if="!getMediaName()"
         class="grey lighten-3 secondary--text text--lighten-5 text-capitalize h7--xxsmall"
         depressed
         @click="onOpenFile"
@@ -134,6 +134,10 @@ export default {
   computed: {},
 
   methods: {
+    getMediaName() {
+      return this.form?.file?.name || null;
+    },
+
     onEmitRemove() {
       this.mediaFile.media = {};
       this.mediaFile.url = null;
@@ -164,9 +168,6 @@ export default {
         this.mediaFile.media = files[0];
       };
       reader.readAsDataURL(files[0]);
-
-      console.log(this.mediaFile);
-      console.log(files[0]);
     },
 
     onDrop(e) {
@@ -263,7 +264,6 @@ export default {
   },
   watch: {
     "mediaFile.media"(val) {
-      console.log("ww");
       this.form.file = val;
     },
   },

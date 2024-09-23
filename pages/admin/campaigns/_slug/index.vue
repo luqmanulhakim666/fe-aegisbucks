@@ -7,7 +7,7 @@
     <template v-if="!state.fetchLoading">
       <v-tabs show-arrows grow v-model="state.tab" centered icons-and-text>
         <v-tab
-          class="header"
+          :class="['header', { 'disabled-tab': true }]"
           active-class="header-active"
           v-for="(header, index) in items.tab_headers"
           :key="index"
@@ -47,8 +47,16 @@
             :form="form"
           />
         </v-tab-item>
-        <v-tab-item> template </v-tab-item>
-        <v-tab-item> preview </v-tab-item>
+        <v-tab-item>
+          <form-campaign-templates :form="form" />
+        </v-tab-item>
+        <v-tab-item>
+          <form-campaign-preview
+            :brandSlug="form.brand.slug"
+            :campaignSlug="form.slug"
+            :isPublished="form.published"
+          />
+        </v-tab-item>
       </v-tabs-items>
     </template>
   </div>
@@ -123,7 +131,7 @@ export default {
         //   completed: false,
         // },
         {
-          name: "Template",
+          name: "Templates",
           icon: "mdi-hammer-screwdriver",
           completed: false,
         },
@@ -229,12 +237,18 @@ export default {
       const res = await this.$store.dispatch("campaign/getDetail", id);
 
       this.form = res.data;
-      this.form.date = this.$dayjs(res.data.expiredDate).format("YYYY-MM-DD");
-      this.form.time = {
-        HH: this.$dayjs(res.data.expiredDate).format("HH"),
-        mm: this.$dayjs(res.data.expiredDate).format("mm"),
-        ss: this.$dayjs(res.data.expiredDate).format("ss"),
-      };
+
+      console.log("this", this.form);
+      if (res.data.expiredDate) {
+        this.form.date = this.$dayjs(res.data?.expiredDate).format(
+          "YYYY-MM-DD"
+        );
+        this.form.time = {
+          HH: this.$dayjs(res.data?.expiredDate).format("HH"),
+          mm: this.$dayjs(res.data?.expiredDate).format("mm"),
+          ss: this.$dayjs(res.data?.expiredDate).format("ss"),
+        };
+      }
 
       if (!res.success) {
         this.setFailedAlert(res);
@@ -295,6 +309,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.disabled-tab {
+  pointer-events: none;
+}
 .header {
   // background: #eef5f9 !important;
   // border: 1px solid red;

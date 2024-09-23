@@ -67,7 +67,7 @@
 
       <div class="mb-8">
         <div class="d-flex align-center mb-2">
-          <p class="h6--xsmall label-text">Flight Date</p>
+          <p class="h6--xsmall label-text">Expired Date</p>
           <p class="h6--xsmall text-capitalize label-text ml-1 error--text">
             *
           </p>
@@ -217,9 +217,9 @@ export default {
 
       this.$emit("set:loading", true);
 
-      const hours = this.form.time.HH || 23;
-      const minutes = this.form.time.mm || 59;
-      const seconds = this.form.time.ss || 59;
+      const hours = this.form.time?.HH || 23;
+      const minutes = this.form.time?.mm || 59;
+      const seconds = this.form.time?.ss || 59;
 
       const dateInstance = this.$dayjs(this.form.date)
         .hour(hours)
@@ -236,7 +236,7 @@ export default {
             ? this.toInt(this.form.budget)
             : this.form.budget,
         description: this.form.description,
-        expiredDate: dateInstance.toISOString(),
+        expiredDate: dateInstance?.toISOString(),
         enableCaptcha: this.form.enableCaptcha,
         loginGmail: this.form.loginGmail,
         loginWhatsapp: false,

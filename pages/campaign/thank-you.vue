@@ -6,58 +6,41 @@
 
       <v-icon size="32">mdi-share-variant</v-icon>
     </div>
-    <!-- Hero Slider -->
-    <v-carousel hide-delimiters height="auto">
-      <v-carousel-item v-for="(image, i) in heroImages" :key="i">
-        <img :src="image" class="full-width" />
-      </v-carousel-item>
-    </v-carousel>
 
-    <!-- Content Section -->
-    <v-container fluid class="content">
-      <p class="section-title mb-6">Pilih Voucher yang anda inginkan</p>
+    <div
+      class="d-flex full-width flex-column align-center justify-center container"
+    >
+      <v-icon class="text-center mx-auto d-flex success--text" size="150"
+        >mdi-check-circle</v-icon
+      >
 
-      <v-row>
-        <!-- Product Cards -->
-        <v-col cols="6" v-for="i in 6" :key="i">
-          <div class="product" @click="onDetail()">
-            <!-- Product Image -->
-            <img
-              class="product-img"
-              src="https://app.letsbuyasia.id/assets/product/images/20240726141121.png"
-              alt="Product Image"
-            />
-
-            <!-- Product Title -->
-            <p class="product-title">
-              {{
-                i % 2 === 0
-                  ? "1 Kaleng Bear Brand Beli 1 gratis 1"
-                  : "1 Kaleng Bear Brand"
-              }}
-            </p>
-
-            <!-- Product Price -->
-            <div class="price">
-              <p class="discount">Rp 9.500</p>
-              <p class="final-price">Rp 9.500</p>
-            </div>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
-
-    <!-- Social Media Section -->
-    <v-container class="social-media-section">
-      <div class="social-icons">
-        <v-icon large color="#3f729b">mdi-instagram</v-icon>
-        <v-icon large color="#4267B2">mdi-facebook</v-icon>
-        <v-icon large color="#25D366">mdi-whatsapp</v-icon>
-        <v-icon large color="#000000">mdi-web</v-icon>
+      <div class="d-flex flex-column justify-center">
+        <h3 class="section-title h3--xsmall text-center mb-6">
+          Selamat, Kamu berhasil mendapatkan i-Kupon 1 KALENG BEAR BRAND!
+        </h3>
       </div>
-    </v-container>
 
-    <div class="mx-auto my-10 d-flex text-center align-center justify-center">
+      <div class="full-width text-center">
+        <v-divider class="my-6" />
+        <h4 class="success--text h4--default">LSWJQNK</h4>
+        <v-icon size="100">mdi-barcode</v-icon>
+        <v-divider class="my-6" />
+      </div>
+
+      <p class="text--default">
+        i-Kupon berlaku hinggal 15 Sep 2024 dan dapat digunakan di Indomaret
+      </p>
+      <br />
+      <p class="text--default">
+        Kami juga telah mengirimkan i-Kupon beserta
+        <b>cara pemakaian nya melalui email luqmanulh25@gmail.com</b>
+      </p>
+    </div>
+
+    <div
+      class="mx-auto my-10 d-flex flex-column text-center align-center justify-center"
+    >
+      <p class="text--small my-2">Powered by:</p>
       <general-logo max_width="70" />
     </div>
   </div>
@@ -88,7 +71,6 @@ export default {
 .neat {
   max-width: 500px;
   width: 100%;
-  z-index: 0;
 }
 
 .hero-slider {
@@ -101,12 +83,6 @@ export default {
 
 .content {
   background-color: #fff;
-}
-
-.section-title {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
 }
 
 .product {

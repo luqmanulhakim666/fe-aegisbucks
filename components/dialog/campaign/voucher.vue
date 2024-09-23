@@ -15,9 +15,19 @@
             bold
             :rules="[required]"
           />
-          <general-form-file required bold label="Voucher File" :form="form" />
 
-          <div class="mb-8 mt-4">
+          <template v-if="!isEdited">
+            <general-form-file
+              :acceptFile="['.csv', 'xls', '.xlsx']"
+              class="mb"
+              required
+              bold
+              label="Voucher File"
+              :form="form"
+            />
+          </template>
+
+          <div class="mb-8 mt-2">
             <div class="d-flex align-center mb-2">
               <p class="h6--xsmall label-text">Expired Date</p>
               <p class="h6--xsmall text-capitalize label-text ml-1 error--text">
@@ -155,8 +165,8 @@ export default {
     },
 
     async onSubmit() {
-      console.log(this.form.file);
       const valid = await this.validate(this.state.isValid);
+      const campaignId = this.$route.params.slug;
 
       if (!valid) return;
 
@@ -176,18 +186,33 @@ export default {
         expiredDate: dateInstance.toISOString(),
         limit: this.toInt(this.form.limit),
         usageInstruction: this.form.usageInstruction,
-        id: this.$route.params.slug,
+        id: campaignId,
       };
 
-      const res = await this.$api.campaigns.voucher.upload(payload);
+      if (this.isEdited) {
+        delete payload["file"];
+        delete payload["id"];
+      }
 
-      console.log("res", res);
+      const res = this.isEdited
+        ? await this.$api.campaigns.voucher.update(
+            campaignId,
+            this.form.id,
+            payload
+          )
+        : await this.$api.campaigns.voucher.upload(payload);
 
-      return;
+      if (res.success) {
+        this.setSuccessAlert(
+          this.isEdited ? "Voucher has been updated" : "Voucher has been added"
+        );
+        this.$emit("on:fetch");
+      }
 
-      this.this.setSuccessAlert(
-        this.isEdited ? "Product has been updated" : "Product has been added"
-      );
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
       this.onClearForm();
       this.onEmitClose();
     },
@@ -204,6 +229,7 @@ export default {
       this.form.expiredDate = null;
       this.form.limit = null;
       this.form.usageInstruction = null;
+      this.form.file = null;
       this.$refs.form.resetValidation();
     },
   },
@@ -212,10 +238,30 @@ export default {
     async dialog(val) {
       if (val && this.item?.productId) {
         this.form = JSON.parse(JSON.stringify(this.item));
+
+        this.form.date = this.$dayjs(this.form.expiredDate).format(
+          "YYYY-MM-DD"
+        );
+        this.form.time = {
+          HH: this.$dayjs(this.form.expiredDate).format("HH"),
+          mm: this.$dayjs(this.form.expiredDate).format("mm"),
+          ss: this.$dayjs(this.form.expiredDate).format("ss"),
+        };
       }
 
       if ((await val) && !this.isEdited) {
-        this.onClearForm();
+        this.form.file = null;
+        this.form.retailId = null;
+        this.form.date = null;
+        this.form.time = {
+          hh: "",
+          mm: "",
+          ss: "",
+        };
+        this.form.productId = {};
+        this.form.expiredDate = null;
+        this.form.limit = null;
+        this.form.usageInstruction = null;
       }
     },
     "form.limit"(val) {

@@ -304,7 +304,7 @@ export default {
         {
           label: "Text Field",
           icon: "mdi-form-textbox",
-          type: "text-field",
+          type: "text",
           defaultValue: "",
           placeholder: "",
           options: [],
@@ -312,7 +312,7 @@ export default {
         {
           label: "Text Area",
           icon: "mdi-form-textarea",
-          type: "text-area",
+          type: "text_area",
           defaultValue: "",
           placeholder: "",
           options: [],
@@ -336,7 +336,6 @@ export default {
   },
 
   created() {
-    console.log("created");
     this.items.selectedFields = this.item.inputs;
     this.items.oldFields = JSON.parse(JSON.stringify(this.item.inputs));
   },

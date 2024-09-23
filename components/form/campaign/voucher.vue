@@ -24,7 +24,7 @@
       <v-data-table
         :headers="headers"
         :loading="state.isLoading"
-        :items="items.selectedProducts"
+        :items="items.vouchers"
         hide-default-footer
         no-data-text="No Data"
         class="mt-2"
@@ -32,20 +32,22 @@
         <template v-slot:[`item.no`]="{ index }">
           {{ index + 1 }}
         </template>
-        <template v-slot:[`item.thumbnail`]="{ item }">
-          <general-thumbnail
-            ratio="1"
-            :image="getImage(item.productId)"
-            class="my-4 text-center"
-          />
+
+        <template v-slot:[`item.voucherName`]="{ item }">
+          Voucher {{ item.retail.name }}
+          {{ item.campaignProduct.product.name }}
         </template>
 
-        <template v-slot:[`item.name`]="{ item }">
-          {{ item.productId.name }}
+        <template v-slot:[`item.totalCode`]="{ item }">
+          {{ decimal(item.totalCode) }}
         </template>
 
-        <template v-slot:[`item.limitClaim`]="{ item }">
-          {{ decimal(item.limitClaim) }}
+        <template v-slot:[`item.limit`]="{ item }">
+          {{ decimal(item.limit) }}
+        </template>
+
+        <template v-slot:[`item.expiredDate`]="{ item }">
+          {{ fullDateTime(item.expiredDate, "-") }}
         </template>
 
         <template v-slot:[`item.normalPrice`]="{ item }">
@@ -73,7 +75,7 @@
             <v-btn
               icon
               class="d-flex align-center"
-              @click="handleDialogDelete(index)"
+              @click="handleDialogDelete(item, index)"
             >
               <v-icon size="16" class="error--text"> mdi-delete </v-icon>
             </v-btn>
@@ -117,7 +119,6 @@
       :products="products"
       :isEdited="state.isEdited"
       @on:fetch="fetchVouchers"
-      @on:submitVoucher="onSubmitVoucher"
       @on:close="state.dialog = false"
     />
   </div>
@@ -127,13 +128,14 @@
 import media from "@/mixins/media";
 import rules from "@/mixins/rules";
 import utils from "@/mixins/utils";
+import pipe from "@/mixins/pipe";
 export default {
   props: {
     form: Object,
     partners: Array,
     products: Array,
   },
-  mixins: [media, rules, utils],
+  mixins: [media, rules, utils, pipe],
   middleware: ["authenticated", "authorized"],
   meta: {
     page: "admin",
@@ -148,37 +150,37 @@ export default {
       },
       {
         text: "Partner",
-        value: "partner",
+        value: "retail.name",
         sortable: false,
         class: "dark--text h7--xxsmall",
       },
       {
         text: "Voucher Name",
-        value: "name",
+        value: "voucherName",
         sortable: false,
         class: "dark--text h7--xxsmall",
       },
       {
-        text: "Products",
-        value: "limitClaim",
+        text: "Product",
+        value: "campaignProduct.product.name",
         sortable: false,
         class: "dark--text h7--xxsmall",
       },
       {
         text: "Limit per User",
-        value: "type",
+        value: "limit",
         sortable: false,
         class: "dark--text h7--xxsmall",
       },
       {
         text: "Total Voucher",
-        value: "normalPrice",
+        value: "totalCode",
         sortable: false,
         class: "dark--text h7--xxsmall",
       },
       {
         text: "Expired Date",
-        value: "discount",
+        value: "expiredDate",
         sortable: false,
         class: "dark--text h7--xxsmall",
       },
@@ -204,14 +206,11 @@ export default {
       isEdited: false,
     },
     items: {
-      selectedProducts: [],
       vouchers: [],
     },
   }),
 
   created() {
-    console.log("w");
-    console.log(this.isCreated);
     if (!this.isCreated) {
       this.fetchVouchers();
     }
@@ -219,11 +218,12 @@ export default {
 
   methods: {
     async fetchVouchers() {
-      console.log("go");
       const id = this.$route.params.slug;
       this.state.fetchLoading = true;
 
       const res = await this.$api.campaigns.voucher.getList(id);
+
+      console.log(res);
 
       if (res.success) {
         this.items.vouchers = res.data.list;
@@ -247,32 +247,39 @@ export default {
     },
 
     onSubmit() {
-      console.log("ww");
+      this.$router.push({
+        path: `/admin/campaigns/${this.$route.params.slug}`,
+        query: { tab: "templates" },
+      });
     },
 
-    onSubmitVoucher(val) {
-      if (!this.state.isEdited) {
-        this.items.selectedProducts.push(val);
-        return;
-      }
-
-      if (this.state.isEdited) {
-        this.items.selectedProducts.splice(this.state.selectedIndex, 1, val);
-      }
-
-      this.$forceUpdate();
-    },
-
-    handleDialogDelete(index) {
-      if (index) {
+    handleDialogDelete(val, index) {
+      if (val?.productId) {
+        this.state.selectedItem = val;
         this.state.selectedIndex = index;
       }
       this.state.dialogDelete = !this.state.dialogDelete;
     },
 
-    onDelete() {
-      this.items.selectedProducts.splice(this.state.selectedIndex, 1);
-      this.state.dialogDelete = false;
+    async onDelete() {
+      this.state.isLoading = true;
+
+      const res = await this.$api.campaigns.voucher.delete(
+        this.$route.params.slug,
+        this.state.selectedItem?.id
+      );
+
+      if (res.success) {
+        this.items.vouchers.splice(this.state.selectedIndex, 1);
+        this.setSuccessAlert("Voucher has been removed");
+        this.state.dialogDelete = false;
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.state.isLoading = false;
       this.state.selectedIndex = null;
     },
 

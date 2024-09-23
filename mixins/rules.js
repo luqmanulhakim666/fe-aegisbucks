@@ -6,7 +6,7 @@ export default {
         value
           ? /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(
               value
-            ) || "*Link tidak valid"
+            ) || "*Invalid URL"
           : true,
       hundred: (value) => value <= 100 || "Max 100",
       email: (v) => /.+@.+/.test(v) || "E-mail tidak valid",
