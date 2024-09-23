@@ -25,6 +25,10 @@ export default (ctx) => {
       return await $axios.delete(`${url}/${id}`);
     },
 
+    async publish(campaignId, body) {
+      return await $axios.put(`${url}/${campaignId}/publish`, body);
+    },
+
     voucher: {
       async getList(id) {
         return await $axios.get(`${url}/${id}/voucher`);

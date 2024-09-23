@@ -237,6 +237,7 @@ export default {
       dialogForm: false,
       isEdited: false,
       formMode: false,
+      hasFetched: false,
     },
     items: {
       selectedProducts: [],
@@ -248,9 +249,12 @@ export default {
 
     if (route === "/admin/campaigns/create") {
       this.$emit("get:detail", this.$route.params.slug);
+      return true;
     }
 
+    this.state.hasFetched = true;
     if (!this.isCreated) {
+      console.log("not create");
       this.items.selectedProducts = this.form.campaignProducts.map((x) => {
         return {
           ...x,
@@ -263,6 +267,14 @@ export default {
   },
 
   methods: {
+    async fetchOne() {
+      const route = this.$router.history._startLocation;
+
+      if (route === "/admin/campaigns/create") {
+        this.$emit("get:detail", this.$route.params.slug);
+      }
+    },
+
     onSaveForm(val) {
       this.items.selectedProducts[this.state.selectedIndex]["inputs"] = val;
     },
