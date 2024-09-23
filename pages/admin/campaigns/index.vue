@@ -18,8 +18,8 @@
         {{ decimal(item.budget) }}
       </template>
 
-      <template v-slot:[`item.brand`]="{ item }">
-        {{ item.brandId }}
+      <template v-slot:[`item.flightDate`]="{ item }">
+        {{ fullDateTime(item.expiredDate, "-") }}
       </template>
 
       <template v-slot:[`item.createdAt`]="{ item }">
@@ -36,7 +36,7 @@
             color="success lighten-2"
             inset
             :ripple="false"
-            v-model="item.active"
+            v-model="item.published"
             @click="onUpdateStatus(item)"
           />
           <!-- <general-chips-status
@@ -69,12 +69,18 @@
               <v-list-item
                 v-for="(menu, i) of items.actions"
                 :key="i"
-                @click="onAction(menu.key, item.id)"
+                @click="onAction(menu.key, item)"
               >
                 <v-list-item-icon class="mr-2">
                   <v-icon
                     size="14"
-                    :color="menu.key === 'edit' ? 'primary ' : 'error'"
+                    :color="
+                      menu.key === 'edit'
+                        ? 'primary '
+                        : menu.key === 'delete'
+                        ? 'error '
+                        : 'dark'
+                    "
                     >{{ menu.icon }}</v-icon
                   >
                 </v-list-item-icon>
@@ -82,7 +88,11 @@
                 <v-list-item-content>
                   <v-list-item-title
                     :class="[
-                      menu.key === 'edit' ? 'primary--text ' : 'error--text',
+                      menu.key === 'edit'
+                        ? 'primary--text '
+                        : menu.key === 'delete'
+                        ? 'error--text'
+                        : 'dark--text',
                       'h8--supersmall',
                     ]"
                     >{{ menu.text }}</v-list-item-title
@@ -155,7 +165,7 @@ export default {
       },
       {
         text: "Brand",
-        value: "brand",
+        value: "brand.name",
         sortable: false,
         class: "dark--text h7--xxsmall ",
       },
@@ -202,6 +212,11 @@ export default {
       campaigns: [],
       actions: [
         {
+          key: "open",
+          text: "Open Web",
+          icon: "mdi-web",
+        },
+        {
           key: "edit",
           text: "Ubah",
           icon: "mdi-pencil",
@@ -233,16 +248,16 @@ export default {
     },
 
     async onUpdateStatus(val) {
-      const res = await this.$api.campaigns.update(val.id, {
-        published: val.active,
+      const res = await this.$api.campaigns.publish(val.id, {
+        publish: val.published,
       });
 
       if (res.success) {
-        this.setSuccessAlert("Status has been changed");
+        this.setFailedAlert({ message: "Campaign has been deactive" });
       }
 
       if (!res.success) {
-        this.setFailedAlert(res);
+        this.setSuccessAlert("Campaign has been active");
       }
     },
     async fetch() {
@@ -289,15 +304,25 @@ export default {
       this.fetch();
     },
 
-    onAction(val, id) {
-      switch (val) {
+    onAction(key, val) {
+      switch (key) {
         case "delete":
           this.state.isDeleteDialog = true;
-          this.state.user_id = id;
+          this.state.user_id = val.id;
+          break;
+
+        case "open":
+          let url = "";
+          if (!val.published) {
+            url = `${this.$config.API_URL}/campaign/cover?brand=${val.brand.slug}&campaign=${val.slug}&__preview=true`;
+            return;
+          }
+          url = `${this.$config.API_URL}/campaign/cover?brand=${val.brand.slug}&campaign=${val.slug}`;
+          window.open(url);
           break;
 
         default:
-          this.$router.push(`/admin/campaigns/${id}`);
+          this.$router.push(`/admin/campaigns/${val.id}`);
           break;
       }
     },

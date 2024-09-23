@@ -52,6 +52,7 @@
         </v-tab-item>
         <v-tab-item>
           <form-campaign-preview
+            v-if="state.tab === 4"
             :brandSlug="form.brand.slug"
             :campaignSlug="form.slug"
             :isPublished="form.published"
@@ -155,7 +156,7 @@ export default {
   },
 
   mounted() {
-    this.setMeta("Campaign");
+    this.setMeta("Campaign", true);
   },
 
   methods: {
@@ -166,6 +167,7 @@ export default {
         page: 1,
         brandId: this.form.brandId,
       };
+
       const res = await this.$api.products.getList(payload);
 
       if (res.success) {

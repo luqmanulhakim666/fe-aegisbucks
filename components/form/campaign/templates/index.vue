@@ -315,7 +315,7 @@ export default {
         this.setFailedAlert(res);
       }
 
-      this.state.isLoading = true;
+      this.state.isLoading = false;
     },
 
     expandTemplate() {
