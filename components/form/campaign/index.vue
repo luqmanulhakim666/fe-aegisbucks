@@ -107,7 +107,6 @@
                         <v-expansion-panel-content>
                           <general-form-text-field
                             v-model="element.label"
-                            :rules="[required]"
                             class="mt-6"
                             label="Field Name"
                             outlined
@@ -129,11 +128,11 @@
                             <div
                               v-for="(option, i) in element.options"
                               :key="i"
-                              class="d-flex justify-space-between mb-4 align-center"
+                              class="d-flex justify-space-between mb-4 align-start"
                             >
-                              <div class="d-flex full-width align-center">
-                                <p class="text--default">{{ i + 1 }}.</p>
-                                <general-form-text-field
+                              <div class="d-flex full-width align-start">
+                                <p class="text--default mt-3">{{ i + 1 }}.</p>
+                                <general-form-rich-editor
                                   class="full-width ml-2 mr-4"
                                   v-model="element.options[i]['key']"
                                   outlined
@@ -186,7 +185,7 @@
                 :key="index"
                 @click="selectField(element, index)"
               >
-                <template v-if="element.type === 'text-field'">
+                <template v-if="element.type === 'text'">
                   <general-form-text-field
                     bold
                     outlined
@@ -219,19 +218,26 @@
                     >
                       *Not options yet
                     </p>
-                    <div v-for="(option, i) in element.options" :key="i">
+                    <div
+                      v-for="(option, i) in element.options"
+                      :key="i"
+                      class="d-flex align-start"
+                    >
                       <v-checkbox
-                        dense
+                        class="mb-0"
+                        cldense
                         multiple
                         hide-details
-                        :label="option.key"
                         :ripple="false"
-                      />
+                      >
+                      </v-checkbox>
+
+                      <p class="text--default mt-5" v-html="option.key"></p>
                     </div>
                   </div>
                 </template>
 
-                <template v-if="element.type === 'text-area'">
+                <template v-if="element.type === 'text_area'">
                   <general-form-text-area
                     bold
                     :label="element.label"
@@ -392,5 +398,9 @@ export default {
 
 .list-group-item {
   cursor: move;
+}
+
+::v-deep a {
+  color: var(--v-primary-base) !important;
 }
 </style>

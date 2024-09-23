@@ -4,6 +4,7 @@
       sort
       actionCreate="/admin/users/create"
       @on:search="onSearch"
+      @on:export="onExport"
     />
 
     <v-tabs
@@ -251,7 +252,6 @@ export default {
     onChangeRole(val) {
       this.body.role = val;
       this.body.page = 1;
-      this.body.keyword = "";
       this.fetch();
       this.pushQuery("role", val);
     },
@@ -294,6 +294,11 @@ export default {
       }
 
       this.state.isLoading = false;
+    },
+
+    onExport() {
+      const url = this.$api.reports.export("user", this.body);
+      window.open(url);
     },
 
     preventDelete(val) {

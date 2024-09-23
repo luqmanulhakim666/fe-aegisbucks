@@ -41,6 +41,11 @@ module.exports = {
       mode: "client",
     },
     {
+      src: "@/plugins/apex-chart",
+      ssr: false,
+      mode: "client",
+    },
+    {
       src: "@plugins/vue-timepicker",
       ssr: false,
     },

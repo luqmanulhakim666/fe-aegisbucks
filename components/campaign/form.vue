@@ -37,14 +37,22 @@
           <p class="text--small error--text" v-if="!field.options.length">
             *Not options yet
           </p>
-          <div v-for="(option, i) in field.options" :key="i">
+          <div
+            v-for="(option, i) in field.options"
+            :key="i"
+            class="d-flex align-start"
+          >
             <v-checkbox
-              dense
+              class="mb-0"
+              cldense
               multiple
-              hide-details
-              :label="option.key"
+              hide-details="auto"
               :ripple="false"
-            />
+              :rules="[arrayRule]"
+            >
+            </v-checkbox>
+
+            <p class="text--default mt-5" v-html="option.key"></p>
           </div>
         </div>
       </template>
@@ -85,3 +93,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+::v-deep a {
+  color: var(--v-primary-base) !important;
+}
+</style>
