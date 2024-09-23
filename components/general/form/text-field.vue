@@ -85,7 +85,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: () => "Ketik Disini",
+      default: () => "Type Here",
     },
     prepend: {
       type: Boolean,

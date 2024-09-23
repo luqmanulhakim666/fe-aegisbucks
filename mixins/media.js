@@ -8,6 +8,7 @@ export default {
           media: {},
           isLoading: false,
           progress: 0,
+          file: null,
         },
       },
     };
@@ -21,7 +22,11 @@ export default {
         url = val?.image?.url;
       }
 
-      if (!val?.image?.url) {
+      if (val?.imageId) {
+        url = `${this.$config.API_URL}/file/${val?.imageId}/file`;
+      }
+
+      if (!val?.image?.url && !val?.imageId) {
         url = `${this.$config.API_URL}/file/${val?.id}/file`;
       }
 

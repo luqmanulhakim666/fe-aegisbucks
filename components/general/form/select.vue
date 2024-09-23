@@ -75,7 +75,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: () => "Ketik disini",
+      default: () => "Type here",
     },
     prepend: {
       type: Boolean,

@@ -6,7 +6,7 @@
         v-if="label"
         v-bind:class="{
           'h6--xsmall': bold,
-          'text--default': !bold
+          'text--default': !bold,
         }"
       >
         {{ label }}
@@ -16,7 +16,7 @@
         v-if="required"
         v-bind:class="{
           'h6--xsmall': bold,
-          'text--default': !bold
+          'text--default': !bold,
         }"
       >
         *
@@ -35,10 +35,10 @@
         <v-icon
           v-bind:class="{
             'material-icons-outlined': prependOutline,
-            'primary--text': active
+            'primary--text': active,
           }"
         >
-          {{ $attrs['prepend-icon'] }}
+          {{ $attrs["prepend-icon"] }}
         </v-icon>
       </template>
 
@@ -46,10 +46,10 @@
         <v-icon
           v-bind:class="{
             'material-icons-outlined': prependOutline,
-            'primary--text': active
+            'primary--text': active,
           }"
         >
-          {{ $attrs['prepend-inner-icon'] }}
+          {{ $attrs["prepend-inner-icon"] }}
         </v-icon>
       </template>
     </v-autocomplete>
@@ -62,36 +62,36 @@ export default {
     className: String,
     label: {
       type: String,
-      default: () => ''
+      default: () => "",
     },
     required: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     placeholder: {
       type: String,
-      default: () => 'Ketik disini'
+      default: () => "Type here",
     },
     prepend: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     prependInner: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     prependOutline: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     bold: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data: () => ({
-    active: false
-  })
-}
+    active: false,
+  }),
+};
 </script>

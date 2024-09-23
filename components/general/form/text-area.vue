@@ -72,7 +72,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: () => "Ketik disini",
+      default: () => "Type here",
     },
     labelWhite: {
       type: Boolean,

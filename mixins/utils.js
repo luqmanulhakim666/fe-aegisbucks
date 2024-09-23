@@ -23,9 +23,25 @@ export default {
         return { name: x, key: x };
       });
     },
+
+    isCreated() {
+      return this.$route.params.slug === "create";
+    },
   },
 
   methods: {
+    toInt(val) {
+      if (val) {
+        return parseInt(val?.replace(/\./g, ""));
+      }
+    },
+    decimal(val) {
+      if (val) {
+        return String(val)
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+    },
     onDigits(event) {
       let keyCode = event.keyCode;
       if (keyCode < 48 || keyCode > 57) {
