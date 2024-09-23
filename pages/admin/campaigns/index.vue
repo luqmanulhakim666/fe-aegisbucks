@@ -148,6 +148,7 @@ export default {
     state: {
       isLoading: false,
       isDeleteDialog: false,
+      campaignId: null,
     },
 
     headers: [
@@ -253,11 +254,15 @@ export default {
       });
 
       if (res.success) {
-        this.setFailedAlert({ message: "Campaign has been deactive" });
+        if (!val.published) {
+          this.setFailedAlert({ message: "Campaign has been deactive" });
+          return;
+        }
+        this.setSuccessAlert("Campaign has been active");
       }
 
       if (!res.success) {
-        this.setSuccessAlert("Campaign has been active");
+        this.setFailedAlert(res);
       }
     },
     async fetch() {
@@ -308,16 +313,20 @@ export default {
       switch (key) {
         case "delete":
           this.state.isDeleteDialog = true;
-          this.state.user_id = val.id;
+          this.state.campaignId = val.id;
           break;
 
         case "open":
           let url = "";
+          const host = this.$config.API_URL.replace("/api", "");
           if (!val.published) {
-            url = `${this.$config.API_URL}/campaign/cover?brand=${val.brand.slug}&campaign=${val.slug}&__preview=true`;
-            return;
+            url = `${host}/campaign/cover?brand=${val.brand.slug}&campaign=${val.slug}&__preview=true`;
           }
-          url = `${this.$config.API_URL}/campaign/cover?brand=${val.brand.slug}&campaign=${val.slug}`;
+
+          if (val.published) {
+            url = `${host}/campaign/cover?brand=${val.brand.slug}&campaign=${val.slug}`;
+          }
+
           window.open(url);
           break;
 
@@ -334,7 +343,7 @@ export default {
     async onDelete() {
       this.state.isLoading = true;
 
-      const res = await this.$api.campaigns.delete(this.state.user_id);
+      const res = await this.$api.campaigns.delete(this.state.campaignId);
 
       if (res.success) {
         this.fetch();
