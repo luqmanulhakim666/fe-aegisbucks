@@ -70,7 +70,6 @@ export default {
 
   methods: {
     setIndex(i) {
-      console.log("ww");
       this.index = i;
     },
   },

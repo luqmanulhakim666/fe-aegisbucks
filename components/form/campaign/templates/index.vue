@@ -47,6 +47,8 @@
                   <b>Primary Color:</b> {{ form.primaryColor }}
                 </p>
                 <v-color-picker
+                  hide-mode-switch
+                  mode="hexa"
                   class="d-inline-block"
                   v-model="form.primaryColor"
                 />
@@ -58,6 +60,8 @@
                 </p>
                 <v-color-picker
                   class="d-inline-block"
+                  hide-mode-switch
+                  mode="hexa"
                   v-model="form.secondaryColor"
                 />
               </div>
@@ -165,7 +169,11 @@
               <p class="h6--xsmall">Thank You Page</p>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <general-form-drop-file class="mt-4" />
+              <form-campaign-templates-thank-you
+                acceptFile=".pdf, image/png, image/jpg, image/jpeg"
+                :cropper="thankYouPageSections"
+                class="mt-4"
+              />
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -246,6 +254,20 @@ export default {
       hasImageId: false,
       indexFile: null,
     },
+    thankYouPageSections: {
+      images: [],
+      isEdited: false,
+      media: {},
+      isLoading: false,
+      progress: 0,
+      imageUrl: null,
+      imageName: null,
+      croppedImage: null,
+      finalCroppedImage: null,
+      dialog: false,
+      hasImageId: false,
+      indexFile: null,
+    },
 
     footerSections: [
       { icon: "mdi-facebook", value: "", placeholder: "Facebook" },
@@ -257,12 +279,26 @@ export default {
   }),
 
   created() {
-    this.coverSections.images = this.form.coverSection;
-    this.headerSections.images = this.form.headerSection;
-    this.footerSections = this.form.footerSection;
+    this.coverSections.images =
+      this.form.coverSection?.length > 0 ? this.form.coverSection : [];
+    this.headerSections.images =
+      this.form.headerSection?.length > 0 ? this.form.headerSection : [];
+
+    this.thankYouPageSections.images =
+      this.form.thanksSection?.length > 0 ? this.form.thanksSection : [];
+
+    if (this.form.footerSection?.length > 0) {
+      this.footerSections = this.form.footerSection;
+    }
   },
 
   methods: {
+    updatePrimaryColor(color) {
+      // if(typeof color === 'string')
+      // Extract the hex value from the color picker and assign it to the form
+      this.form.primaryColor = color.hex;
+    },
+
     goBack() {
       this.$router.push({
         path: `/admin/campaigns/${this.$route.params.slug}`,
@@ -291,6 +327,14 @@ export default {
           };
         }),
         headerSection: this.headerSections.images?.map((x) => {
+          return {
+            id: x.id,
+            type: x.mimetype !== "text" ? "image" : "text",
+            name: x.name,
+          };
+        }),
+
+        thanksSection: this.thankYouPageSections.images?.map((x) => {
           return {
             id: x.id,
             type: x.mimetype !== "text" ? "image" : "text",
