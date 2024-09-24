@@ -291,8 +291,6 @@ export default {
 
       const res = await this.$api.campaigns.voucher.getList(id);
 
-      console.log(res);
-
       if (res.success) {
         this.items.vouchers = res.data.list;
       }
@@ -359,8 +357,6 @@ export default {
         campaignId,
         voucherId
       );
-
-      console.log("res", res);
 
       if (res.success) {
         this.state.voucher = res.data;

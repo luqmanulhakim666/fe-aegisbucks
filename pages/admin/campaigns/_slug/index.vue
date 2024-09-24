@@ -84,9 +84,9 @@ export default {
       googleAnalyticScript: "",
       gmailUsername: "",
       gmailPassword: "",
-      templateId: null,
-      primaryColor: "",
-      secondaryColor: "",
+      templateId: "1",
+      primaryColor: "#2962ff",
+      secondaryColor: "#E27106",
       backgroundImageId: "",
       coverSection: [],
       headerSection: [],
@@ -238,9 +238,18 @@ export default {
       this.state.fetchLoading = true;
       const res = await this.$store.dispatch("campaign/getDetail", id);
 
+      res.data.templateId = "1";
+
       this.form = res.data;
 
-      console.log("this", this.form);
+      if (!res.data.primaryColor) {
+        this.form.primaryColor = "#2962ff";
+      }
+
+      if (!res.data.secondaryColor) {
+        this.form.secondaryColor = "#E27106";
+      }
+
       if (res.data.expiredDate) {
         this.form.date = this.$dayjs(res.data?.expiredDate).format(
           "YYYY-MM-DD"

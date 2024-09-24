@@ -254,7 +254,6 @@ export default {
 
     this.state.hasFetched = true;
     if (!this.isCreated) {
-      console.log("not create");
       this.items.selectedProducts = this.form.campaignProducts.map((x) => {
         return {
           ...x,
