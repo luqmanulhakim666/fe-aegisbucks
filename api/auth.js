@@ -28,5 +28,10 @@ export default (ctx) => {
     async changePassword(body) {
       return await $axios.post(`${url}/password/change`, body);
     },
+
+    async googleLogin(key, body) {
+      let res = await $axios.post(`auth/sso/${key}`, body);
+      return res;
+    },
   };
 };

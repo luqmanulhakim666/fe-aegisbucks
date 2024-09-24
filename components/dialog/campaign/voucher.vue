@@ -1,7 +1,11 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="700">
     <div class="white rounded-xl">
-      <general-card-dialog-header name="Product" @close="onEmitClose" />
+      <general-card-dialog-header
+        name="Product"
+        @close="onEmitClose"
+        :loading="state.isLoading"
+      />
       <v-card class="pa-4">
         <v-form v-model="state.isValid" ref="form">
           <general-form-autocomplete
@@ -98,6 +102,7 @@
             <v-btn
               class="secondary lighten-5 text-capitalize ml-2 h7--xxsmall"
               depressed
+              :loading="state.isLoading"
               @click="onSubmit()"
             >
               Submit
@@ -113,6 +118,7 @@
 import rules from "@/mixins/rules";
 import utils from "@/mixins/utils";
 import pipe from "@/mixins/pipe";
+import { state } from "../../../store/auth";
 
 export default {
   mixins: [rules, utils, pipe],
@@ -127,6 +133,7 @@ export default {
   data: () => ({
     state: {
       isValid: false,
+      isLoading: false,
     },
     form: {
       retailId: null,
@@ -165,6 +172,7 @@ export default {
     },
 
     async onSubmit() {
+      this.state.isLoading = true;
       const valid = await this.validate(this.state.isValid);
       const campaignId = this.$route.params.slug;
 
@@ -212,6 +220,8 @@ export default {
       if (!res.success) {
         this.setFailedAlert(res);
       }
+
+      this.state.isLoading = false;
 
       this.onClearForm();
       this.onEmitClose();

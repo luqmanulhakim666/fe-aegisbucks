@@ -1,12 +1,10 @@
 <template>
-  <div class="neat mx-auto">
-    <template v-if="state.isLoading">
+  <div class="content">
+    <template v-if="loading">
       <general-loading />
     </template>
 
-    <template v-if="!state.isLoading">
-      <campaign-navbar :logo="logo" />
-
+    <template v-if="!loading">
       <campaign-slider
         height="250"
         :primaryColor="campaign.primaryColor"
@@ -14,8 +12,8 @@
       />
 
       <!-- Content Section -->
-      <v-container fluid class="content">
-        <p class="section-title dark--text text--lighten-5 mb-6">
+      <div class="white container--fluid pa-6">
+        <p class="h6--xsmall dark--text text--lighten-5 mb-6">
           Pilih Voucher yang anda inginkan
         </p>
 
@@ -35,13 +33,9 @@
             />
           </v-col>
         </v-row>
-      </v-container>
+      </div>
       <!-- Social Media Section -->
       <campaign-social-media :items="items.footerSections" />
-
-      <div class="mx-auto my-10 d-flex text-center align-center justify-center">
-        <general-logo max_width="70" />
-      </div>
     </template>
   </div>
 </template>
@@ -49,13 +43,22 @@
 <script>
 import media from "@/mixins/media";
 export default {
+  async asyncData({ store, route }) {
+    let loading = true;
+
+    const res = await store.dispatch("campaign/getDetailPublic", {
+      brandSlug: route.query?.brand,
+      campaignSlug: route.params.slug,
+      preview: route.query?.__preview,
+    });
+
+    loading = false;
+
+    return { campaign: res.data, loading: loading };
+  },
   mixins: [media],
-  layout: "empty",
+  layout: "campaign",
   data: () => ({
-    campaign: {},
-    state: {
-      isLoading: false,
-    },
     items: {
       primaryColor: null,
       secondaryColor: null,
@@ -68,32 +71,10 @@ export default {
   }),
 
   created() {
-    this.fetch();
-  },
-
-  computed: {
-    logo() {
-      return `${this.$config.API_URL}/file/${this.campaign?.brand?.logoId}/file`;
-    },
+    this.setLandingPageData();
   },
 
   methods: {
-    async fetch() {
-      this.state.isLoading = true;
-
-      const res = await this.$store.dispatch("campaign/getDetailPublic", {
-        brandSlug: this.$route.query?.brand,
-        campaignSlug: this.$route.params.slug,
-        preview: this.$route.query?.__preview,
-      });
-
-      this.campaign = res.data;
-
-      this.setLandingPageData();
-
-      this.state.isLoading = false;
-    },
-
     setLandingPageData() {
       const {
         primaryColor,
@@ -140,27 +121,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.neat {
-  max-width: 500px;
-  width: 100%;
-  z-index: 0;
-}
-
-.hero-slider {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  object-fit: cover;
-}
-
 .content {
-  background-color: #fff;
-}
-
-.section-title {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+  background: #ffff;
 }
 </style>

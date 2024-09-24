@@ -21,7 +21,7 @@
       </v-carousel-item>
     </v-carousel>
 
-    <div class="d-flex justify-center mt-2">
+    <div class="d-flex justify-center mt-2" v-if="showSliderDots">
       <div v-for="i in totalItems" :key="i">
         <v-avatar
           @click="setIndex(i - 1)"
@@ -53,6 +53,10 @@ export default {
   computed: {
     totalItems() {
       return this.items?.length;
+    },
+
+    showSliderDots() {
+      return this.totalItems > 1;
     },
   },
 

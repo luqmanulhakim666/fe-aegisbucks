@@ -29,6 +29,14 @@ export default (ctx) => {
       return await $axios.put(`${url}/${campaignId}/publish`, body);
     },
 
+    async claimVoucher(body) {
+      return await $axios.post(`${url}/claim-voucher-code`, body);
+    },
+
+    async tracking(body) {
+      return await $axios.post("/user-analytic", body);
+    },
+
     voucher: {
       async getList(id) {
         return await $axios.get(`${url}/${id}/voucher`);

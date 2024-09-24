@@ -24,6 +24,7 @@
     "vue": "^2.7.10",
     "vue-apexcharts": "^1.6.2",
     "vue-cropperjs": "^4.1.0",
+    "vue-jwt-decode": "^0.1.0",
     "vue-quill-editor": "^3.0.6",
     "vue-server-renderer": "^2.7.10",
     "vue-slick-carousel": "^1.0.6",

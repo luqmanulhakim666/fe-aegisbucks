@@ -43,11 +43,13 @@
             class="d-flex align-start"
           >
             <v-checkbox
+              v-model="option['value']"
+              multiple
               class="mb-0"
               cldense
-              multiple
               hide-details="auto"
               :ripple="false"
+              :value="option['key']"
               :rules="[arrayRule]"
             >
             </v-checkbox>
