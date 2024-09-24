@@ -1,9 +1,13 @@
+import VueJwtDecode from "vue-jwt-decode";
 const Cookie = process.client ? require("js-cookie") : undefined;
+const cookieparser = process.server ? require("cookieparser") : undefined;
 
 const defaultState = {
   token: null,
   profile: {},
   role: null,
+  isGoogleAuth: null,
+  googleProfile: {},
 };
 
 export const state = () => ({
@@ -19,6 +23,12 @@ export const mutations = {
   },
   SET_ROLE(state, payload) {
     state.role = payload;
+  },
+  SET_IS_GOOGLE_AUTH(state, payload) {
+    state.isGoogleAuth = payload;
+  },
+  SET_GOOGLE_PROFILE(state, payload) {
+    state.googleProfile = payload;
   },
 };
 export const actions = {
@@ -141,6 +151,53 @@ export const actions = {
   },
 
   /**
+   * Handle Google Login
+   *
+   *
+   */
+  async setGoogleToken({ commit }, token) {
+    // Handle login success and decode JWT token
+    const decodedToken = VueJwtDecode.decode(token);
+
+    // Store the token in cookies
+    Cookie.set("googleToken", token, { expires: 7 }); // Expires in 7 days
+    commit("SET_IS_GOOGLE_AUTH", true);
+    commit("SET_GOOGLE_PROFILE", decodedToken);
+  },
+
+  /**
+   * 1. Load token from Cookies
+   * 2. Set token to store and axios
+   *
+   */
+  async loadGoogleAuth({ dispatch, commit }, context = {}) {
+    let token = null;
+
+    // Server-side cookie handling
+    if (process.server && context.req) {
+      const cookies = context.req.headers.cookie;
+      if (cookies) {
+        const parsedCookies = cookieparser.parse(cookies);
+        token = parsedCookies.googleAuth;
+      }
+    }
+
+    // Client-side cookie handling
+    if (process.client && Cookie) {
+      token = Cookie.get("googleToken");
+    }
+
+    if (token) {
+      try {
+        await dispatch("setGoogleToken", token);
+      } catch (error) {
+        console.error("Failed to decode token", error);
+        commit("SET_IS_GOOGLE_AUTH", false);
+      }
+    }
+  },
+
+  /**
    * Set profile
    *
    *
@@ -162,5 +219,11 @@ export const getters = {
   },
   profile(state) {
     return state.profile;
+  },
+  isGoogleAuth(state) {
+    return state.isGoogleAuth;
+  },
+  googleProfile(state) {
+    return state.googleProfile;
   },
 };

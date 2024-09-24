@@ -21,6 +21,13 @@ module.exports = {
       { hid: "description", name: "description", content: "" },
       { name: "format-detection", content: "telephone=no" },
     ],
+    script: [
+      {
+        src: "https://accounts.google.com/gsi/client",
+        async: true,
+        defer: true,
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

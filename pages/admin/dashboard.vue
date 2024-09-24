@@ -4,9 +4,9 @@
       <lotties-dashboard />
     </v-card>
 
-    <!-- <nuxt-link
+    <nuxt-link
       to="/campaign/cover?brand=indofood&campaign=ayam-geprek&__preview=true"
       >Click</nuxt-link
-    > -->
+    >
   </div>
 </template>

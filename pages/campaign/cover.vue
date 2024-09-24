@@ -1,14 +1,19 @@
 <template>
   <div
-    class="neat mx-auto"
-    :style="`background: url(${backgroudnUrl}) no-repeat cover;`"
+    class="cover"
+    :style="`${
+      backgroudnUrl
+        ? `  background: url(${backgroudnUrl})
+            no-repeat;
+          background-size: cover;`
+        : ''
+    }
+        `"
   >
-    <template v-if="state.isLoading">
+    <template v-if="loading">
       <general-loading />
     </template>
-    <template v-if="!state.isLoading">
-      <campaign-navbar :logo="logo" />
-
+    <template v-if="!loading">
       <div class="container">
         <campaign-slider
           height="70vh"
@@ -24,20 +29,29 @@
           >Dapatkan Voucher</v-btn
         >
       </div>
-
-      <campaign-footer />
     </template>
   </div>
 </template>
 
 <script>
+import tracking from "@/mixins/tracking";
 export default {
-  layout: "empty",
+  mixins: [tracking],
+  async asyncData({ store, route }) {
+    let loading = true;
+
+    const res = await store.dispatch("campaign/getDetailPublic", {
+      brandSlug: route.query?.brand,
+      campaignSlug: route.query?.campaign,
+      preview: route.query?.__preview,
+    });
+
+    loading = false;
+
+    return { campaign: res.data, loading: loading };
+  },
+  layout: "campaign",
   data: () => ({
-    campaign: {},
-    state: {
-      isLoading: false,
-    },
     items: {
       primaryColor: null,
       secondaryColor: null,
@@ -50,36 +64,25 @@ export default {
   }),
 
   created() {
-    this.fetch();
+    this.setLandingPageData();
+    this.tracking("View Campaign", {
+      data: {
+        campaignId: "aa",
+      },
+    });
   },
 
   computed: {
-    logo() {
-      return `${this.$config.API_URL}/file/${this.campaign?.brand?.logoId}/file`;
-    },
-
     backgroudnUrl() {
-      return `${this.$config.API_URL}/file/${this.items.backgroundImageId}/file`;
+      if (this.campaign?.backgroundImageId) {
+        return `${this.$config.API_URL}/file/${this.campaign.backgroundImageId}/file`;
+      }
+
+      return false;
     },
   },
 
   methods: {
-    async fetch() {
-      this.state.isLoading = true;
-
-      const res = await this.$store.dispatch("campaign/getDetailPublic", {
-        brandSlug: this.$route.query?.brand,
-        campaignSlug: this.$route.query?.campaign,
-        preview: this.$route.query?.__preview,
-      });
-
-      this.campaign = res.data;
-
-      this.setLandingPageData();
-
-      this.state.isLoading = false;
-    },
-
     setLandingPageData() {
       const {
         primaryColor,
@@ -115,11 +118,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.neat {
-  max-width: 500px;
-  width: 100%;
-  z-index: 0;
-}
-</style>

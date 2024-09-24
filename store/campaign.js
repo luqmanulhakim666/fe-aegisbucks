@@ -48,10 +48,48 @@ export const actions = {
       return res;
     }
 
-    let { data } = res.data;
+    await dispatch("setCampaign", res.data);
 
-    // await dispatch('setToken', 'Bearer ' + accessToken)
-    await dispatch("setCampaign", data);
+    return res;
+  },
+
+  async getDetailProductPublic({ dispatch }, payload) {
+    let res = await this.$api.campaigns.public.product(
+      payload.brandSlug,
+      payload.campaignSlug,
+      payload.producId,
+      { __preview: payload.preview }
+    );
+
+    if (!res.success) {
+      this.dispatch("snack", [res.error.message, "error", "mdi-close-circle"]);
+      return res;
+    }
+
+    await dispatch("setCampaign", res.data);
+
+    return res;
+  },
+
+  /**
+   * Tacking
+   *
+   *
+   */
+  async tracking({ commit }, payload) {
+    const body = {
+      event: payload.event,
+      data: {
+        campaignId: payload.campaignId,
+      },
+      identity: payload.identity,
+      name: payload.name,
+      email: payload.email,
+      googleId: payload.googleId,
+      phone: payload.phone,
+    };
+
+    const res = await this.$api.campaigns.tracking(body);
 
     return res;
   },
