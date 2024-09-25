@@ -17,7 +17,7 @@
           v-bind:class="{
             'retail_card-active rounded-xl': form.retailId === item.id,
           }"
-          cols="6"
+          :cols="retailPartners.length > 1 ? 6 : 12"
           v-for="(item, index) in retailPartners"
           :key="index"
         >

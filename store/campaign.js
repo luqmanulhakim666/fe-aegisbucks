@@ -57,12 +57,12 @@ export const actions = {
     let res = await this.$api.campaigns.public.product(
       payload.brandSlug,
       payload.campaignSlug,
-      payload.producId,
+      payload.productSlug,
       { __preview: payload.preview }
     );
 
     if (!res.success) {
-      this.dispatch("snack", [res.error.message, "error", "mdi-close-circle"]);
+      // this.dispatch("snack", ["error", "error", "mdi-close-circle"]);
       return res;
     }
 
@@ -77,19 +77,7 @@ export const actions = {
    *
    */
   async tracking({ commit }, payload) {
-    const body = {
-      event: payload.event,
-      data: {
-        campaignId: payload.campaignId,
-      },
-      identity: payload.identity,
-      name: payload.name,
-      email: payload.email,
-      googleId: payload.googleId,
-      phone: payload.phone,
-    };
-
-    const res = await this.$api.campaigns.tracking(body);
+    const res = await this.$api.campaigns.tracking(payload);
 
     return res;
   },

@@ -1,36 +1,24 @@
 <template>
-  <div>
+  <div class="container">
     <template v-if="loading">
       <general-loading />
     </template>
     <template v-if="!loading">
-      <div
-        v-if="campaign"
-        class="cover"
-        :style="`${
-          backgroudnUrl
-            ? `  background: url(${backgroudnUrl})
-            no-repeat;
-          background-size: cover;`
-            : ''
-        }
-        `"
-      >
-        <div class="container">
-          <campaign-slider
-            height="70vh"
-            :items="items.coverSections"
-            :primaryColor="items.primaryColor"
-          />
-          <v-btn
-            depressed
-            class="h7--xxsmall text-capitalize mt-6"
-            block
-            :color="items.primaryColor"
-            @click="onGetVoucher()"
-            >Dapatkan Voucher</v-btn
-          >
-        </div>
+      <div v-if="campaign">
+        <campaign-slider
+          height="65vh"
+          :items="items.coverSections"
+          :primaryColor="items.primaryColor"
+        />
+        <v-btn
+          depressed
+          class="h7--xxsmall text-capitalize mt-6"
+          block
+          large
+          :color="items.primaryColor"
+          @click="onGetVoucher()"
+          >Dapatkan Voucher</v-btn
+        >
       </div>
     </template>
   </div>
@@ -47,8 +35,8 @@ export default {
 
     try {
       const res = await store.dispatch("campaign/getDetailPublic", {
-        brandSlug: route.query?.brand,
-        campaignSlug: route.query?.campaign,
+        brandSlug: route.params?.brandSlug,
+        campaignSlug: route.params?.campaignSlug,
         preview: route.query?.__preview,
       });
 
@@ -59,7 +47,6 @@ export default {
       }
     } catch (err) {
       console.error("Error fetching campaign data:", err);
-      // Show custom error message
       error({ statusCode: 500, message: "Failed to load campaign data." });
     }
     loading = false;
@@ -67,6 +54,7 @@ export default {
     return { campaign: campaign, loading: loading };
   },
   layout: "campaign",
+
   data: () => ({
     items: {
       primaryColor: null,
@@ -82,22 +70,14 @@ export default {
   created() {
     if (this.campaign?.id) {
       this.setLandingPageData();
-      this.tracking("View Campaign", {
-        data: {
-          campaignId: "aa",
-        },
-      });
+      this.checkGoogleAuth();
     }
   },
 
-  computed: {
-    backgroudnUrl() {
-      if (this.campaign?.backgroundImageId) {
-        return `${this.$config.API_URL}/file/${this.campaign.backgroundImageId}/file`;
-      }
-
-      return false;
-    },
+  mounted() {
+    if (!this.isPreview) {
+      this.trackEvent("View Campaign", { campaignId: this.campaign.id });
+    }
   },
 
   methods: {
@@ -122,15 +102,15 @@ export default {
     },
 
     onGetVoucher() {
-      if (!this.campaign.published) {
+      if (this.isPreview) {
         this.$router.push(
-          `/campaign/${this.campaign.slug}?brand=${this.campaign.brand.slug}&__preview=true`
+          `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/products?__preview=true`
         );
         return;
       }
 
       this.$router.push(
-        `/campaign/${this.campaign.slug}?brand=${this.campaign.brand.slug}`
+        `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/products`
       );
     },
   },

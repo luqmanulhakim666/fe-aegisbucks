@@ -26,8 +26,8 @@ export default {
   computed: {
     campaignUrl() {
       return this.isPublished
-        ? `/campaign/cover?brand=${this.brandSlug}&campaign=${this.campaignSlug}`
-        : `/campaign/cover?brand=${this.brandSlug}&campaign=${this.campaignSlug}&__preview=true`;
+        ? `/campaign/${this.brandSlug}/${this.campaignSlug}`
+        : `/campaign/${this.brandSlug}/${this.campaignSlug}&__preview=true`;
     },
   },
 };

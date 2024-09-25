@@ -317,7 +317,9 @@ export default {
         templateId: "1",
         primaryColor: this.form.primaryColor,
         secondaryColor: this.form.secondaryColor,
-        backgroundImageId: this.form.backgroundImageId?.id,
+        backgroundImageId: this.form.backgroundImage?.id
+          ? this.form.backgroundImage?.id
+          : null,
         footerSection: this.footerSections,
         coverSection: this.coverSections.images?.map((x) => {
           return {

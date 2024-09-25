@@ -1,5 +1,5 @@
 <template>
-  <v-container class="social-media-section">
+  <v-container class="social-media-section white">
     <div class="social-icons">
       <div v-for="(item, index) in items" :key="index">
         <v-btn v-if="item.value" link :href="item.value" target="_blank" icon>
@@ -23,7 +23,6 @@ export default {
 .social-media-section {
   border-bottom: 1px solid #f3f3f3;
   border-top: 1px solid #f3f3f3;
-  margin-top: 20px;
   padding: 20px;
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mx-auto grey lighten-4 my-10 d-flex flex-column text-center align-center justify-center"
+    class="mx-auto d-flex flex-column text-center align-center justify-center"
   >
     <p class="text--small my-2">Powered by:</p>
     <general-logo max_width="70" />

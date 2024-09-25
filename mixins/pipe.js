@@ -19,6 +19,14 @@ export default {
       return "";
     },
 
+    dateMonthTextYear(value, seperator = "/") {
+      let s = seperator;
+      if (value) {
+        return this.$dayjs(value).format(`DD${s}MMM${s}YYYY`);
+      }
+      return "";
+    },
+
     fullDateTime(value, seperator = "/") {
       let s = seperator;
       if (value) {
