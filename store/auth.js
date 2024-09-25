@@ -6,7 +6,7 @@ const defaultState = {
   token: null,
   profile: {},
   role: null,
-  isGoogleAuth: null,
+  isGoogleAuth: false,
   googleProfile: {},
 };
 
@@ -178,7 +178,7 @@ export const actions = {
       const cookies = context.req.headers.cookie;
       if (cookies) {
         const parsedCookies = cookieparser.parse(cookies);
-        token = parsedCookies.googleAuth;
+        token = parsedCookies.googleToken;
       }
     }
 

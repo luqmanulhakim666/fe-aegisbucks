@@ -37,6 +37,14 @@ export default (ctx) => {
       return await $axios.post("/user-analytic", body);
     },
 
+    claim: {
+      async detail(campaignId, groupId) {
+        return await $axios.get(
+          `${url}/${campaignId}/voucher-claim/${groupId}`
+        );
+      },
+    },
+
     voucher: {
       async getList(id) {
         return await $axios.get(`${url}/${id}/voucher`);
@@ -79,11 +87,11 @@ export default (ctx) => {
         );
       },
 
-      async product(brandSlug, campaignSlug, campaignId, query = {}) {
+      async product(brandSlug, campaignSlug, productSlug, query = {}) {
         let q = qs.stringify(query);
 
         return await $axios.get(
-          `${url}/public/${brandSlug}/${campaignSlug}/${campaignId}?${q}`
+          `${url}/public/${brandSlug}/${campaignSlug}/${productSlug}?${q}`
         );
       },
     },

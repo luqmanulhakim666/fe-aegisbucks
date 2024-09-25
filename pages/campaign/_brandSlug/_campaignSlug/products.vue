@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="products">
     <template v-if="loading">
       <general-loading />
     </template>
@@ -12,12 +12,13 @@
       />
 
       <!-- Content Section -->
-      <div class="white container--fluid pa-6">
-        <p class="h6--xsmall dark--text text--lighten-5 mb-6">
-          Pilih Voucher yang anda inginkan
-        </p>
-
-        <v-row>
+      <v-container class="pa-10">
+        <v-row class="white rounded-xl pa-2">
+          <v-col cols="12">
+            <p class="h6--xsmall dark--text text--lighten-5">
+              Pilih Voucher yang anda inginkan
+            </p>
+          </v-col>
           <!-- Product Cards -->
           <v-col
             cols="6"
@@ -33,7 +34,7 @@
             />
           </v-col>
         </v-row>
-      </div>
+      </v-container>
       <!-- Social Media Section -->
       <campaign-social-media :items="items.footerSections" />
     </template>
@@ -42,28 +43,35 @@
 
 <script>
 import media from "@/mixins/media";
+import tracking from "@/mixins/tracking";
 export default {
-  async asyncData({ store, route }) {
+  async asyncData({ store, route, redirect }) {
     let loading = true;
+    let campaign = null;
 
     const res = await store.dispatch("campaign/getDetailPublic", {
-      brandSlug: route.query?.brand,
-      campaignSlug: route.params.slug,
+      brandSlug: route.params?.brandSlug,
+      campaignSlug: route.params.campaignSlug,
       preview: route.query?.__preview,
     });
 
+    campaign = res.data;
+
+    if (!campaign) {
+      redirect("/campaign/404");
+    }
+
     loading = false;
 
-    return { campaign: res.data, loading: loading };
+    return { campaign: campaign, loading: loading };
   },
-  mixins: [media],
+  mixins: [media, tracking],
   layout: "campaign",
   data: () => ({
     items: {
       primaryColor: null,
       secondaryColor: null,
       backgroundImage: {},
-      coverSections: [],
       headerSections: [],
       productSections: [],
       footerSections: [],
@@ -72,6 +80,14 @@ export default {
 
   created() {
     this.setLandingPageData();
+  },
+
+  mounted() {
+    if (!this.isPreview) {
+      this.trackEvent("View Campaign Product List", {
+        campaignId: this.campaign.id,
+      });
+    }
   },
 
   methods: {
@@ -105,23 +121,22 @@ export default {
     },
 
     onDetail(val) {
-      if (!this.campaign.published) {
+      this.trackEvent("Click Campaign Product", {
+        campaignId: this.campaign.id,
+        productId: val.product.id,
+      });
+
+      if (this.isPreview) {
         this.$router.push(
-          `/campaign/${this.campaign.slug}/product?id=${val.product.id}&brand=${this.campaign.brand.slug}&__preview=true`
+          `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}?__preview=true`
         );
         return;
       }
 
       this.$router.push(
-        `/campaign/${this.campaign.slug}/product?id=${val.product.id}&brand=${this.campaign.brand.slug}`
+        `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}`
       );
     },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.content {
-  background: #ffff;
-}
-</style>

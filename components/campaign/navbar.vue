@@ -1,30 +1,34 @@
 <template>
-  <div class="d-flex ma-4">
-    <general-logo-brand :logo="logo" max_width="60" />
-    <v-spacer />
-    <v-menu bottom left>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn icon v-bind="attrs" v-on="on">
-          <v-icon size="32">mdi-share-variant</v-icon>
-        </v-btn>
-      </template>
-      <v-list>
-        <!-- <v-list-item @click="share('facebook')">
+  <div class="campaign-navbar white">
+    <div
+      class="campaign-navbar_logo d-flex justify-center mx-auto container--fluid px-6 py-4 px-sm-10"
+    >
+      <general-logo-brand :logo="logo" max_width="60" />
+      <v-spacer />
+      <v-menu bottom left>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon size="32">mdi-share-variant</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <!-- <v-list-item @click="share('facebook')">
           <v-list-item-content>Share on Facebook</v-list-item-content>
         </v-list-item>
         <v-list-item @click="share('twitter')">
           <v-list-item-content>Share on Twitter</v-list-item-content>
         </v-list-item> -->
-        <v-list-item @click="copyLink">
-          <v-list-item-content class="text--default">
-            <div class="d-flex align-center">
-              <v-icon small class="mr-2">mdi-content-copy</v-icon>
-              Copy Link
-            </div>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+          <v-list-item @click="copyLink">
+            <v-list-item-content class="text--default">
+              <div class="d-flex align-center">
+                <v-icon small class="mr-2">mdi-content-copy</v-icon>
+                Copy Link
+              </div>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </div>
   </div>
 </template>
 
@@ -72,3 +76,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.campaign-navbar {
+  &_logo {
+    max-width: 500px;
+    width: 100%;
+    z-index: 0;
+  }
+}
+</style>
