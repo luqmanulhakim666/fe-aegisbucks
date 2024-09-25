@@ -70,19 +70,28 @@
           <general-google-sign-in @loginSuccess="handleGoogleLogin" />
         </template>
 
+        <general-google-sign-in @loginSuccess="handleGoogleLogin" />
+
         <!-- Submit button only if authenticated -->
-        <v-btn
-          v-if="isAuthenticated"
-          block
-          large
-          depressed
-          :color="campaign.primaryColor"
-          class="text-capitalize mb-10 h6--xsmall"
-          @click="onSubmit()"
-          :disabled="!isAuthenticated"
-        >
-          Dapatkan Voucher Sekarang
-        </v-btn>
+        <template v-if="isAuthenticated">
+          <div
+            class="d-flex rounded-xl py-3 justify-center grey lighten-3 mb-2"
+          >
+            <v-icon class="mr-2">mdi-email</v-icon>
+            <p class="h7--xxsmall">{{ profile.email }}</p>
+          </div>
+          <v-btn
+            block
+            large
+            depressed
+            :color="campaign.primaryColor"
+            class="text-capitalize mb-10 h6--xsmall"
+            @click="onSubmit()"
+            :disabled="!isAuthenticated"
+          >
+            Dapatkan Voucher Sekarang
+          </v-btn>
+        </template>
       </div>
     </template>
   </div>
@@ -143,6 +152,10 @@ export default {
     isAuthenticated() {
       return this.$store.getters["auth/isGoogleAuth"];
     },
+
+    profile() {
+      return this.$store.getters["auth/googleProfile"];
+    },
   },
 
   methods: {
@@ -179,16 +192,14 @@ export default {
 
       if (!valid) return;
 
-      const profile = this.$store.getters["auth/googleProfile"];
-
       const payload = {
         campaignId: this.campaign.id,
         retailId: this.form.retailId,
         productId: this.product?.productId,
-        name: profile.name,
-        email: profile.email,
-        googleId: profile.sub,
-        phone: "081" + profile.sub,
+        name: this.profile.name,
+        email: this.profile.email,
+        googleId: this.profile.sub,
+        phone: "081" + this.profile.sub,
         count: this.form.count,
         userInputs: this.form.userInputs?.map((x) => {
           return {
