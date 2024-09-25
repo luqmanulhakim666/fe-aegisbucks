@@ -44,7 +44,7 @@ export const actions = {
     );
 
     if (!res.success) {
-      this.dispatch("snack", [res.error.message, "error", "mdi-close-circle"]);
+      // this.dispatch("snack", [res.error.message, "error", "mdi-close-circle"]);
       return res;
     }
 

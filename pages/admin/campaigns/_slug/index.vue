@@ -156,7 +156,7 @@ export default {
   },
 
   mounted() {
-    this.setMeta("Campaign", true);
+    this.setMeta("Campaign");
   },
 
   methods: {
