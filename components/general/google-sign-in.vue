@@ -31,7 +31,6 @@ export default {
 
   mounted() {
     window.handleCredentialResponse = (response) => {
-      console.log("Google Sign-in response:", response);
       const jwt = response.credential;
       // Emit the JWT token to the parent
       this.$emit("loginSuccess", jwt);

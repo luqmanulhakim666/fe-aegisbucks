@@ -28,7 +28,7 @@
 
           <general-form-autocomplete
             v-model="form.productId"
-            label="Brands"
+            label="Product"
             :items="availableProducts"
             item-text="name"
             outlined

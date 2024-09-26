@@ -1,35 +1,39 @@
 <template>
   <div>
-    <p class="text-center h5--small">Pilih Lokasi Penukaran Voucher</p>
-    <p class="text-center h7--xxsmall">Klik Pada Logo Merchant</p>
+    <p class="text-center h6--xsmall mt-6">Pilih Lokasi Penukaran Voucher</p>
 
     <general-form-text-field
       hide-details="auto"
       dense
-      class="hide-input mt-2 mb-4 ml-4"
+      class="hide-input mt-2 mb-4"
       v-model="form.retailId"
       :rules="[required]"
     />
-    <v-container>
-      <v-row>
-        <v-col
-          class="retail_card"
-          v-bind:class="{
-            'retail_card-active rounded-xl': form.retailId === item.id,
-          }"
-          :cols="retailPartners.length > 1 ? 6 : 12"
-          v-for="(item, index) in retailPartners"
-          :key="index"
-        >
+
+    <v-radio-group
+      class="mt-0"
+      hide-details
+      v-model="form.retailId"
+      :rules="[required]"
+    >
+      <v-radio
+        v-for="(item, index) in retailPartners"
+        :key="index"
+        :ripple="false"
+        :value="item.id"
+        class="mb-6"
+      >
+        <template v-slot:label>
           <img
-            class="v-responsive pointer"
+            width="80"
+            class="pointer"
             :src="getImage(item.image)"
             alt="img"
-            @click="onEmitSelect(item.id)"
           />
-        </v-col>
-      </v-row>
-    </v-container>
+          <span class="ml-4 h6--xsmall">{{ item.name }}</span>
+        </template>
+      </v-radio>
+    </v-radio-group>
   </div>
 </template>
 

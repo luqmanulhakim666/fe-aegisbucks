@@ -30,7 +30,7 @@
 
       <template v-if="field.type === 'checkbox'">
         <div class="mb-6">
-          <p class="h6--xsmall">
+          <p class="h6--xsmall" v-bind:class="{ 'mt-n4': !field.label }">
             {{ field.label }}
           </p>
 
@@ -47,14 +47,14 @@
               multiple
               class="mb-0"
               cldense
-              hide-details="auto"
+              hide-details
               :ripple="false"
               :value="option['key']"
               :rules="[arrayRule]"
             >
             </v-checkbox>
 
-            <p class="text--default mt-5" v-html="option.key"></p>
+            <span class="text--default mt-5" v-html="option.key"></span>
           </div>
         </div>
       </template>

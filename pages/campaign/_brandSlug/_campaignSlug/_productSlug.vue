@@ -67,7 +67,7 @@
           </v-form>
 
           <!-- Show Google login button if not logged in -->
-          <template v-if="state.showGoogleLogin">
+          <template v-if="!isAuthenticated">
             <general-google-sign-in @loginSuccess="handleGoogleLogin" />
           </template>
 
@@ -103,7 +103,6 @@ import media from "@/mixins/media";
 import pipe from "@/mixins/pipe";
 import rules from "@/mixins/rules";
 import tracking from "@/mixins/tracking";
-import { state } from "../../../../store/campaign";
 
 export default {
   async asyncData({ store, route }) {
@@ -150,7 +149,6 @@ export default {
       isLoading: false,
       isValid: true,
       qty: 1,
-      showGoogleLogin: false,
     },
   }),
 

@@ -28,8 +28,8 @@ export default {
 
     setBackground() {
       return this.campaign?.backgroundImageId
-        ? `background: url(${this.$config.API_URL}/file/${this.campaign?.backgroundImageId}/file)
-            no-repeat;
+        ? `background: url(${this.$config.API_URL}/file/${this.campaign?.backgroundImageId}/file);
+         background-attachment: fixed;
           background-size: cover;`
         : "";
     },
