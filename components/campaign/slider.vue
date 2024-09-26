@@ -4,7 +4,7 @@
       v-model="index"
       :height="height"
       hide-delimiters
-      :show-arrows="showArrow"
+      :show-arrows="showArrow && showSliderDots"
       class="carousel"
       :cycle="cycle"
     >
@@ -15,6 +15,7 @@
       >
         <template v-if="isImage">
           <v-img
+            :lazy-src="`${getImage(item)}?auto=format,compress&w=1946`"
             :height="height"
             contain
             :src="getImage(item)"

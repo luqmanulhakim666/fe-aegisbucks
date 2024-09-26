@@ -93,6 +93,7 @@ export default {
       footerSection: [],
       thanksSection: [],
       campaignProducts: [],
+      additionalInformation: [],
       date: "",
       time: {
         hh: "",
@@ -248,6 +249,10 @@ export default {
 
       if (!res.data.secondaryColor) {
         this.form.secondaryColor = "#E27106";
+      }
+
+      if (!res.data.additionalInformation) {
+        this.form.additionalInformation = [{ label: "Title", content: "" }];
       }
 
       if (res.data.expiredDate) {

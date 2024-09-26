@@ -39,6 +39,15 @@
           />
 
           <general-form-text-field
+            v-model="form.promoLabel"
+            label="Promo Label"
+            outlined
+            required
+            bold
+            :rules="[required]"
+          />
+
+          <general-form-text-field
             required
             v-model="form.limitClaim"
             label="Limit Claim"
@@ -104,6 +113,7 @@ export default {
     },
     form: {
       type: "free",
+      promoLabel: "",
       productId: {},
       limitClaim: null,
       price: null,
@@ -157,6 +167,7 @@ export default {
 
     onClearForm() {
       this.form.type = "free";
+      this.form.promoLabel = "";
       this.form.productId = {};
       this.form.limitClaim = null;
       this.form.price = null;
@@ -173,13 +184,7 @@ export default {
       }
 
       if ((await val) && !this.isEdited) {
-        this.form.type = "free";
-        this.form.productId = {};
-        this.form.limitClaim = null;
-        this.form.price = null;
-        this.form.discount = null;
-        this.form.inputs = [];
-        this.$refs.form.resetValidation();
+        this.onClearForm();
       }
     },
     "form.limitClaim"(val) {

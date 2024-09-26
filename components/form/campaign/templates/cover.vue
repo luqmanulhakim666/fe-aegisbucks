@@ -134,8 +134,17 @@
               <cropper
                 ref="cropper"
                 :src="cropper.imageUrl"
-                :aspect-ratio="16 / 9"
+                :aspect-ratio="9 / 16"
                 class="cropper"
+                :viewMode="1"
+                :autoCropArea="1"
+                :movable="true"
+                :zoomable="true"
+                :scalable="false"
+                :rotatable="false"
+                :toggleDragModeOnDblclick="false"
+                :cropBoxResizable="false"
+                dragMode="move"
               />
               <div class="d-flex align-center">
                 <v-btn
@@ -250,23 +259,6 @@ export default {
     cropper: Object,
   },
 
-  data: () => ({
-    // cropper: {
-    //   images: [],
-    //   isEdited: false,
-    //   media: {},
-    //   isLoading: false,
-    //   progress: 0,
-    //   imageUrl: null,
-    //   imageName: null,
-    //   croppedImage: null,
-    //   finalCroppedImage: null,
-    //   dialog: false,
-    //   hasImageId: false,
-    //   indexFile: null,
-    // },
-  }),
-
   created() {
     this.cropper.hasImageId = !!this.cropper?.image?.id;
   },
@@ -370,6 +362,7 @@ export default {
       if (res.success) {
         this.cropper.images.push({
           ...res.data,
+          type: "image",
           finalCroppedImage: image,
         });
         this.cropper.media = res.data;

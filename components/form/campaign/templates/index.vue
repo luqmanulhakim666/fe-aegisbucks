@@ -324,14 +324,14 @@ export default {
         coverSection: this.coverSections.images?.map((x) => {
           return {
             id: x.id,
-            type: x.mimetype !== "text" ? "image" : "text",
+            type: x.type,
             name: x.name,
           };
         }),
         headerSection: this.headerSections.images?.map((x) => {
           return {
             id: x.id,
-            type: x.mimetype !== "text" ? "image" : "text",
+            type: x.type,
             name: x.name,
           };
         }),
@@ -339,7 +339,7 @@ export default {
         thanksSection: this.thankYouPageSections.images?.map((x) => {
           return {
             id: x.id,
-            type: x.mimetype !== "text" ? "image" : "text",
+            type: x.type,
             name: x.name,
           };
         }),

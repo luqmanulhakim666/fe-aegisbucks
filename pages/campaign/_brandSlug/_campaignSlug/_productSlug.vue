@@ -15,11 +15,9 @@
           />
 
           <div class="d-flex flex-column justify-center align-center">
-            <p class="section-title h7--xxsmall">
-              LIMITED OFFER ONLY <b>{{ decimal(product.discount) }}</b>
+            <p class="section-title h7--xxsmall mt-2 mb-4">
+              {{ product.promoLabel }}
             </p>
-
-            <p class="p--default mb-6">{{ product.product.description }}</p>
 
             <p class="text--default dark--text text--lighten-1">
               Jumlah Voucer
