@@ -160,7 +160,7 @@ export const actions = {
     const decodedToken = VueJwtDecode.decode(token);
 
     // Store the token in cookies
-    Cookie.set("googleToken", token, { expires: 7 }); // Expires in 7 days
+    Cookie.set("googleToken", token, { expires: 30 }); // Expires in 7 days
     commit("SET_IS_GOOGLE_AUTH", true);
     commit("SET_GOOGLE_PROFILE", decodedToken);
   },

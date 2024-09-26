@@ -127,15 +127,11 @@ export default {
       });
 
       if (this.isPreview) {
-        this.$router.push(
-          `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}?__preview=true`
-        );
+        window.location.href = `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}?__preview=true`;
         return;
       }
 
-      this.$router.push(
-        `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}`
-      );
+      window.location.href = `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}`;
     },
   },
 };
