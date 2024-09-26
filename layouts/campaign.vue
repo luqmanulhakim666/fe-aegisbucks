@@ -28,7 +28,7 @@ export default {
 
     setBackground() {
       return this.campaign?.backgroundImageId
-        ? `background: url(${this.$config.API_URL}/file/${this.campaign?.backgroundImageId}/file);
+        ? `background: url(${this.$config.API_URL}/file/${this.campaign?.backgroundImageId}/file?auto=format,compress&w=720);
          background-attachment: fixed;
           background-size: cover;`
         : "";

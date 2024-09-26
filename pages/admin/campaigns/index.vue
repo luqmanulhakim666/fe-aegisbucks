@@ -320,11 +320,11 @@ export default {
           let url = "";
           const host = this.$config.API_URL.replace("/api", "");
           if (!val.published) {
-            url = `${host}/campaign/cover?brand=${val.brand.slug}&campaign=${val.slug}&__preview=true`;
+            url = `${host}/campaign/${val.brand.slug}/${val.slug}&__preview=true`;
           }
 
           if (val.published) {
-            url = `${host}/campaign/cover?brand=${val.brand.slug}&campaign=${val.slug}`;
+            url = `${host}/campaign/${val.brand.slug}/${val.slug}`;
           }
 
           window.open(url);

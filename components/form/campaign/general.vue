@@ -53,7 +53,68 @@
         :rules="[required]"
       />
 
-      <div></div>
+      <!-- <div class="mb-8 mt-4">
+        <p class="h6--xsmall label-text mb-4">Aditional Informations</p>
+        <v-btn
+          @click="onAddItem()"
+          small
+          depressed
+          class="primary text-capitalize h8--supersmall mb-6"
+        >
+          <v-icon small class="mr-2">mdi-plus-circle</v-icon>Add</v-btn
+        >
+
+        <draggable
+          class="dragArea list-group"
+          :list="form.additionalInformation"
+          group="people"
+          :animation="500"
+          tag="transition-group"
+          handle=".handle"
+        >
+          <div
+            class="list-group-item d-flex align-start"
+            v-for="(item, index) in form.additionalInformation"
+            :key="index"
+            @click="selectedItem(item, index)"
+          >
+            <v-icon class="mr-2 mt-4 handle" size="24"
+              >mdi-drag-horizontal-variant</v-icon
+            >
+            <v-expansion-panels
+              flat
+              class="mb-4 border-thin rounded-lg"
+              focusable
+            >
+              <v-expansion-panel>
+                <v-expansion-panel-header color="grey lighten-3">
+                  <p class="h6--xsmall">
+                    {{ item.label }}
+                  </p>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <general-form-text-field
+                    v-model="item.label"
+                    class="mt-6"
+                    label="Ttitle"
+                    outlined
+                  />
+
+                  <general-form-rich-editor
+                    class="full-width ml-2 mr-4"
+                    v-model="item.content"
+                    outlined
+                    hide-details="auto"
+                  />
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+            <v-btn icon x-small class="ml-2 mt-2" @click="onRemoveItem(index)"
+              ><v-icon color="error">mdi-close-circle</v-icon></v-btn
+            >
+          </div>
+        </draggable>
+      </div> -->
 
       <general-form-text-field
         v-model="form.budget"
@@ -185,15 +246,22 @@ import { AUTH_SETTINGS } from "@/data/general";
 import rules from "@/mixins/rules";
 import utils from "@/mixins/utils";
 import pipe from "@/mixins/pipe";
+import draggable from "vuedraggable";
+
 export default {
   mixins: [rules, utils, pipe],
+  components: {
+    draggable,
+  },
   props: {
     loading: Boolean,
     form: Object,
     users: Array,
     brands: Array,
   },
+
   data: () => ({
+    selectedItemIndex: 0,
     state: {
       isValid: true,
     },
@@ -210,6 +278,15 @@ export default {
   },
 
   methods: {
+    selectedItem(index) {
+      this.selectedItemIndex = index;
+    },
+    onAddItem() {
+      this.form.additionalInformation.push({ label: "Title", content: "" });
+    },
+    onRemoveItem(index) {
+      this.form.additionalInformation.splice(index, 1);
+    },
     async onSubmit() {
       const valid = await this.validate(this.state.isValid);
 
@@ -243,6 +320,7 @@ export default {
         googleAnalyticScript: this.form.googleAnalyticScript,
         gmailUsername: this.form.gmailUsername,
         gmailPassword: this.form.gmailPassword,
+        additionalInformation: this.form.termCondition,
       };
 
       if (this.isCreated) {
@@ -294,6 +372,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.flip-list-move {
+  transition: transform 0.5s;
+}
+
+.no-move {
+  transition: transform 0s;
+}
+
+.ghost {
+  opacity: 0.5;
+  background: #00557c15;
+}
+
+.list-group-item {
+  cursor: move;
+}
+
+::v-deep a {
+  color: var(--v-primary-base) !important;
+}
 ::v-deep .hide-input {
   .v-input__slot {
     display: none !important;

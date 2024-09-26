@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panels flat class="mb-4 border-thin rounded-lg" focusable>
     <v-expansion-panel>
-      <v-expansion-panel-header>
+      <v-expansion-panel-header class="grey lighten-3">
         <p class="h6--xsmall">Syarat dan Ketentuan</p>
       </v-expansion-panel-header>
       <v-expansion-panel-content>

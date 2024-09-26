@@ -370,6 +370,7 @@ export default {
       if (res.success) {
         this.cropper.images.push({
           ...res.data,
+          type: "image",
           finalCroppedImage: image,
         });
         this.cropper.media = res.data;

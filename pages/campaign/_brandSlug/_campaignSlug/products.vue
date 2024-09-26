@@ -16,7 +16,7 @@
         <v-row class="white rounded-xl pa-2">
           <v-col cols="12">
             <p class="h6--xsmall dark--text text--lighten-5">
-              Pilih Voucher yang anda inginkan
+              {{ getTextContentProducts }}
             </p>
           </v-col>
           <!-- Product Cards -->
@@ -88,6 +88,16 @@ export default {
         campaignId: this.campaign.id,
       });
     }
+  },
+
+  computed: {
+    getTextContentProducts() {
+      const findText = this.items.headerSections.find((x) => x.type === "text");
+
+      console.log(findText);
+
+      return findText?.name ?? "Pilih Voucher yang anda inginkan";
+    },
   },
 
   methods: {

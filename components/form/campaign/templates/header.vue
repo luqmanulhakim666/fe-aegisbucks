@@ -41,7 +41,7 @@
           class="mt-6"
           cols="12"
           md="4"
-          v-for="(cropper, index) in cropper.images"
+          v-for="(cropper, index) in filterImages"
           :key="index"
         >
           <div
@@ -67,7 +67,7 @@
     </v-row>
 
     <template v-if="!cropper.isLoading">
-      <div class="drop-file-component mt-8" @click="onOpenFile">
+      <div class="drop-file-component mt-10" @click="onOpenFile">
         <v-icon>mdi-image</v-icon>
 
         <div class="d-flex mx-auto justify-center mt-1">
@@ -97,6 +97,37 @@
         {{ cropper.progress }}%
       </v-progress-circular>
     </template>
+
+    <div
+      class="drop-file-component"
+      @click="onAddText()"
+      v-if="getTextIndex < 0"
+    >
+      <div class="d-flex mx-auto justify-center mt-1">
+        <v-icon color="dark lighten-5">mdi-text-shadow</v-icon>
+        <h6 class="h6--xsmall dark--text text--lighten-5">
+          Add Text Content Products
+        </h6>
+      </div>
+    </div>
+
+    <div class="d-flex align-center mt-4" v-if="getTextIndex >= 0">
+      <general-form-text-field
+        v-model="cropper.images[getTextIndex]['name']"
+        class="full-width"
+        bold
+        label="Products Text"
+        outlined
+        hide-details="auto"
+      />
+      <v-btn
+        icon
+        x-small
+        class="ml-2 mt-md-7"
+        @click="onRemoveText(getTextIndex)"
+        ><v-icon color="error">mdi-close-circle</v-icon></v-btn
+      >
+    </div>
 
     <v-dialog
       v-if="cropper.dialog"
@@ -134,9 +165,20 @@
               <cropper
                 ref="cropper"
                 :src="cropper.imageUrl"
-                :aspect-ratio="16 / 9"
+                :aspect-ratio="6 / 5"
                 class="cropper"
+                :viewMode="1"
+                :autoCropArea="1"
+                :movable="true"
+                :zoomable="true"
+                :scalable="false"
+                :rotatable="false"
+                :toggleDragModeOnDblclick="false"
+                :cropBoxResizable="false"
+                dragMode="move"
+                :ready="setFixedSize"
               />
+
               <div class="d-flex align-center">
                 <v-btn
                   plain
@@ -250,28 +292,19 @@ export default {
     cropper: Object,
   },
 
-  data: () => ({
-    // cropper: {
-    //   images: [],
-    //   isEdited: false,
-    //   media: {},
-    //   isLoading: false,
-    //   progress: 0,
-    //   imageUrl: null,
-    //   imageName: null,
-    //   croppedImage: null,
-    //   finalCroppedImage: null,
-    //   dialog: false,
-    //   hasImageId: false,
-    //   indexFile: null,
-    // },
-  }),
-
   created() {
     this.cropper.hasImageId = !!this.cropper?.image?.id;
   },
 
   computed: {
+    filterImages() {
+      return this.cropper.images.filter((x) => x.type !== "text");
+    },
+    getTextIndex() {
+      const findIndex = this.cropper.images.findIndex((x) => x.type === "text");
+      return findIndex;
+    },
+
     dragOptions() {
       return {
         animation: 200,
@@ -284,6 +317,28 @@ export default {
   },
 
   methods: {
+    setFixedSize() {
+      const cropper = this.$refs.cropper.cropper;
+      // Set the fixed crop box size
+      cropper.setCropBoxData({
+        width: 335,
+        height: 250,
+        left: (this.$refs.cropper.cropper.getContainerData().width - 335) / 2, // Center horizontally
+        top: (this.$refs.cropper.cropper.getContainerData().height - 250) / 2,
+      });
+    },
+
+    onAddText() {
+      this.cropper.images.push({
+        id: this.cropper.images?.length + 1,
+        type: "text",
+        name: "",
+      });
+    },
+
+    onRemoveText() {
+      this.cropper.images.splice(this.getTextIndex, 1);
+    },
     getImage(val) {
       return `${this.$config.API_URL}/file/${val.id}/file` || "";
     },
@@ -370,6 +425,7 @@ export default {
       if (res.success) {
         this.cropper.images.push({
           ...res.data,
+          type: "image",
           finalCroppedImage: image,
         });
         this.cropper.media = res.data;
