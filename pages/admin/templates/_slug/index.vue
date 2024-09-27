@@ -17,7 +17,7 @@
       <p class="section-title h7--xxsmall mb-6">
         LIMITED OFFER ONLY <b>Rp9.500</b>
       </p>
-      <p class="text--default">Jumlah Voucer</p>
+      <p class="text--default">Jumlah Voucher</p>
       <div class="d-flex align-center my-4">
         <v-btn x-small class="success" icon color="white"
           ><v-icon>mdi-minus</v-icon></v-btn

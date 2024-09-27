@@ -5,7 +5,7 @@
         <p class="h6--xsmall">{{ label ? label : "Syarat dan Ketentuan" }}</p>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        <p v-html="termAndConditions"></p>
+        <p class="mt-6" v-html="termAndConditions"></p>
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
