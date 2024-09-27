@@ -4,7 +4,9 @@
     :max-width="max_width"
     :max-height="max_height"
     :src="logo"
-    alt="ridi-logo"
+    alt="logo"
+    class="pointer"
+    @click="goHome()"
   />
 </template>
 
@@ -14,6 +16,16 @@ export default {
     logo: String,
     max_width: [String, Number],
     max_height: [String, Number],
+  },
+
+  methods: {
+    goHome() {
+      const params = this.$route.params;
+      const brandSlug = params?.brandSlug;
+      const campaignSlug = params?.campaignSlug;
+
+      this.$router.push(`/campaign/${brandSlug}/${campaignSlug}`);
+    },
   },
 };
 </script>

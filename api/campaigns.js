@@ -102,5 +102,24 @@ export default (ctx) => {
         );
       },
     },
+
+    report: {
+      async getSummary(campaignId, query = {}) {
+        let q = `?${qs.stringify(query)}`;
+        return await $axios.get(`${url}/${campaignId}/report/summary${q}`);
+      },
+
+      async getPageView(campaignId, query = {}) {
+        let q = `?${qs.stringify(query)}`;
+        return await $axios.get(`${url}/${campaignId}/report/page-viw${q}`);
+      },
+
+      async getProductRetailStock(campaignId, query = {}) {
+        let q = `?${qs.stringify(query)}`;
+        return await $axios.get(
+          `${url}/${campaignId}/report/retail-product-stocks${q}`
+        );
+      },
+    },
   };
 };

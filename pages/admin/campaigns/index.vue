@@ -218,6 +218,11 @@ export default {
           icon: "mdi-web",
         },
         {
+          key: "report",
+          text: "Report",
+          icon: "mdi-chart-pie",
+        },
+        {
           key: "edit",
           text: "Ubah",
           icon: "mdi-pencil",
@@ -328,6 +333,10 @@ export default {
           }
 
           window.open(url);
+          break;
+
+        case "report":
+          this.$router.push(`/admin/campaigns/report/${val.id}`);
           break;
 
         default:

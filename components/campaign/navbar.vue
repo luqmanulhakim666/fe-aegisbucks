@@ -3,7 +3,7 @@
     <div
       class="campaign-navbar_logo d-flex justify-center mx-auto container--fluid px-6 py-4 px-sm-10"
     >
-      <general-logo-brand :logo="logo" max_width="60" />
+      <general-logo-brand class="pointer" :logo="logo" max_width="60" />
       <v-spacer />
       <v-menu bottom left>
         <template v-slot:activator="{ on, attrs }">
