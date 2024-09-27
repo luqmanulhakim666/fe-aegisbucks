@@ -80,6 +80,7 @@ export default {
 
   created() {
     this.setLandingPageData();
+    console.log("campaign", this.campaign);
   },
 
   mounted() {
@@ -92,7 +93,9 @@ export default {
 
   computed: {
     getTextContentProducts() {
-      const findText = this.items.headerSections.find((x) => x.type === "text");
+      const findText = this.items.headerSections?.find(
+        (x) => x.type === "text"
+      );
 
       console.log(findText);
 
@@ -116,18 +119,21 @@ export default {
       this.items.backgroundImage = backgroundImage;
       this.items.headerSections = headerSection;
       this.items.productSections = campaignProducts;
-      this.items.footerSections = footerSection?.map((x) => {
-        return {
-          ...x,
-          color: "",
-        };
-      });
 
-      this.items.footerSections[0].color = "#3f729b";
-      this.items.footerSections[1].color = "#bc2a8d";
-      this.items.footerSections[2].color = "#FF0000";
-      this.items.footerSections[3].color = "#1DA1F2";
-      this.items.footerSections[4].color = "#4a4a4a";
+      if (footerSection?.length > 0) {
+        this.items.footerSections = footerSection?.map((x) => {
+          return {
+            ...x,
+            color: "",
+          };
+        });
+
+        this.items.footerSections[0].color = "#3f729b";
+        this.items.footerSections[1].color = "#bc2a8d";
+        this.items.footerSections[2].color = "#FF0000";
+        this.items.footerSections[3].color = "#1DA1F2";
+        this.items.footerSections[4].color = "#4a4a4a";
+      }
     },
 
     onDetail(val) {

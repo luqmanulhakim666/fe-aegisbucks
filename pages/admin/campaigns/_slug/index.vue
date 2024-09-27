@@ -93,7 +93,7 @@ export default {
       footerSection: [],
       thanksSection: [],
       campaignProducts: [],
-      additionalInformation: [],
+      additionalInformation: [{ label: "Title", content: "" }],
       date: "",
       time: {
         hh: "",

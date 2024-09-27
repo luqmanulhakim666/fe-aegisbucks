@@ -362,10 +362,13 @@ export default {
     },
   },
   watch: {
-    "form.budget"(val) {
-      if (val) {
-        this.form.budget = this.decimal(val);
-      }
+    "form.budget": {
+      handler(val) {
+        if (val) {
+          this.form.budget = this.decimal(val);
+        }
+      },
+      immediate: true,
     },
   },
 };
