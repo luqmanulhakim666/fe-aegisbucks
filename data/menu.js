@@ -50,6 +50,16 @@ export const SUPER_ADMIN = [
       },
     ],
   },
+  {
+    name: "Report",
+    menus: [
+      {
+        text: "Campaign Report",
+        icon: "mdi-chart-bar",
+        path: "/admin/reports",
+      },
+    ],
+  },
 ];
 
 // {
