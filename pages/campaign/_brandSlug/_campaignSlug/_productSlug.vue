@@ -43,7 +43,7 @@
 
           <v-form v-model="state.isValid" ref="form">
             <!-- Term and Conditions -->
-            <campaign-term-and-conditions
+            <campaign-accordion
               class="mt-6"
               :termAndConditions="campaign.termCondition"
             />
@@ -52,7 +52,7 @@
               v-for="(item, index) in campaign.additionalInformation"
               :key="index"
             >
-              <campaign-term-and-conditions
+              <campaign-accordion
                 class="mt-6"
                 :termAndConditions="item.content"
                 :label="item.label"
@@ -76,12 +76,12 @@
           </v-form>
 
           <!-- Show Google login button if not logged in -->
-          <template v-if="!isAuthenticated">
+          <template v-if="!isAuthenticated && campaign.loginGmail">
             <general-google-sign-in @loginSuccess="handleGoogleLogin" />
           </template>
 
           <!-- Submit button only if authenticated -->
-          <template v-if="isAuthenticated">
+          <template v-if="isAuthenticated && campaign.loginGmail">
             <div
               class="d-flex rounded-xl py-3 justify-center grey lighten-3 mb-2"
             >
@@ -101,6 +101,20 @@
               Dapatkan Voucher Sekarang
             </v-btn>
           </template>
+
+          <template v-if="!campaign.loginGmail">
+            <v-btn
+              block
+              large
+              depressed
+              class="text-capitalize h6--xsmall"
+              @click="onSubmit()"
+              :loading="state.isLoading"
+              :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
+            >
+              Dapatkan Voucher Sekarang
+            </v-btn>
+          </template>
         </div>
       </template>
     </template>
@@ -112,7 +126,6 @@ import media from "@/mixins/media";
 import pipe from "@/mixins/pipe";
 import rules from "@/mixins/rules";
 import tracking from "@/mixins/tracking";
-import campaigns from "../../../../api/campaigns";
 
 export default {
   async asyncData({ store, route }) {
@@ -240,8 +253,6 @@ export default {
         userInputs: payload.userInputs,
         count: payload.count,
       });
-
-      console.log("res voucher", res);
 
       this.state.isLoading = false;
       this.$router.push(
