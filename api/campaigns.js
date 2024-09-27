@@ -76,6 +76,13 @@ export default (ctx) => {
       async getDetail(campaignId, voucherId) {
         return await $axios.get(`${url}/${campaignId}/voucher/${voucherId}`);
       },
+
+      async getListVoucherCode(campaignId, voucherId, query = {}) {
+        let q = qs.stringify(query);
+        return await $axios.get(
+          `${url}/${campaignId}/voucher/${voucherId}/code?${q}`
+        );
+      },
     },
 
     public: {

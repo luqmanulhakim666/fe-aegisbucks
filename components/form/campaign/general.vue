@@ -53,7 +53,7 @@
         :rules="[required]"
       />
 
-      <!-- <div class="mb-8 mt-4">
+      <div class="mb-8 mt-4">
         <p class="h6--xsmall label-text mb-4">Aditional Informations</p>
         <v-btn
           @click="onAddItem()"
@@ -114,7 +114,7 @@
             >
           </div>
         </draggable>
-      </div> -->
+      </div>
 
       <general-form-text-field
         v-model="form.budget"
@@ -320,7 +320,7 @@ export default {
         googleAnalyticScript: this.form.googleAnalyticScript,
         gmailUsername: this.form.gmailUsername,
         gmailPassword: this.form.gmailPassword,
-        additionalInformation: this.form.termCondition,
+        additionalInformation: this.form.additionalInformation,
       };
 
       if (this.isCreated) {

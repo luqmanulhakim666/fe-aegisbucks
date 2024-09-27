@@ -69,7 +69,7 @@
             outlined
             required
             bold
-            :rules="[arrayRule]"
+            :rules="[required]"
           />
 
           <general-form-text-field
@@ -118,7 +118,6 @@
 import rules from "@/mixins/rules";
 import utils from "@/mixins/utils";
 import pipe from "@/mixins/pipe";
-import { state } from "../../../store/auth";
 
 export default {
   mixins: [rules, utils, pipe],
@@ -172,13 +171,13 @@ export default {
     },
 
     async onSubmit() {
-      this.state.isLoading = true;
       const valid = await this.validate(this.state.isValid);
       const campaignId = this.$route.params.slug;
 
       if (!valid) return;
+      this.state.isLoading = true;
 
-      const hours = this.form.time.HH || 23;
+      const hours = this.form.time.hh || 23;
       const minutes = this.form.time.mm || 59;
       const seconds = this.form.time.ss || 59;
 
@@ -260,18 +259,8 @@ export default {
       }
 
       if ((await val) && !this.isEdited) {
-        this.form.file = null;
-        this.form.retailId = null;
-        this.form.date = null;
-        this.form.time = {
-          hh: "",
-          mm: "",
-          ss: "",
-        };
-        this.form.productId = {};
-        this.form.expiredDate = null;
-        this.form.limit = null;
-        this.form.usageInstruction = null;
+        this.onClearForm();
+        this.$forceUpdate();
       }
     },
     "form.limit"(val) {
