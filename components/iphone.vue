@@ -27,7 +27,7 @@ export default {
     campaignUrl() {
       return this.isPublished
         ? `/campaign/${this.brandSlug}/${this.campaignSlug}`
-        : `/campaign/${this.brandSlug}/${this.campaignSlug}&__preview=true`;
+        : `/campaign/${this.brandSlug}/${this.campaignSlug}?__preview=true`;
     },
   },
 };

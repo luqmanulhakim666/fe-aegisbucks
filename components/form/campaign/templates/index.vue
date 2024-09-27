@@ -9,7 +9,7 @@
         >
           <v-expansion-panel>
             <v-expansion-panel-header
-              @click="expandTemplate()"
+              @click="handleExpand('template')"
               :color="state.headerColor"
             >
               <p class="h6--xsmall">Choose Template</p>
@@ -35,7 +35,7 @@
         >
           <v-expansion-panel>
             <v-expansion-panel-header
-              @click="expandColor()"
+              @click="handleExpand('color')"
               :color="state.headerColor"
             >
               <p class="h6--xsmall">Setting Color</p>
@@ -76,7 +76,7 @@
         >
           <v-expansion-panel>
             <v-expansion-panel-header
-              @click="expandBackground()"
+              @click="handleExpand('background')"
               :color="state.headerColor"
             >
               <p class="h6--xsmall">Background Template</p>
@@ -98,7 +98,7 @@
         >
           <v-expansion-panel>
             <v-expansion-panel-header
-              @click="expandCover()"
+              @click="handleExpand('cover')"
               :color="state.headerColor"
             >
               <p class="h6--xsmall">Cover Section</p>
@@ -120,7 +120,7 @@
         >
           <v-expansion-panel>
             <v-expansion-panel-header
-              @click="expandHeader()"
+              @click="handleExpand('header')"
               :color="state.headerColor"
             >
               <p class="h6--xsmall">Header Section</p>
@@ -142,7 +142,7 @@
         >
           <v-expansion-panel>
             <v-expansion-panel-header
-              @click="expandFooter()"
+              @click="handleExpand('footer')"
               :color="state.headerColor"
             >
               <p class="h6--xsmall">Footer Section</p>
@@ -163,7 +163,7 @@
         >
           <v-expansion-panel>
             <v-expansion-panel-header
-              @click="expandThankYou()"
+              @click="handleExpand('thankyou')"
               :color="state.headerColor"
             >
               <p class="h6--xsmall">Thank You Page</p>
@@ -364,32 +364,8 @@ export default {
       this.state.isLoading = false;
     },
 
-    expandTemplate() {
-      this.state.mandatory.template = !this.state.mandatory.template;
-    },
-
-    expandColor() {
-      this.state.mandatory.color = !this.state.mandatory.color;
-    },
-
-    expandBackground() {
-      this.state.mandatory.background = !this.state.mandatory.background;
-    },
-
-    expandCover() {
-      this.state.mandatory.cover = !this.state.mandatory.cover;
-    },
-
-    expandHeader() {
-      this.state.mandatory.header = !this.state.mandatory.header;
-    },
-
-    expandFooter() {
-      this.state.mandatory.footer = !this.state.mandatory.footer;
-    },
-
-    expandThankYou() {
-      this.state.mandatory.thankYou = !this.state.mandatory.thankYou;
+    handleExpand(key) {
+      this.state.mandatory[key] = !this.state.mandatory[key];
     },
   },
 };
