@@ -11,9 +11,10 @@
       class="g_id_signin"
       data-type="standard"
       data-size="large"
-      data-theme="outline"
+      data-theme="filled_blue"
       data-text="signin_with"
       data-shape="rectangular"
+      data-width="364"
       data-logo_alignment="left"
     ></div>
   </div>
