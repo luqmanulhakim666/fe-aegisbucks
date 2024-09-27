@@ -20,20 +20,20 @@
             </p>
 
             <p class="text--default dark--text text--lighten-1">
-              Jumlah Voucer
+              Jumlah Voucher
             </p>
             <div class="d-flex align-center my-4">
               <v-btn
                 x-small
-                class="success"
+                :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
                 icon
                 @click="handleQuantity('decrease')"
                 ><v-icon color="white">mdi-minus</v-icon></v-btn
               >
               <p class="h6--xsmall mx-4">{{ decimal(state.qty) }}</p>
               <v-btn
+                :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
                 x-small
-                class="success"
                 icon
                 @click="handleQuantity('increase')"
                 ><v-icon color="white">mdi-plus</v-icon></v-btn
@@ -92,11 +92,11 @@
               block
               large
               depressed
-              :color="campaign.primaryColor"
               class="text-capitalize h6--xsmall"
               @click="onSubmit()"
               :loading="state.isLoading"
               :disabled="!isAuthenticated"
+              :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
             >
               Dapatkan Voucher Sekarang
             </v-btn>
@@ -112,6 +112,7 @@ import media from "@/mixins/media";
 import pipe from "@/mixins/pipe";
 import rules from "@/mixins/rules";
 import tracking from "@/mixins/tracking";
+import campaigns from "../../../../api/campaigns";
 
 export default {
   async asyncData({ store, route }) {
