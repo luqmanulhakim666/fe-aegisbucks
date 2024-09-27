@@ -2,7 +2,7 @@
   <v-expansion-panels flat class="mb-4 border-thin rounded-lg" focusable>
     <v-expansion-panel>
       <v-expansion-panel-header class="grey lighten-3">
-        <p class="h6--xsmall">Syarat dan Ketentuan</p>
+        <p class="h6--xsmall">{{ label ? label : "Syarat dan Ketentuan" }}</p>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <p v-html="termAndConditions"></p>
@@ -15,6 +15,7 @@
 export default {
   props: {
     termAndConditions: String,
+    label: String,
   },
 };
 </script>

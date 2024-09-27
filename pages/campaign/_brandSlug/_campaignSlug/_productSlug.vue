@@ -48,6 +48,17 @@
               :termAndConditions="campaign.termCondition"
             />
 
+            <div
+              v-for="(item, index) in campaign.additionalInformation"
+              :key="index"
+            >
+              <campaign-term-and-conditions
+                class="mt-6"
+                :termAndConditions="item.content"
+                :label="item.label"
+              />
+            </div>
+
             <!-- Retail Partners -->
             <campaign-retail-partners
               class="mb-4"
