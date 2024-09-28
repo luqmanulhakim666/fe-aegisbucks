@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" persistent max-width="700">
     <div class="white rounded-xl">
       <general-card-dialog-header
-        name="Product"
+        name="Voucher"
         @close="onEmitClose"
         :loading="state.isLoading"
       />

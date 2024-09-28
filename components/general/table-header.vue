@@ -71,7 +71,10 @@ export default {
   props: {
     body: Object,
     label: String,
-    placeholder: String,
+    placeholder: {
+      type: String,
+      default: "Search here...",
+    },
     actionCreate: String,
     filterYear: {
       type: Boolean,
