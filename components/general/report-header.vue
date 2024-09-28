@@ -30,7 +30,7 @@
           <v-text-field
             v-if="filterDate"
             placeholder="Select date"
-            class="gray lighten-2 rounded-pill border-none"
+            class="white lighten-2 border-none"
             pill
             outlined
             hide-details

@@ -233,14 +233,24 @@ export default {
         phone: "081" + this.profile.sub,
         count: this.form.count,
         userInputs: this.form.userInputs?.map((x) => {
+          let finalValue = x.defaultValue;
+
+          if (x.type === "checkbox" && x.options?.length === 1) {
+            finalValue = x.options?.map((y) => {
+              console.log("1", y);
+              return y?.value[0];
+            });
+          }
+
+          if (x.type === "checkbox" && x.options?.length > 1) {
+            finalValue = x.defaultValue?.map((y) => {
+              console.log("2", y);
+              return y;
+            });
+          }
           return {
             inputId: x.id,
-            value:
-              x.type === "checkbox"
-                ? x.options?.map((y) => {
-                    return y?.value;
-                  })
-                : x.defaultValue,
+            value: finalValue,
           };
         }),
       };

@@ -2,7 +2,126 @@
   <div>
     <general-breadcrumbs :lists="items.breadcrumbs" class="mb-9" />
 
-    <general-report-header :isSearch="false" />
+    <general-report-header
+      :isSearch="false"
+      @on:fetchDateRange="filterDateRange"
+    />
+
+    <v-row class="mt-8">
+      <v-col cols="12" md="7">
+        <div class="white rounded-xl">
+          <div class="pa-6 d-flex">
+            <v-icon color="primary" size="44">mdi-bullhorn</v-icon>
+
+            <div class="ml-4">
+              <p class="h5--small dark--text text--lighten-5">
+                {{ campaign.name }}
+              </p>
+              <p class="text--large dark--text text--lighten-1">
+                {{ campaign.brand.name }}
+              </p>
+            </div>
+          </div>
+          <v-divider> </v-divider>
+
+          <div class="d-flex justify-space-between">
+            <div class="pa-6 d-flex">
+              <v-icon color="success" size="34">mdi-cash-multiple</v-icon>
+              <div class="ml-4">
+                <p class="p--default dark--text text--lighten-5">Budget</p>
+                <p class="h4--default dark--text text--lighten-1">
+                  {{ decimal(campaign.budget) }}
+                </p>
+              </div>
+            </div>
+            <div class="pa-6 d-flex">
+              <v-icon color="dark" size="34">mdi-calendar-range</v-icon>
+              <div class="ml-4">
+                <p class="p--default dark--text text--lighten-5">Flight Date</p>
+                <p class="h4--default dark--text text--lighten-1">
+                  {{ dateMonthTextYear(campaign.publishedAt) }}
+                </p>
+              </div>
+            </div>
+
+            <div class="pa-6 d-flex">
+              <v-icon color="dark" size="34">mdi-calendar-range</v-icon>
+              <div class="ml-4">
+                <p class="p--default dark--text text--lighten-5">
+                  Expired Date
+                </p>
+                <p class="h4--default dark--text text--lighten-1">
+                  {{ dateMonthTextYear(campaign.expiredDate) }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </v-col>
+      <v-col cols="12" md="5">
+        <v-row>
+          <v-col cols="6" md="4">
+            <div class="pa-6 rounded-xl primary lighten-3">
+              <p class="h6--xsmall white--text text--lighten-5">
+                Total Page Views
+              </p>
+              <p class="h6--xsmall white--text text--lighten-1">
+                {{ decimal(getTotalPageView) }}
+              </p>
+            </div>
+          </v-col>
+          <v-col cols="6" md="4">
+            <div class="pa-6 rounded-xl primary lighten-2">
+              <p class="h6--xsmall white--text text--lighten-5">
+                Total Page Views
+              </p>
+              <p class="h6--xsmall white--text text--lighten-1">
+                {{ decimal(getTotalPageView) }}
+              </p>
+            </div>
+          </v-col>
+          <v-col cols="6" md="4">
+            <div class="pa-6 rounded-xl primary">
+              <p class="h6--xsmall white--text text--lighten-5">
+                Total Page Views
+              </p>
+              <p class="h6--xsmall white--text text--lighten-1">
+                {{ decimal(getTotalPageView) }}
+              </p>
+            </div>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+
+    <v-row class="my-8" align-content="center">
+      <template v-if="state.loading.summary">
+        <general-loading />
+      </template>
+
+      <template v-if="!state.loading.summary">
+        <v-col cols="12" xl="7" lg="6">
+          <campaign-report-charts-trends
+            class="fill-height my-auto"
+            v-if="!state.loading.summary"
+            :summary="items.summary"
+          />
+
+          <!-- <campaign-report-page-view :summary="items.summary" class="mt-6" /> -->
+        </v-col>
+        <v-col cols="12" xl="5" lg="6">
+          <campaign-report-charts-product
+            class="mb-6"
+            v-if="!state.loading.summary"
+            :summary="items.summary"
+          />
+          <campaign-report-charts-voucher-status
+            v-if="!state.loading.summary"
+            :summary="items.summary"
+          />
+        </v-col>
+      </template>
+    </v-row>
 
     <campaign-report-table
       label="Page Views Report"
@@ -24,7 +143,7 @@
       :paging="paging.productStocks"
       :headers="headers.productStocks"
       :isLoading="state.loading.productStocks"
-      @on:change="onChangePaginationProductStocks"
+      :paginate="false"
       @on:search="fetchProductStocks"
     />
   </div>
@@ -32,6 +151,7 @@
 
 <script>
 import meta from "@/mixins/meta";
+import pipe from "@/mixins/pipe";
 export default {
   async asyncData({ route, app }) {
     const id = route.params?.id;
@@ -48,7 +168,7 @@ export default {
 
     return { id: id, campaign: campaign };
   },
-  mixins: [meta],
+  mixins: [meta, pipe],
 
   data: () => ({
     body: {
@@ -182,6 +302,7 @@ export default {
     },
 
     items: {
+      summary: {},
       pageViews: [],
       productStocks: [],
       breadcrumbs: [
@@ -201,13 +322,46 @@ export default {
     this.setMeta("Report", true);
   },
 
+  computed: {
+    getTotalPageView() {
+      return this.items.summary.pageView?.total || 0;
+    },
+  },
+
   methods: {
+    filterDateRange(val) {
+      const hours = 23;
+      const minutes = 59;
+      const seconds = 59;
+
+      const fromDateInstance = val[0]
+        ? this.$dayjs(val[0]).hour(hours).minute(minutes).second(seconds)
+        : "";
+
+      const toDateInstance = val[1]
+        ? this.$dayjs(val[1]).hour(hours).minute(minutes).second(seconds)
+        : "";
+
+      let date_from = fromDateInstance.toISOString();
+      let date_to = toDateInstance.toISOString();
+      let sameDay = date_from === date_to && !!date_from;
+      if (sameDay) {
+        date_to = fromDateInstance.toISOString();
+      }
+
+      this.body.summary.fromDate = date_from;
+      this.body.summary.toDate = date_to;
+      this.fetch();
+    },
+
     async fetch() {
       this.state.loading.summary = true;
       const res = await this.$api.campaigns.report.getSummary(
         this.id,
         this.body.summary
       );
+
+      this.items.summary = res.data;
 
       this.state.loading.summary = false;
     },
@@ -273,11 +427,6 @@ export default {
     onChangePaginationPageViews(val) {
       this.body.pageViews.page = val;
       this.fetchPageView();
-    },
-
-    onChangePaginationProductStocks(val) {
-      this.body.productStocks.page = val;
-      this.fetchProductStocks();
     },
   },
 };
