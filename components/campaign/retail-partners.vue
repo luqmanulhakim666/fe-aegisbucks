@@ -30,7 +30,7 @@
             :src="getImage(item.image)"
             alt="img"
           />
-          <span class="ml-4 h6--xsmall">{{ item.name }}</span>
+          <span class="ml-4 text--default">{{ item.name }}</span>
         </template>
       </v-radio>
     </v-radio-group>

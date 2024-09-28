@@ -43,10 +43,10 @@
 
           <v-form v-model="state.isValid" ref="form">
             <!-- Term and Conditions -->
-            <campaign-accordion
+            <!-- <campaign-accordion
               class="mt-6"
               :termAndConditions="campaign.termCondition"
-            />
+            /> -->
 
             <div
               v-for="(item, index) in campaign.additionalInformation"

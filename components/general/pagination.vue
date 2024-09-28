@@ -13,6 +13,7 @@
           color="secondary lighten-5"
           v-model="paging.page"
           :length="totalPage"
+          :total-visible="5"
           @input="onEmitChange"
         />
       </div>
@@ -31,19 +32,19 @@ export default {
     perPage: [Number, String],
     total: Number,
     totalPage: Number,
-    paging: Object
+    paging: Object,
   },
 
   computed: {
     pagingData() {
-      return this.paging.limit * this.paging.page - (this.paging.limit - 1)
-    }
+      return this.paging.limit * this.paging.page - (this.paging.limit - 1);
+    },
   },
 
   methods: {
     onEmitChange(val) {
-      this.$emit('on:change', val)
-    }
-  }
-}
+      this.$emit("on:change", val);
+    },
+  },
+};
 </script>
