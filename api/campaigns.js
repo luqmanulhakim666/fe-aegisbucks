@@ -111,7 +111,7 @@ export default (ctx) => {
 
       async getPageView(campaignId, query = {}) {
         let q = `?${qs.stringify(query)}`;
-        return await $axios.get(`${url}/${campaignId}/report/page-viw${q}`);
+        return await $axios.get(`${url}/${campaignId}/report/page-views${q}`);
       },
 
       async getProductRetailStock(campaignId, query = {}) {

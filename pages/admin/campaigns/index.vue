@@ -72,29 +72,14 @@
                 @click="onAction(menu.key, item)"
               >
                 <v-list-item-icon class="mr-2">
-                  <v-icon
-                    size="14"
-                    :color="
-                      menu.key === 'edit'
-                        ? 'primary '
-                        : menu.key === 'delete'
-                        ? 'error '
-                        : 'dark'
-                    "
-                    >{{ menu.icon }}</v-icon
-                  >
+                  <v-icon size="14" :class="[menu.textColor]">{{
+                    menu.icon
+                  }}</v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>
                   <v-list-item-title
-                    :class="[
-                      menu.key === 'edit'
-                        ? 'primary--text '
-                        : menu.key === 'delete'
-                        ? 'error--text'
-                        : 'dark--text',
-                      'h8--supersmall',
-                    ]"
+                    :class="[menu.textColor, 'h8--supersmall']"
                     >{{ menu.text }}</v-list-item-title
                   >
                 </v-list-item-content>
@@ -104,6 +89,12 @@
         </v-menu>
       </template>
     </v-data-table>
+
+    <dialog-campaign-link-sources
+      :dialog="state.dialogLink"
+      :campaign="state.selectedItem"
+      @on:close="onCloseDialogLink"
+    />
 
     <general-dialog-delete
       :dialog="state.isDeleteDialog"
@@ -149,7 +140,9 @@ export default {
     state: {
       isLoading: false,
       isDeleteDialog: false,
+      dialogLink: false,
       campaignId: null,
+      selectedItem: {},
     },
 
     headers: [
@@ -217,21 +210,31 @@ export default {
           key: "open",
           text: "Open Web",
           icon: "mdi-web",
+          textColor: "dark--text",
         },
         {
           key: "report",
           text: "Report",
           icon: "mdi-chart-pie",
+          textColor: "secondary--text",
+        },
+        {
+          key: "link-sources",
+          text: "Link Sources",
+          icon: "mdi-link",
+          textColor: "info--text",
         },
         {
           key: "edit",
           text: "Ubah",
           icon: "mdi-pencil",
+          textColor: "primary--text",
         },
         {
           key: "delete",
           text: "Hapus",
           icon: "mdi-delete",
+          textColor: "error--text",
         },
       ],
       paging: {},
@@ -336,6 +339,11 @@ export default {
           window.open(url);
           break;
 
+        case "link-sources":
+          this.state.selectedItem = val;
+          this.state.dialogLink = !this.state.dialogLink;
+          break;
+
         case "report":
           this.$router.push(`/admin/campaigns/report/${val.id}`);
           break;
@@ -348,6 +356,11 @@ export default {
 
     onCloseDialog() {
       this.state.isDeleteDialog = false;
+    },
+
+    onCloseDialogLink() {
+      this.state.dialogLink = false;
+      this.state.selectedItem = {};
     },
 
     async onDelete() {

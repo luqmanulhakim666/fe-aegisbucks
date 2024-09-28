@@ -125,7 +125,16 @@
                           >
                             <p class="h6--xsmall mb-2">Options</p>
                             <v-divider class="mb-4" />
-
+                            <v-btn
+                              @click="copyTermAndConditionsLink()"
+                              depressed
+                              plain
+                              class="text-capitalize h8--supersmall primary--text"
+                              x-small
+                              v-if="element.type === 'checkbox'"
+                              ><v-icon small class="mr-2">mdi-link</v-icon>Copy
+                              Link S&K</v-btn
+                            >
                             <div
                               v-for="(option, i) in element.options"
                               :key="i"
@@ -134,16 +143,6 @@
                               <div class="d-flex full-width align-start">
                                 <p class="text--default mt-3">{{ i + 1 }}.</p>
                                 <div>
-                                  <v-btn
-                                    @click="copyTermAndConditionsLink(i)"
-                                    depressed
-                                    plain
-                                    class="text-capitalize h8--supersmall primary--text"
-                                    x-small
-                                    v-if="element.type === 'checkbox'"
-                                    ><v-icon small class="mr-2">mdi-link</v-icon
-                                    >Copy Link S&K</v-btn
-                                  >
                                   <general-form-rich-editor
                                     class="full-width ml-2 mr-4"
                                     v-model="element.options[i]['key']"
@@ -380,10 +379,10 @@ export default {
       this.items.selectedFields[parentIndex].options?.splice(childIndex, 1);
     },
 
-    copyTermAndConditionsLink(i) {
-      const url = `${this.$config.API_URL}/campaign/${this.brandSlug}/${
-        this.campaignSlug
-      }/term-and-conditions/${i + 1}`;
+    copyTermAndConditionsLink() {
+      const host = this.$config.API_URL.replace("/api", "");
+
+      const url = `${host}/campaign/${this.brandSlug}/${this.campaignSlug}/term-and-conditions`;
 
       navigator.clipboard.writeText(url).then(
         () => {
