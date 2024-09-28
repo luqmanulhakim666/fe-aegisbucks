@@ -125,6 +125,7 @@
                           >
                             <p class="h6--xsmall mb-2">Options</p>
                             <v-divider class="mb-4" />
+
                             <div
                               v-for="(option, i) in element.options"
                               :key="i"
@@ -132,12 +133,24 @@
                             >
                               <div class="d-flex full-width align-start">
                                 <p class="text--default mt-3">{{ i + 1 }}.</p>
-                                <general-form-rich-editor
-                                  class="full-width ml-2 mr-4"
-                                  v-model="element.options[i]['key']"
-                                  outlined
-                                  hide-details="auto"
-                                />
+                                <div>
+                                  <v-btn
+                                    @click="copyTermAndConditionsLink(i)"
+                                    depressed
+                                    plain
+                                    class="text-capitalize h8--supersmall primary--text"
+                                    x-small
+                                    v-if="element.type === 'checkbox'"
+                                    ><v-icon small class="mr-2">mdi-link</v-icon
+                                    >Copy Link S&K</v-btn
+                                  >
+                                  <general-form-rich-editor
+                                    class="full-width ml-2 mr-4"
+                                    v-model="element.options[i]['key']"
+                                    outlined
+                                    hide-details="auto"
+                                  />
+                                </div>
                               </div>
                               <v-btn
                                 icon
@@ -273,6 +286,8 @@ export default {
   props: {
     item: Object,
     inputs: Array,
+    brandSlug: String,
+    campaignSlug: String,
   },
   components: {
     draggable,
@@ -363,6 +378,29 @@ export default {
 
     onRemoveOption(parentIndex, childIndex) {
       this.items.selectedFields[parentIndex].options?.splice(childIndex, 1);
+    },
+
+    copyTermAndConditionsLink(i) {
+      const url = `${this.$config.API_URL}/campaign/${this.brandSlug}/${
+        this.campaignSlug
+      }/term-and-conditions/${i + 1}`;
+
+      navigator.clipboard.writeText(url).then(
+        () => {
+          this.$store.dispatch("snack", [
+            "Link copied to clipboard!",
+            "success lighten-2",
+            "mdi-check-circle",
+          ]);
+        },
+        (err) => {
+          this.$store.dispatch("snack", [
+            "Failed to copy link",
+            "error",
+            "mdi-close-circle",
+          ]);
+        }
+      );
     },
 
     onSave() {

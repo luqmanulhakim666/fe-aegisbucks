@@ -1,6 +1,7 @@
 <!-- GoogleSignin.vue -->
 <template>
   <div class="d-flex mx-auto justify-center">
+    <!-- Google Sign-In Button -->
     <div
       id="g_id_onload"
       :data-client_id="client_id"
@@ -22,20 +23,28 @@
 
 <script>
 export default {
-  data: () => ({
-    client_id: "",
-  }),
+  data() {
+    return {
+      client_id: "", // Your Google Client ID
+    };
+  },
 
   created() {
-    this.client_id = process.env.GOOGLE_CLIENT_ID;
+    this.client_id = process.env.GOOGLE_CLIENT_ID; // Set the client ID from environment variables
   },
 
   mounted() {
+    // Register the handleCredentialResponse function globally
     window.handleCredentialResponse = (response) => {
       const jwt = response.credential;
-      // Emit the JWT token to the parent
+      // Emit the JWT token to the parent or handle the response as needed
       this.$emit("loginSuccess", jwt);
     };
+  },
+
+  beforeDestroy() {
+    // Clean up the global function when the component is destroyed
+    delete window.handleCredentialResponse;
   },
 };
 </script>

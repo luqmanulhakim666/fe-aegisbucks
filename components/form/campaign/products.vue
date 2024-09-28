@@ -26,7 +26,7 @@
           :items="items.selectedProducts"
           hide-default-footer
           no-data-text="No Data"
-          class="mt-4"
+          class="mt-4 border-thin"
         >
           <template v-slot:[`item.no`]="{ index }">
             {{ index + 1 }}
@@ -143,6 +143,8 @@
 
     <template v-if="state.formMode">
       <form-campaign
+        :campaignSlug="form.slug"
+        :brandSlug="form.brand.slug"
         @go:back="handleFormMode"
         @save:form="onSaveForm"
         :item="state.selectedItem"
@@ -329,6 +331,8 @@ export default {
       );
 
       if (res.success) {
+        this.form.campaignProducts = payload.campaignProducts;
+
         this.$router.push({
           path: `/admin/campaigns/${this.$route.params.slug}`,
           query: { tab: "vouchers" },

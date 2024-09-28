@@ -23,6 +23,10 @@
         outlined
       />
 
+      <p v-if="brandRule" class="text--small error--text">
+        You cannot change the Brand because You are already added campaign
+        product*
+      </p>
       <general-form-select
         v-model="form.brandId"
         :items="brands"
@@ -34,6 +38,7 @@
         label="Brand"
         :rules="[required]"
         outlined
+        :disabled="brandRule"
       />
 
       <general-form-rich-editor
@@ -274,6 +279,10 @@ export default {
     minDate() {
       let date = new Date();
       return this.$dayjs(date).format("YYYY-MM-DD");
+    },
+
+    brandRule() {
+      return this.form.campaignProducts?.length > 0;
     },
   },
 

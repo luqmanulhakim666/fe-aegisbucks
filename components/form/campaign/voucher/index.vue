@@ -1,35 +1,12 @@
 <template>
   <div>
     <template v-if="state.detailMode">
-      <div>
-        <v-btn @click="closeDetailMode()">Back</v-btn>
-
-        <v-row>
-          <v-col cols="12" md="4">
-            <div class="shadow-base pa-4 rounded-xl d-inline-block white">
-              <v-img
-                class="rounded-xl"
-                width="200"
-                :src="getImage(state.voucher.campaignProduct.product)"
-              />
-
-              <p>
-                {{ state.voucher.campaignProduct.product.name }}
-              </p>
-            </div>
-          </v-col>
-          <v-col cols="12" md="8">
-            <div class="white full-width d-inline-block shadow-base rounded-xl">
-              <apexchart
-                type="pie"
-                height="350"
-                :options="options"
-                :series="options.series"
-              />
-            </div>
-          </v-col>
-        </v-row>
-      </div>
+      <form-campaign-voucher-detail
+        :campaignId="$route.params.slug"
+        :voucherId="state.selectedItem.id"
+        :voucherName="`Voucher ${state.selectedItem.retail.name} ${state.selectedItem.campaignProduct.product.name}`"
+        @go:back="onGoToDetail"
+      />
     </template>
 
     <template v-if="!state.detailMode">
@@ -52,7 +29,7 @@
           class="hide-input mb-2"
           hide-details="auto"
           dense
-          v-model="form.termCondition"
+          v-model="items.vouchers"
           :rules="[arrayRule]"
         />
 
@@ -62,7 +39,7 @@
           :items="items.vouchers"
           hide-default-footer
           no-data-text="No Data"
-          class="mt-2"
+          class="mt-2 border-thin"
         >
           <template v-slot:[`item.no`]="{ index }">
             {{ index + 1 }}
@@ -125,14 +102,14 @@
                   </v-list-item-title>
                 </v-list-item>
 
-                <!-- <v-list-item @click="onVoucherDetail(item.id)">
+                <v-list-item @click="onGoToDetail(item)">
                   <v-list-item-title class="d-flex align-center">
                     <v-icon size="16" class="mr-3 dark--text"> mdi-eye </v-icon>
                     <span class="h8--supersmall dark--text h8--supersmall"
                       >Detail
                     </span>
                   </v-list-item-title>
-                </v-list-item> -->
+                </v-list-item>
               </v-list>
             </v-menu>
           </template>
@@ -197,16 +174,6 @@ export default {
     page: "admin",
   },
   data: () => ({
-    options: {
-      legend: {
-        position: "top",
-      },
-      series: [],
-      chart: {
-        type: "pie",
-      },
-      labels: [],
-    },
     headers: [
       {
         text: "No",
@@ -312,6 +279,15 @@ export default {
       this.state.dialog = !this.state.dialog;
     },
 
+    onGoToDetail(val, index) {
+      if (val?.id) {
+        this.state.selectedItem = val;
+        this.state.selectedIndex = index;
+      }
+
+      this.state.detailMode = !this.state.detailMode;
+    },
+
     onSubmit() {
       this.$router.push({
         path: `/admin/campaigns/${this.$route.params.slug}`,
@@ -347,35 +323,6 @@ export default {
 
       this.state.isLoading = false;
       this.state.selectedIndex = null;
-    },
-
-    async onVoucherDetail(id) {
-      const campaignId = this.$route.params.slug;
-      const voucherId = id;
-
-      const res = await this.$api.campaigns.voucher.getDetail(
-        campaignId,
-        voucherId
-      );
-
-      if (res.success) {
-        this.state.voucher = res.data;
-        this.options.series[0] = res.data.limit;
-        this.options.series[1] = res.data.totalCode;
-        this.options.labels[0] = "Limit";
-        this.options.labels[1] = "Total";
-      }
-
-      if (!res.success) {
-        this.setFailedAlert(res);
-      }
-
-      this.state.detailMode = true;
-    },
-
-    closeDetailMode() {
-      this.state.voucher = {};
-      this.state.detailMode = false;
     },
 
     goBack() {
