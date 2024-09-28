@@ -48,5 +48,29 @@ export default {
         event.preventDefault();
       }
     },
+
+    copyLink(val) {
+      let url = window.location.href;
+
+      if (val) {
+        url = val;
+      }
+      navigator.clipboard.writeText(url).then(
+        () => {
+          this.$store.dispatch("snack", [
+            "Link copied to clipboard!",
+            "success lighten-2",
+            "mdi-check-circle",
+          ]);
+        },
+        (err) => {
+          this.$store.dispatch("snack", [
+            "Failed to copy link",
+            "error",
+            "mdi-close-circle",
+          ]);
+        }
+      );
+    },
   },
 };

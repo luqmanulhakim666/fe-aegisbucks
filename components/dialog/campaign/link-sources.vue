@@ -52,15 +52,23 @@
                 </div>
 
                 <v-btn
+                  @click="copyLink(generateLink(item))"
+                  small
+                  icon
+                  class="text-capitalize mb-6 mt-4 ml-2"
+                  :ripple="false"
+                >
+                  <v-icon small class="info--text">mdi-content-copy</v-icon>
+                </v-btn>
+
+                <v-btn
                   @click="onRemoveItem(index)"
                   small
                   icon
                   class="text-capitalize mb-6 mt-4"
                   :ripple="false"
                 >
-                  <v-icon small class="error--text ml-2"
-                    >mdi-close-circle</v-icon
-                  >
+                  <v-icon small class="error--text">mdi-close-circle</v-icon>
                 </v-btn>
               </div>
             </v-form>
