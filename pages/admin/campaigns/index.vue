@@ -213,18 +213,6 @@ export default {
           textColor: "dark--text",
         },
         {
-          key: "report",
-          text: "Report",
-          icon: "mdi-chart-pie",
-          textColor: "secondary--text",
-        },
-        {
-          key: "link-sources",
-          text: "Link Sources",
-          icon: "mdi-link",
-          textColor: "info--text",
-        },
-        {
           key: "edit",
           text: "Ubah",
           icon: "mdi-pencil",
@@ -235,6 +223,18 @@ export default {
           text: "Hapus",
           icon: "mdi-delete",
           textColor: "error--text",
+        },
+        {
+          key: "link-sources",
+          text: "Link Sources",
+          icon: "mdi-link",
+          textColor: "info--text",
+        },
+        {
+          key: "report",
+          text: "Report",
+          icon: "mdi-chart-pie",
+          textColor: "success--text",
         },
       ],
       paging: {},
