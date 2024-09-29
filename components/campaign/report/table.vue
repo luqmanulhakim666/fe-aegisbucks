@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-md-flex align-center mb-6">
-      <p class="h4--default dark--text mt-4 text--lighten-5">
+      <p class="h4--default primary--text mt-4 text--lighten-1">
         {{ label }}
       </p>
       <v-spacer />
@@ -37,6 +37,7 @@
     </v-data-table>
 
     <general-pagination
+      v-if="paginate"
       class="mt-6"
       :perPage="body.limit"
       :total="paging.count"
@@ -52,6 +53,10 @@ import pipe from "@/mixins/pipe";
 export default {
   mixins: [pipe],
   props: {
+    paginate: {
+      type: Boolean,
+      default: true,
+    },
     label: String,
     items: Array,
     headers: Array,
@@ -62,15 +67,12 @@ export default {
 
   methods: {
     onChangePagination(val) {
-      console.log("val", val);
       this.$emit("on:change", val);
     },
 
     onExport() {},
 
     onSearch(val) {
-      console.log(val);
-      console.log(this.body);
       this.body.page = 1;
       this.body.keyword = val;
 

@@ -48,8 +48,6 @@ export default {
         preview: this.$route.query?.__preview,
       });
     }
-
-    console.log(this.item);
   },
 };
 </script>

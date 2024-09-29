@@ -5,7 +5,6 @@
     :max-height="max_height"
     :src="logo"
     alt="logo"
-    class="pointer"
     @click="goHome()"
   />
 </template>
@@ -20,6 +19,10 @@ export default {
 
   methods: {
     goHome() {
+      if (this.$route?.name === "campaign-brandSlug-campaignSlug-success") {
+        return;
+      }
+
       const params = this.$route.params;
       const brandSlug = params?.brandSlug;
       const campaignSlug = params?.campaignSlug;

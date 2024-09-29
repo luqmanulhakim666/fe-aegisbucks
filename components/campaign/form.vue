@@ -19,12 +19,11 @@
           required
           :label="field.label"
           bold
-          className="text-capitalize"
+          class="text-capitalize"
           outlined
           item-text="key"
           item-value="value"
           :items="field.options"
-          :rules="[required]"
         />
       </template>
 
@@ -37,22 +36,39 @@
           <p class="text--small error--text" v-if="!field.options.length">
             *Not options yet
           </p>
+
           <div
             v-for="(option, i) in field.options"
             :key="i"
             class="d-flex align-start"
           >
-            <v-checkbox
-              v-model="option['value']"
-              multiple
-              class="mb-0"
-              cldense
-              hide-details
-              :ripple="false"
-              :value="option['key']"
-              :rules="[arrayRule]"
-            >
-            </v-checkbox>
+            <template v-if="field.options.length > 1 && field.options.length">
+              <v-checkbox
+                v-model="field.defaultValue"
+                multiple
+                class="mb-0"
+                cldense
+                hide-details="auto"
+                :ripple="false"
+                :value="option['key']"
+                :rules="[arrayRule]"
+              >
+              </v-checkbox>
+            </template>
+
+            <template v-if="field.options.length === 1 && field.options.length">
+              <v-checkbox
+                v-model="option['value']"
+                multiple
+                class="mb-0"
+                cldense
+                hide-details="auto"
+                :ripple="false"
+                :value="option['key']"
+                :rules="[arrayRule]"
+              >
+              </v-checkbox>
+            </template>
 
             <span class="text--default mt-5" v-html="option.key"></span>
           </div>

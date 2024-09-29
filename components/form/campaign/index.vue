@@ -1,7 +1,6 @@
 <template>
   <div>
     <p class="h4--default mb-6">{{ item.productId.name }}</p>
-
     <v-row>
       <v-col cols="12" md="3" lg="3" xl="2">
         <div class="white rounded-xl">
@@ -117,12 +116,7 @@
                             outlined
                           />
 
-                          <template
-                            v-if="
-                              element.type === 'checkbox' ||
-                              element.type === 'select'
-                            "
-                          >
+                          <template v-if="element.type === 'checkbox'">
                             <p class="h6--xsmall mb-2">Options</p>
                             <v-divider class="mb-4" />
                             <v-btn
@@ -131,7 +125,10 @@
                               plain
                               class="text-capitalize h8--supersmall primary--text"
                               x-small
-                              v-if="element.type === 'checkbox'"
+                              v-if="
+                                element.type === 'checkbox' &&
+                                element.options.length
+                              "
                               ><v-icon small class="mr-2">mdi-link</v-icon>Copy
                               Link S&K</v-btn
                             >
@@ -144,6 +141,45 @@
                                 <p class="text--default mt-3">{{ i + 1 }}.</p>
                                 <div>
                                   <general-form-rich-editor
+                                    class="full-width ml-2 mr-4"
+                                    v-model="element.options[i]['key']"
+                                    outlined
+                                    hide-details="auto"
+                                  />
+                                </div>
+                              </div>
+                              <v-btn
+                                icon
+                                x-small
+                                color="error"
+                                @click="onRemoveOption(index, i)"
+                              >
+                                <v-icon small>mdi-close</v-icon>
+                              </v-btn>
+                            </div>
+                            <v-btn
+                              x-small
+                              depressed
+                              class="text-capitalize primary-create-btn h8--supersmall mb-6"
+                              @click="onAddNewOption(index)"
+                            >
+                              <v-icon small>mdi-plus</v-icon> Add
+                            </v-btn>
+                          </template>
+
+                          <template v-if="element.type === 'select'">
+                            <p class="h6--xsmall mb-2">Options</p>
+                            <v-divider class="mb-4" />
+
+                            <div
+                              v-for="(option, i) in element.options"
+                              :key="i"
+                              class="d-flex justify-space-between mb-4 align-start"
+                            >
+                              <div class="d-flex full-width align-start">
+                                <p class="text--default mt-3">{{ i + 1 }}.</p>
+                                <div>
+                                  <general-form-text-field
                                     class="full-width ml-2 mr-4"
                                     v-model="element.options[i]['key']"
                                     outlined
@@ -212,7 +248,7 @@
                     bold
                     className="text-capitalize"
                     outlined
-                    item-text="name"
+                    item-text="key"
                     item-value="value"
                     :items="element.options"
                   />
@@ -384,6 +420,8 @@ export default {
 
       const url = `${host}/campaign/${this.brandSlug}/${this.campaignSlug}/term-and-conditions`;
 
+      console.log(url);
+
       navigator.clipboard.writeText(url).then(
         () => {
           this.$store.dispatch("snack", [
@@ -403,7 +441,27 @@ export default {
     },
 
     onSave() {
-      this.$emit("save:form", this.items.selectedFields);
+      const handleField = this.items.selectedFields?.map((field) => {
+        // Only modify the options for 'checkbox' or 'select' types
+        if (
+          field.type === "select" ||
+          (field.type === "checkbox" && field.options?.length > 1)
+        ) {
+          field.options = field.options.map((option) => {
+            const transformedValue = option.key
+              .toLowerCase()
+              .replace(/\s+/g, "_");
+            return {
+              ...option,
+              value: transformedValue,
+            };
+          });
+        }
+
+        return field;
+      });
+
+      this.$emit("save:form", handleField);
       this.setSuccessAlert("Fields have been updated");
       this.$emit("go:back");
 
