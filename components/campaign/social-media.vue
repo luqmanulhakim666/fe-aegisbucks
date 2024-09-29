@@ -2,7 +2,14 @@
   <v-container class="social-media-section white">
     <div class="social-icons">
       <div v-for="(item, index) in items" :key="index">
-        <v-btn v-if="item.value" link :href="item.value" target="_blank" icon>
+        <v-btn
+          class="mx-2"
+          v-if="item.value"
+          link
+          :href="item.value"
+          target="_blank"
+          icon
+        >
           <v-icon large :color="item.color">{{ item.icon }}</v-icon>
         </v-btn>
       </div>
@@ -30,7 +37,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 24px;
 }
 
 .social-icons v-icon {

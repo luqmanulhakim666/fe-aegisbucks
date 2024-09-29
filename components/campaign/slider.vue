@@ -27,15 +27,23 @@
           <div
             class="d-flex full-width flex-column align-center justify-center container"
           >
-            <v-icon class="text-center mx-auto d-flex success--text" size="150"
-              >mdi-check-circle</v-icon
-            >
+            <template v-if="!title">
+              <v-icon
+                class="text-center mx-auto d-flex success--text"
+                size="150"
+                >mdi-check-circle</v-icon
+              >
 
-            <div class="d-flex flex-column justify-center">
-              <h3 class="section-title h3--xsmall text-center mb-6">
-                Selamat, Kamu berhasil mendapatkan 1 Kupon {{ productName }}
-              </h3>
-            </div>
+              <div class="d-flex flex-column justify-center">
+                <h3 class="section-title h3--xsmall text-center mb-6">
+                  Selamat, Kamu berhasil mendapatkan 1 Kupon {{ productName }}
+                </h3>
+              </div>
+            </template>
+
+            <template v-if="title">
+              <span v-html="title"></span>
+            </template>
 
             <div class="full-width text-center">
               <v-divider class="my-6" />
@@ -65,6 +73,10 @@
                 >cara pemakaian nya melalui email <b>{{ item.email }}</b></b
               >
             </p>
+
+            <template v-if="description">
+              <span v-html="description"></span>
+            </template>
           </div>
         </template>
       </v-carousel-item>
@@ -96,6 +108,8 @@ export default {
   props: {
     productName: String,
     retailName: String,
+    title: String,
+    description: String,
     isImage: {
       type: Boolean,
       default: true,

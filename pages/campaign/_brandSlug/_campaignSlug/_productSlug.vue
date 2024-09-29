@@ -255,17 +255,24 @@ export default {
 
       const res = await this.$api.campaigns.claimVoucher(payload);
 
-      this.trackEvent("Click Claim Voucher", {
-        campaignId: payload.campaignId,
-        productId: payload.productId,
-        userInputs: payload.userInputs,
-        count: payload.count,
-      });
+      if (res.success) {
+        this.trackEvent("Click Claim Voucher", {
+          campaignId: payload.campaignId,
+          productId: payload.productId,
+          userInputs: payload.userInputs,
+          count: payload.count,
+        });
+
+        this.$router.push(
+          `/campaign/${res.data.brand?.slug}/${res.data?.campaign?.id}/${res.data?.groupId}/success`
+        );
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
 
       this.state.isLoading = false;
-      this.$router.push(
-        `/campaign/${res.data?.campaign?.id}/${res.data?.groupId}/success`
-      );
     },
   },
 };

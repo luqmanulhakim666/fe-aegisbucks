@@ -72,7 +72,7 @@
 
         <div class="d-flex mx-auto justify-center mt-1">
           <v-icon color="dark lighten-5" small>mdi-plus-circle</v-icon>
-          <h6 class="h6--xsmall dark--text text--lighten-5">Add Image</h6>
+          <h6 class="h6--xsmall dark--text text--lighten-5 ml-1">Add Image</h6>
         </div>
       </div>
 
@@ -98,14 +98,19 @@
       </v-progress-circular>
     </template>
 
+    <v-divider class="my-8"></v-divider>
+
     <div
       class="drop-file-component"
       @click="onAddText()"
       v-if="getTextIndex < 0"
     >
+      <v-icon>mdi-text-shadow</v-icon>
+
       <div class="d-flex mx-auto justify-center mt-1">
-        <v-icon color="dark lighten-5">mdi-text-shadow</v-icon>
-        <h6 class="h6--xsmall dark--text text--lighten-5">
+        <v-icon color="dark lighten-5" small>mdi-plus-circle</v-icon>
+
+        <h6 class="h6--xsmall dark--text text--lighten-5 ml-1">
           Add Text Content Products
         </h6>
       </div>

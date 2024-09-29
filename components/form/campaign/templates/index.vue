@@ -172,6 +172,8 @@
               <form-campaign-templates-thank-you
                 acceptFile=".pdf, image/png, image/jpg, image/jpeg"
                 :cropper="thankYouPageSections"
+                :primaryColor="form.primaryColor"
+                :secondaryColor="form.secondaryColor"
                 class="mt-4"
               />
             </v-expansion-panel-content>
@@ -338,6 +340,7 @@ export default {
 
         thanksSection: this.thankYouPageSections.images?.map((x) => {
           return {
+            ...x,
             id: x.id,
             type: x.type,
             name: x.name,
