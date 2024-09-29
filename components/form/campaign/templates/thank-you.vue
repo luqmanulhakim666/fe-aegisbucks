@@ -28,6 +28,7 @@
       </template>
     </div>
 
+    <h5 class="h5--small info--text text--lighten-1">Slider Section</h5>
     <v-row>
       <draggable
         class="row"
@@ -41,7 +42,7 @@
           class="mt-6"
           cols="12"
           md="4"
-          v-for="(cropper, index) in cropper.images"
+          v-for="(cropper, index) in filterImages"
           :key="index"
         >
           <div
@@ -83,6 +84,143 @@
         v-model="cropper.images"
         :rules="[arrayRule]"
       />
+      <v-divider class="my-8" />
+
+      <!-- TITLE -->
+      <template>
+        <h5 class="h5--small info--text text--lighten-1">Title</h5>
+        <div
+          v-if="getIndexTitle < 0"
+          class="drop-file-component mt-8"
+          @click="onAddTitle()"
+        >
+          <v-icon>mdi-button-cursor</v-icon>
+
+          <div class="d-flex mx-auto justify-center mt-1">
+            <v-icon color="dark lighten-5" small>mdi-plus-circle</v-icon>
+            <h6 class="h6--xsmall dark--text text--lighten-5">Add Title</h6>
+          </div>
+        </div>
+
+        <div class="d-flex align-center" v-if="getIndexTitle >= 0">
+          <general-form-rich-editor
+            v-model="cropper.images[getIndexTitle]['content']"
+            class="full-width mt-2"
+            placeholder="Call to Action Text"
+            bold
+            outlined
+            hide-details="auto"
+          />
+
+          <v-btn
+            icon
+            x-small
+            class="ml-2 mt-md-7"
+            @click="onRemoveTitle(getIndexTitle)"
+            ><v-icon color="error">mdi-close-circle</v-icon></v-btn
+          >
+        </div>
+      </template>
+      <!-- END TITLE -->
+
+      <v-divider class="my-8" />
+
+      <!-- Description -->
+      <template>
+        <h5 class="h5--small info--text text--lighten-1">Description</h5>
+        <div
+          v-if="getIndexDescription < 0"
+          class="drop-file-component mt-8"
+          @click="onAddDescription()"
+        >
+          <v-icon>mdi-button-cursor</v-icon>
+
+          <div class="d-flex mx-auto justify-center mt-1">
+            <v-icon color="dark lighten-5" small>mdi-plus-circle</v-icon>
+            <h6 class="h6--xsmall dark--text text--lighten-5">Add Title</h6>
+          </div>
+        </div>
+
+        <div class="d-flex align-center" v-if="getIndexDescription >= 0">
+          <general-form-rich-editor
+            v-model="cropper.images[getIndexDescription]['content']"
+            class="full-width mt-2"
+            placeholder="Call to Action Text"
+            bold
+            outlined
+            hide-details="auto"
+          />
+
+          <v-btn
+            icon
+            x-small
+            class="ml-2 mt-md-7"
+            @click="onRemoveDescription(getIndexDescription)"
+            ><v-icon color="error">mdi-close-circle</v-icon></v-btn
+          >
+        </div>
+      </template>
+      <!-- END Description -->
+
+      <v-divider class="my-8" />
+
+      <!-- CTA -->
+      <template>
+        <h5 class="h5--small info--text text--lighten-1">Call To Auction</h5>
+        <div
+          v-if="getIndexCTA < 0"
+          class="drop-file-component mt-8"
+          @click="onAddCTA()"
+        >
+          <v-icon>mdi-button-cursor</v-icon>
+
+          <div class="d-flex mx-auto justify-center mt-1">
+            <v-icon color="dark lighten-5" small>mdi-plus-circle</v-icon>
+            <h6 class="h6--xsmall dark--text text--lighten-5">
+              Add Call To Auction
+            </h6>
+          </div>
+        </div>
+
+        <div v-if="getIndexCTA >= 0">
+          <div class="d-flex">
+            <general-form-text-field
+              v-model="cropper.images[getIndexCTA]['name']"
+              class="mt-2 mr-4"
+              placeholder="Call to Action Text"
+              label="Label"
+              outlined
+              hide-details="auto"
+            />
+            <general-form-text-field
+              v-model="cropper.images[getIndexCTA]['url']"
+              class="full-width mt-2"
+              placeholder="Example: https://yourdomain.com / www.yourdomain.com"
+              label="Link"
+              outlined
+              hide-details="auto"
+              :rules="[required, link]"
+            />
+          </div>
+          <div class="d-flex align-center mt-4">
+            <v-btn
+              @click="goToCtaLink()"
+              width="300"
+              :style="`background:${primaryColor};color:${secondaryColor}`"
+              class="text-capitalize h6--xsmall"
+              >{{
+                cropper.images[getIndexCTA]["name"]
+                  ? cropper.images[getIndexCTA]["name"]
+                  : "Click Here"
+              }}</v-btn
+            >
+            <v-btn icon x-small class="ml-2" @click="onRemoveCTA(getIndexCTA)"
+              ><v-icon color="error">mdi-close-circle</v-icon></v-btn
+            >
+          </div>
+        </div>
+      </template>
+      <!-- END CTA -->
     </template>
 
     <template v-else>
@@ -221,6 +359,8 @@ export default {
     draggable,
   },
   props: {
+    primaryColor: String,
+    secondaryColor: String,
     bold: {
       type: Boolean,
       default: false,
@@ -272,6 +412,25 @@ export default {
   },
 
   computed: {
+    filterImages() {
+      return this.cropper.images.filter((x) => x.type === "image");
+    },
+    getIndexTitle() {
+      const findIndex = this.cropper.images.findIndex(
+        (x) => x.type === "title"
+      );
+      return findIndex;
+    },
+    getIndexDescription() {
+      const findIndex = this.cropper.images.findIndex(
+        (x) => x.type === "description"
+      );
+      return findIndex;
+    },
+    getIndexCTA() {
+      const findIndex = this.cropper.images.findIndex((x) => x.type === "cta");
+      return findIndex;
+    },
     dragOptions() {
       return {
         animation: 200,
@@ -284,6 +443,52 @@ export default {
   },
 
   methods: {
+    onRemoveTitle() {
+      this.cropper.images.splice(this.getIndexTitle, 1);
+    },
+
+    onRemoveCTA() {
+      this.cropper.images.splice(this.getIndexCTA, 1);
+    },
+
+    onRemoveDescription() {
+      this.cropper.images.splice(this.getIndexDescription, 1);
+    },
+
+    onAddTitle() {
+      this.cropper.images.push({
+        id: this.cropper.images?.length + 1,
+        type: "title",
+        content: "",
+      });
+    },
+
+    onAddDescription() {
+      this.cropper.images.push({
+        id: this.cropper.images?.length + 1,
+        type: "description",
+        content: "",
+      });
+    },
+
+    onAddCTA() {
+      this.cropper.images.push({
+        id: this.cropper.images?.length + 1,
+        type: "cta",
+        name: "",
+        url: "",
+      });
+    },
+
+    goToCtaLink() {
+      const url = this.cropper.images[this.getIndexCTA]["url"];
+
+      let domain = url.replace(/(^\w+:|^)\/\//, "");
+      if (!url) return;
+
+      window.open(`http://${domain}`, "_blank");
+    },
+
     getImage(val) {
       return `${this.$config.API_URL}/file/${val.id}/file` || "";
     },

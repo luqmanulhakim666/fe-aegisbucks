@@ -6,8 +6,8 @@
           label ? label : "Syarat dan Ketentuan"
         }}</span>
       </v-expansion-panel-header>
-      <v-expansion-panel-content>
-        <span class="mt-6" v-html="termAndConditions"></span>
+      <v-expansion-panel-content color="py-6">
+        <span v-html="termAndConditions"></span>
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
