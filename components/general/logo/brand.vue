@@ -17,10 +17,6 @@ export default {
     max_height: [String, Number],
   },
 
-  created() {
-    console.log(this.$route);
-  },
-
   methods: {
     goHome() {
       if (this.$route?.name === "campaign-brandSlug-campaignSlug-success") {

@@ -1,28 +1,28 @@
 <template>
   <div class="white pa-6 rounded-xl">
-    <h4 class="h4--default primary--text text--lighten-1">Voucher Status</h4>
+    <h4 class="h4--default primary--text text--lighten-1 mb-4">
+      Voucher Status
+    </h4>
     <v-row>
       <v-col align-self="center" cols="12" lg="6">
-        <v-row justify="center" align-self="center">
-          <v-col
-            align-self="center"
-            cols="auto "
+        <div class="d-flex justify-space-around" style="gap: 24px">
+          <div
+            class="d-flex justify-center flex-column"
             v-for="(item, index) in items"
             :key="index"
           >
-            <div class="d-flex justify-center flex-column">
-              <v-avatar size="12" :color="item.color"></v-avatar>
-              <h5 class="h5--small my-2">{{ decimal(item.value) }}</h5>
-              <p class="text--default">{{ item.name }}</p>
-            </div>
-          </v-col>
-        </v-row>
+            <v-avatar size="12" :color="item.color"></v-avatar>
+            <h5 class="h5--small my-2">{{ decimal(item.value) }}</h5>
+            <p class="text--default">{{ item.name }}</p>
+          </div>
+        </div>
       </v-col>
       <v-col cols="12" lg="6">
         <apexchart
           :options="chartOptions"
           :series="chartSeries"
-          height="100%"
+          width="300"
+          height="700"
         />
       </v-col>
     </v-row>

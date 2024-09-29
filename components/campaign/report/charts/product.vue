@@ -1,6 +1,6 @@
 <template>
   <div class="white pa-6 rounded-xl">
-    <h4 class="h4--default primary--text text--lighten-1">Products</h4>
+    <h4 class="h4--default primary--text text--lighten-1 mb-4">Products</h4>
     <apexchart
       type="bar"
       :options="chartOptions"
@@ -55,8 +55,6 @@ export default {
       );
       const viewData = this.summary.products?.map((product) => product.view);
       const categories = this.summary.products?.map((product) => product.name);
-
-      console.log(categories);
 
       this.chartSeries = [
         {

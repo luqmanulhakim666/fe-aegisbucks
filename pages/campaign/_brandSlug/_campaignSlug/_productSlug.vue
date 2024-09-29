@@ -237,14 +237,12 @@ export default {
 
           if (x.type === "checkbox" && x.options?.length === 1) {
             finalValue = x.options?.map((y) => {
-              console.log("1", y);
               return y?.value[0];
             });
           }
 
           if (x.type === "checkbox" && x.options?.length > 1) {
             finalValue = x.defaultValue?.map((y) => {
-              console.log("2", y);
               return y;
             });
           }

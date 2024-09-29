@@ -1,5 +1,5 @@
 <template>
-  <div class="white pa-6 rounded-xl">
+  <div class="white pa-6 rounded-xl fill-height">
     <h4 class="h4--default primary--text text--lighten-1 mb-4">
       Visit Claim Trend
     </h4>
@@ -84,7 +84,6 @@ export default {
       const claimData = this.summary?.trends.map((trend) => trend.totalClaim);
       const viewData = this.summary?.trends.map((trend) => trend.totalView);
       const categories = this.summary?.trends.map(
-        // console.log('tredn', trend)
         (trend) => `${months[trend.month - 1]}-${trend.year}`
       );
 

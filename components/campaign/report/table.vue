@@ -67,15 +67,12 @@ export default {
 
   methods: {
     onChangePagination(val) {
-      console.log("val", val);
       this.$emit("on:change", val);
     },
 
     onExport() {},
 
     onSearch(val) {
-      console.log(val);
-      console.log(this.body);
       this.body.page = 1;
       this.body.keyword = val;
 

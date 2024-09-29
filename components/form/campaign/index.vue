@@ -125,7 +125,10 @@
                               plain
                               class="text-capitalize h8--supersmall primary--text"
                               x-small
-                              v-if="element.type === 'checkbox'"
+                              v-if="
+                                element.type === 'checkbox' &&
+                                element.options.length
+                              "
                               ><v-icon small class="mr-2">mdi-link</v-icon>Copy
                               Link S&K</v-btn
                             >
@@ -416,6 +419,8 @@ export default {
       const host = this.$config.API_URL.replace("/api", "");
 
       const url = `${host}/campaign/${this.brandSlug}/${this.campaignSlug}/term-and-conditions`;
+
+      console.log(url);
 
       navigator.clipboard.writeText(url).then(
         () => {

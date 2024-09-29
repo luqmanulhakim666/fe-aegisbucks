@@ -80,7 +80,6 @@ export default {
 
   created() {
     this.setLandingPageData();
-    console.log("campaign", this.campaign);
   },
 
   mounted() {
@@ -96,8 +95,6 @@ export default {
       const findText = this.items.headerSections?.find(
         (x) => x.type === "text"
       );
-
-      console.log(findText);
 
       return findText?.name ?? "Pilih Voucher yang anda inginkan";
     },

@@ -8,28 +8,41 @@
     />
 
     <v-row class="mt-8">
-      <v-col cols="12" md="7">
+      <v-col cols="12" lg="7">
         <div class="white rounded-xl">
           <div class="pa-6 d-flex">
-            <v-icon color="primary" size="44">mdi-bullhorn</v-icon>
-
+            <v-icon color="secondary lighten-5" size="44">mdi-bullhorn</v-icon>
             <div class="ml-4">
-              <p class="h5--small dark--text text--lighten-5">
-                {{ campaign.name }}
-              </p>
-              <p class="text--large dark--text text--lighten-1">
-                {{ campaign.brand.name }}
-              </p>
+              <div class="d-flex align-start">
+                <div>
+                  <p class="h5--small dark--text text--lighten-5 mr-3">
+                    {{ campaign.name }}
+                  </p>
+                  <p class="text--large dark--text text--lighten-1">
+                    {{ campaign.brand.name }}
+                  </p>
+                </div>
+                <v-card
+                  flat
+                  :class="
+                    campaign.published
+                      ? ' h8--supersmall success white--text lighten-2'
+                      : 'h8--supersmall  error white--text lighten-1'
+                  "
+                  class="py-2 px-4 rounded-pill"
+                >
+                  {{ campaign.published ? "Active" : "Inactive" }}
+                </v-card>
+              </div>
             </div>
           </div>
           <v-divider> </v-divider>
-
-          <div class="d-flex justify-space-between">
+          <div class="d-md-flex justify-space-between">
             <div class="pa-6 d-flex">
               <v-icon color="success" size="34">mdi-cash-multiple</v-icon>
               <div class="ml-4">
                 <p class="p--default dark--text text--lighten-5">Budget</p>
-                <p class="h4--default dark--text text--lighten-1">
+                <p class="h6--xsmall dark--text text--lighten-1">
                   {{ decimal(campaign.budget) }}
                 </p>
               </div>
@@ -38,7 +51,7 @@
               <v-icon color="dark" size="34">mdi-calendar-range</v-icon>
               <div class="ml-4">
                 <p class="p--default dark--text text--lighten-5">Flight Date</p>
-                <p class="h4--default dark--text text--lighten-1">
+                <p class="h6--xsmall dark--text text--lighten-1">
                   {{ dateMonthTextYear(campaign.publishedAt) }}
                 </p>
               </div>
@@ -50,7 +63,7 @@
                 <p class="p--default dark--text text--lighten-5">
                   Expired Date
                 </p>
-                <p class="h4--default dark--text text--lighten-1">
+                <p class="h6--xsmall dark--text text--lighten-1">
                   {{ dateMonthTextYear(campaign.expiredDate) }}
                 </p>
               </div>
@@ -58,39 +71,23 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="12" md="5">
-        <v-row>
-          <v-col cols="6" md="4">
-            <div class="pa-6 rounded-xl primary lighten-3">
-              <p class="h6--xsmall white--text text--lighten-5">
-                Total Page Views
-              </p>
-              <p class="h6--xsmall white--text text--lighten-1">
-                {{ decimal(getTotalPageView) }}
-              </p>
-            </div>
-          </v-col>
-          <v-col cols="6" md="4">
-            <div class="pa-6 rounded-xl primary lighten-2">
-              <p class="h6--xsmall white--text text--lighten-5">
-                Total Page Views
-              </p>
-              <p class="h6--xsmall white--text text--lighten-1">
-                {{ decimal(getTotalPageView) }}
-              </p>
-            </div>
-          </v-col>
-          <v-col cols="6" md="4">
-            <div class="pa-6 rounded-xl primary">
-              <p class="h6--xsmall white--text text--lighten-5">
-                Total Page Views
-              </p>
-              <p class="h6--xsmall white--text text--lighten-1">
-                {{ decimal(getTotalPageView) }}
-              </p>
-            </div>
-          </v-col>
-        </v-row>
+      <v-col cols="12" lg="5">
+        <div class="d-flex fill-height justify-space-between" style="gap: 20px">
+          <div class="pa-6 rounded-xl full-width primary lighten-1">
+            <p class="h6--xsmall white--text text--lighten-5">
+              Total Page Views
+            </p>
+            <h1 class="h1--xxlarge white--text text--lighten-1">
+              {{ decimal(getTotalPageView) }}
+            </h1>
+          </div>
+          <div class="pa-6 full-width rounded-xl primary lighten-2">
+            <p class="h6--xsmall white--text text--lighten-5">Total Vouchers</p>
+            <h1 class="h1--xxlarge white--text text--lighten-1">
+              {{ decimal(getTotalVoucher) }}
+            </h1>
+          </div>
+        </div>
       </v-col>
     </v-row>
 
@@ -100,7 +97,7 @@
       </template>
 
       <template v-if="!state.loading.summary">
-        <v-col cols="12" xl="7" lg="6">
+        <v-col align-self="start" cols="12" xl="7" lg="6">
           <campaign-report-charts-trends
             class="fill-height my-auto"
             v-if="!state.loading.summary"
@@ -325,6 +322,10 @@ export default {
   computed: {
     getTotalPageView() {
       return this.items.summary.pageView?.total || 0;
+    },
+
+    getTotalVoucher() {
+      return this.items.summary.voucherCode?.total || 0;
     },
   },
 
