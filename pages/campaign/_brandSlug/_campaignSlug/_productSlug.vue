@@ -77,8 +77,14 @@
           </v-form>
 
           <!-- Show Google login button if not logged in -->
-          <template v-if="!isAuthenticated && campaign.loginGmail">
-            <general-google-sign-in @loginSuccess="handleGoogleLogin" />
+          <template v-if="campaign.loginGmail">
+            <general-google-sign-in
+              :class="[
+                isAuthenticated ? 'd-none' : 'd-flex mx-auto justify-center',
+              ]"
+              @loginSuccess="handleGoogleLogin"
+            />
+            <!-- class="d-none" -->
           </template>
 
           <!-- Submit button only if authenticated -->
