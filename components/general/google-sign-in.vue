@@ -1,6 +1,5 @@
-<!-- GoogleSignin.vue -->
 <template>
-  <div class="d-flex mx-auto justify-center">
+  <div class="google-signin-wrapper">
     <!-- Google Sign-In Button -->
     <div
       id="g_id_onload"
@@ -9,13 +8,14 @@
       data-callback="handleCredentialResponse"
     ></div>
     <div
-      class="g_id_signin"
+      class="g_id_signin google-signin-button d-flex justify-center"
       data-type="standard"
       data-size="large"
       data-theme="filled_blue"
       data-text="signin_with"
       data-shape="rectangular"
-      data-width="364"
+      data-width="278"
+      data-auto_prompt="false"
       data-logo_alignment="left"
     ></div>
   </div>
@@ -30,21 +30,42 @@ export default {
   },
 
   created() {
-    this.client_id = process.env.GOOGLE_CLIENT_ID; // Set the client ID from environment variables
+    this.client_id = process.env.GOOGLE_CLIENT_ID;
   },
 
   mounted() {
-    // Register the handleCredentialResponse function globally
     window.handleCredentialResponse = (response) => {
-      const jwt = response.credential;
-      // Emit the JWT token to the parent or handle the response as needed
-      this.$emit("loginSuccess", jwt);
+      if (response && response.credential) {
+        const jwt = response.credential;
+        this.$emit("loginSuccess", jwt);
+      } else {
+        console.error("No credential response or token.");
+      }
     };
+
+    if (!window.google) {
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
   },
 
   beforeDestroy() {
-    // Clean up the global function when the component is destroyed
-    delete window.handleCredentialResponse;
+    if (window.handleCredentialResponse) {
+      delete window.handleCredentialResponse;
+    }
   },
 };
 </script>
+
+<style scoped>
+.google-signin-wrapper {
+  width: 100%;
+}
+
+.google-signin-button {
+  width: 100% !important;
+}
+</style>
