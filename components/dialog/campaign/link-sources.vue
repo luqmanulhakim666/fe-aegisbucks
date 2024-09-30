@@ -2,7 +2,6 @@
   <v-dialog v-model="dialog" persistent width="800">
     <div class="white rounded-xl">
       <general-card-dialog-header name="Link Sources" @close="onEmitClose" />
-
       <div class="pa-4">
         <v-data-table
           :headers="headers"
@@ -17,10 +16,10 @@
             </p>
           </template>
 
-          <template v-slot:[`item.type`]="{ item }">
+          <template v-slot:[`item.type`]="{}">
             <general-form-select
               class="mt-3"
-              v-model="item.type"
+              v-model="form.type"
               :items="items.types"
               item-value="key"
               item-text="name"
@@ -35,7 +34,7 @@
               <div class="d-flex align-center">
                 <general-form-text-field
                   class="full-width mt-4"
-                  v-model="item.name"
+                  v-model="item.source"
                   outlined
                   bold
                   :rules="[required]"
@@ -116,7 +115,7 @@ export default {
       formMode: false,
     },
     form: {
-      name: "",
+      source: "",
       type: "utm",
       value: "",
     },
@@ -171,12 +170,12 @@ export default {
     onEmitClose() {
       this.$emit("on:close");
       this.onClearForm();
-      this.campaign.campaignUtms = [];
+      // this.campaign.campaignUtms = [];
     },
 
     onClearForm() {
       this.form = {
-        name: "",
+        source: "",
         type: "utm",
         value: "",
       };
@@ -187,12 +186,12 @@ export default {
       const host = this.$config.API_URL.replace("/api", "");
       const campaignSlug = encodeURIComponent(this.campaign.slug);
       const brandSlug = encodeURIComponent(this.campaign.brand?.slug);
-      const utmSource = encodeURIComponent(val.name);
+      const utmSource = encodeURIComponent(val.source);
       let result = "";
 
-      if (val.type === "utm") {
-        result = `${host}/campaign/${campaignSlug}/${brandSlug}?utm_source=${utmSource}`;
-      }
+      // if (val.type === "utm") {
+      result = `${host}/campaign/${campaignSlug}/${brandSlug}?utm_source=${utmSource}`;
+      // }
 
       val.value = result;
 
@@ -207,13 +206,17 @@ export default {
       this.state.isLoading = true;
 
       const payload = {
-        campaignUtms: this.campaign.campaignUtms,
+        utms: this.campaign.campaignUtms?.map((x) => {
+          return { source: x.source };
+        }),
       };
 
       const res = await this.$api.campaigns.update(this.campaign.id, payload);
 
       if (res.success) {
         this.setSuccessAlert("Data has been saved");
+        this.$emit("on:close");
+        this.onClearForm();
       }
 
       if (!res.success) {

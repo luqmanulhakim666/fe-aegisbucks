@@ -8,7 +8,7 @@
       <campaign-slider
         height="250"
         :primaryColor="campaign.primaryColor"
-        :items="items.headerSections"
+        :items="getImages"
       />
 
       <!-- Content Section -->
@@ -35,8 +35,11 @@
           </v-col>
         </v-row>
       </v-container>
+
       <!-- Social Media Section -->
-      <campaign-social-media :items="items.footerSections" />
+      <template v-if="hasFooters">
+        <campaign-social-media :items="items.footerSections" />
+      </template>
     </template>
   </div>
 </template>
@@ -91,6 +94,20 @@ export default {
   },
 
   computed: {
+    hasFooters() {
+      return this.items.footerSections.some(
+        (item) => item.value?.trim() !== ""
+      );
+    },
+
+    getImages() {
+      const images = this.items.headerSections?.filter(
+        (x) => x.type === "image"
+      );
+
+      return images?.length > 0 ? images : false;
+    },
+
     getTextContentProducts() {
       const findText = this.items.headerSections?.find(
         (x) => x.type === "text"

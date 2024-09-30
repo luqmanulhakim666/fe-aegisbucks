@@ -129,6 +129,7 @@
       :isLoading="state.loading.pageViews"
       @on:change="onChangePaginationPageViews"
       @on:search="fetchPageView"
+      @on:export="onExportPageViews"
     />
 
     <v-divider class="my-8 dark--text" />
@@ -142,6 +143,21 @@
       :isLoading="state.loading.productStocks"
       :paginate="false"
       @on:search="fetchProductStocks"
+      @on:export="onExportProductPartner"
+    />
+
+    <v-divider class="my-8 dark--text" />
+
+    <campaign-report-table
+      label="Voucher Claims"
+      :items="items.voucherClaims"
+      :body="body.voucherClaims"
+      :paging="paging.voucherClaims"
+      :headers="headers.voucherClaims"
+      :isLoading="state.loading.voucherClaims"
+      @on:search="fetchVoucherClaims"
+      @on:change="onChangePaginationVoucherClaims"
+      @on:export="onExportVoucherClaims"
     />
   </div>
 </template>
@@ -183,11 +199,17 @@ export default {
         limit: 10,
         keyword: "",
       },
+      voucherClaims: {
+        page: 1,
+        limit: 10,
+        keyword: "",
+      },
     },
 
     paging: {
       pageViews: {},
       productStocks: {},
+      voucherClaims: {},
     },
 
     state: {
@@ -195,6 +217,7 @@ export default {
         summary: false,
         pageViews: false,
         productStocks: false,
+        voucherClaims: false,
       },
     },
 
@@ -296,12 +319,75 @@ export default {
           class: "dark--text h7--xxsmall",
         },
       ],
+      voucherClaims: [
+        {
+          text: "No",
+          value: "no",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Retail Partner",
+          value: "retailName",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Voucher Code",
+          value: "voucherCode",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Expired Date",
+          value: "expiredDate",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Status",
+          value: "claimedStatus",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Claimed / Used Date",
+          value: "claimedDate",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Customer Name",
+          value: "name",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Phone Number",
+          value: "phone",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Email",
+          value: "email",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "IP Address",
+          value: "ipAddress",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+      ],
     },
 
     items: {
       summary: {},
       pageViews: [],
       productStocks: [],
+      voucherClaims: [],
       breadcrumbs: [
         { text: "Campaigns", slug: "/admin/campaigns" },
         { text: "", slug: "" },
@@ -313,6 +399,7 @@ export default {
     this.fetch();
     this.fetchPageView();
     this.fetchProductStocks();
+    this.fetchVoucherClaims();
   },
 
   mounted() {
@@ -405,17 +492,17 @@ export default {
       );
 
       if (res.success) {
-        this.items.productStocks = res.data.list?.map((x, index) => ({
+        this.items.productStocks = res.data?.map((x, index) => ({
           no:
             (this.body.productStocks.page - 1) * this.body.productStocks.limit +
             index +
             1,
           ...x,
         }));
-        this.paging.productStocks = res.data.paging;
-        this.paging.productStocks["totalPage"] = Math.ceil(
-          this.paging.productStocks?.count / this.body.productStocks.limit
-        );
+        // this.paging.productStocks = res.data?.paging;
+        // this.paging.productStocks["totalPage"] = Math.ceil(
+        //   this.paging.productStocks?.count / this.body.productStocks.limit
+        // );
       }
 
       if (!res.success) {
@@ -425,9 +512,70 @@ export default {
       this.state.loading.productStocks = false;
     },
 
+    async fetchVoucherClaims() {
+      this.state.loading.voucherClaims = true;
+
+      const res = await this.$api.campaigns.report.getVoucherClaims(
+        this.id,
+        this.body.voucherClaims
+      );
+
+      if (res.success) {
+        this.items.voucherClaims = res.data?.list?.map((x, index) => ({
+          no:
+            (this.body.voucherClaims.page - 1) * this.body.voucherClaims.limit +
+            index +
+            1,
+          ...x,
+        }));
+        this.paging.voucherClaims = res.data?.paging;
+        this.paging.voucherClaims["totalPage"] = Math.ceil(
+          this.paging.voucherClaims?.count / this.body.voucherClaims.limit
+        );
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.state.loading.voucherClaims = false;
+    },
+
+    onChangePaginationVoucherClaims(val) {
+      this.body.voucherClaims.page = val;
+      this.fetchVoucherClaims();
+    },
+
     onChangePaginationPageViews(val) {
       this.body.pageViews.page = val;
       this.fetchPageView();
+    },
+
+    onExportPageViews() {
+      const url = this.$api.campaigns.report.export(
+        this.campaign?.id,
+        "page-views",
+        this.body.pageViews
+      );
+      window.open(url);
+    },
+
+    onExportProductPartner() {
+      const url = this.$api.campaigns.report.export(
+        this.campaign?.id,
+        "retail-product-stocks",
+        this.body.productStocks
+      );
+      window.open(url);
+    },
+
+    onExportVoucherClaims() {
+      const url = this.$api.campaigns.report.export(
+        this.campaign?.id,
+        "voucher-claims",
+        this.body.voucherClaims
+      );
+      window.open(url);
     },
   },
 };

@@ -103,16 +103,27 @@ export default {
     },
 
     onGetVoucher() {
-      if (this.isPreview) {
-        this.$router.push(
-          `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/products?__preview=true`
-        );
-        return;
+      const url = this.isPreview
+        ? `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/products?__preview=true`
+        : `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/products`;
+      const hasOnlyOneProduct = this.campaign?.campaignProducts?.length === 1;
+
+      if (hasOnlyOneProduct) {
+        const product = this.campaign.campaignProducts[0].product;
+
+        const productDetailUrl = this.isPreview
+          ? `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${product.slug}?__preview=true`
+          : `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${product.slug}`;
+        this.trackEvent("Click Campaign Product", {
+          campaignId: this.campaign.id,
+          productId: product.id,
+        });
+
+        return (window.location.href = productDetailUrl);
       }
 
-      this.$router.push(
-        `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/products`
-      );
+      this.$router.push(url);
+      console.log(this.campaign);
     },
   },
 };

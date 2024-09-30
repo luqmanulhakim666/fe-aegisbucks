@@ -1,7 +1,8 @@
 import qs from "query-string";
 
 export default (ctx) => {
-  let { $axios } = ctx;
+  let { $axios, $config, store } = ctx;
+  const token = `Bearer ${store.getters["auth/isToken"]}`;
   let url = "/campaign";
   return {
     async getList(query = {}) {
@@ -119,6 +120,21 @@ export default (ctx) => {
         return await $axios.get(
           `${url}/${campaignId}/report/retail-product-stocks${q}`
         );
+      },
+
+      async getVoucherClaims(campaignId, query = {}) {
+        let q = `?${qs.stringify(query)}`;
+        return await $axios.get(
+          `${url}/${campaignId}/report/voucher-claims${q}`
+        );
+      },
+
+      export(campaignId, data, query = {}) {
+        query.authorization = token;
+        let q = qs.stringify(query);
+        const api = `${$config.API_URL}`;
+
+        return `${api}/report/campaign/${campaignId}/${data}/export?${q}`;
       },
     },
   };

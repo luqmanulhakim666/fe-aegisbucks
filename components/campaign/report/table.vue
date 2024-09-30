@@ -27,6 +27,23 @@
         <p class="text-capitalize">{{ fullDateTime(item.createdAt) }}</p>
       </template>
 
+      <template v-slot:[`item.expiredDate`]="{ item }">
+        <p class="text-capitalize">{{ fullDateTime(item.expiredDate) }}</p>
+      </template>
+
+      <template v-slot:[`item.claimedDate`]="{ item }">
+        <p class="text-capitalize">{{ fullDateTime(item.claimedDate) }}</p>
+      </template>
+
+      <template v-slot:[`item.claimedStatus`]="{ item }">
+        <general-chips-status
+          :label="item.claimed ? 'Claimed' : 'Not Claimed'"
+          :color="item.claimed ? 'success lighten-2' : 'error lighten-2'"
+          textColor="white--text"
+          width="100"
+        />
+      </template>
+
       <template v-slot:[`item.claimed`]="{ item }">
         <p class="text-capitalize">{{ decimal(item.claimed) }}</p>
       </template>
@@ -70,7 +87,9 @@ export default {
       this.$emit("on:change", val);
     },
 
-    onExport() {},
+    onExport() {
+      this.$emit("on:export");
+    },
 
     onSearch(val) {
       this.body.page = 1;

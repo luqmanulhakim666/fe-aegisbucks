@@ -218,12 +218,12 @@ export default {
           icon: "mdi-pencil",
           textColor: "primary--text",
         },
-        {
-          key: "delete",
-          text: "Hapus",
-          icon: "mdi-delete",
-          textColor: "error--text",
-        },
+        // {
+        //   key: "delete",
+        //   text: "Hapus",
+        //   icon: "mdi-delete",
+        //   textColor: "error--text",
+        // },
         {
           key: "link-sources",
           text: "Link Sources",
@@ -234,7 +234,7 @@ export default {
           key: "report",
           text: "Report",
           icon: "mdi-chart-pie",
-          textColor: "success--text",
+          textColor: "secondary--text",
         },
       ],
       paging: {},

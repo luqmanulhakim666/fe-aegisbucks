@@ -1,23 +1,24 @@
 <template>
   <div class="container">
-    <campaign-slider
-      v-if="getImages"
-      class="mb-4"
-      height="250"
-      :primaryColor="campaign.primaryColor"
-      :items="getImages"
-    />
-
-    <campaign-slider
-      :items="item.vouchers"
-      :isImage="false"
-      :productName="item.product.name"
-      :retailName="item.retail.name"
-      :title="getTitle"
-      :description="getDescription"
-      showArrow
-      :cycle="false"
-    />
+    <div class="white">
+      <campaign-slider
+        v-if="getImages"
+        class="mb-4"
+        height="250"
+        :primaryColor="campaign.primaryColor"
+        :items="getImages"
+      />
+      <campaign-slider
+        :items="item.vouchers"
+        :isImage="false"
+        :productName="item.product.name"
+        :retailName="item.retail.name"
+        :title="getTitle"
+        :description="getDescription"
+        showArrow
+        :cycle="false"
+      />
+    </div>
 
     <v-btn
       v-if="getCTA"
