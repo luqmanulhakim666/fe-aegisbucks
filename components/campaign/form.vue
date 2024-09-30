@@ -24,6 +24,7 @@
           item-text="key"
           item-value="value"
           :items="field.options"
+          :rules="[required]"
         />
       </template>
 
@@ -70,7 +71,11 @@
               </v-checkbox>
             </template>
 
-            <span class="text--default mt-5" v-html="option.key"></span>
+            <span
+              style="margin-top: 24px"
+              class="text--default"
+              v-html="option.key"
+            ></span>
           </div>
         </div>
       </template>

@@ -154,6 +154,8 @@
 </template>
 
 <script>
+let hasEmittedDetail = false;
+
 import media from "@/mixins/media";
 import rules from "@/mixins/rules";
 import utils from "@/mixins/utils";
@@ -246,14 +248,27 @@ export default {
     },
   }),
 
-  created() {
-    const route = this.$router.history._startLocation;
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      const route = to.path; // Get the current route path
 
-    if (route === "/admin/campaigns/create") {
-      this.$emit("get:detail", this.$route.params.slug);
-      return true;
+      if (route === "/admin/campaigns/create" && !hasEmittedDetail) {
+        vm.$emit("get:detail", to.params.slug);
+        hasEmittedDetail = true; // Prevent further emissions
+      }
+    });
+  },
+  beforeRouteUpdate(to, from, next) {
+    const route = to.path; // Same logic as beforeRouteEnter for dynamic route changes
+
+    if (route === "/admin/campaigns/create" && !hasEmittedDetail) {
+      this.$emit("get:detail", to.params.slug);
+      hasEmittedDetail = true;
     }
+    next();
+  },
 
+  created() {
     this.state.hasFetched = true;
     if (!this.isCreated) {
       this.items.selectedProducts = this.form.campaignProducts.map((x) => {

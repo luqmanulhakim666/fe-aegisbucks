@@ -12,7 +12,7 @@
     <!-- Product Price -->
     <div class="price d-flex flex-column align-start">
       <p class="discount">Rp {{ decimal(price) }}</p>
-      <p class="final-price">Rp {{ decimal(discount) }}</p>
+      <p class="final-price">Rp {{ decimal(finalPrice) }}</p>
     </div>
   </div>
 </template>
@@ -26,6 +26,11 @@ export default {
     name: String,
     price: [String, Number],
     discount: [String, Number],
+  },
+  computed: {
+    finalPrice() {
+      return this.price - this.discount || 0;
+    },
   },
   methods: {
     onEmitDetail() {

@@ -8,11 +8,7 @@
       class="carousel"
       :cycle="cycle"
     >
-      <v-carousel-item
-        class="grey lighten-4"
-        v-for="(item, i) in items"
-        :key="i"
-      >
+      <v-carousel-item v-for="(item, i) in items" :key="i">
         <template v-if="isImage">
           <v-img
             :lazy-src="`${getImage(item)}?auto=format,compress&w=1946`"
@@ -36,7 +32,14 @@
 
               <div class="d-flex flex-column justify-center">
                 <h3 class="section-title h3--xsmall text-center mb-6">
-                  Selamat, Kamu berhasil mendapatkan 1 Kupon {{ productName }}
+                  Selamat, Kamu berhasil <br />
+                  mendapatkan
+                  {{
+                    retailName === "Indomaret" || retailName === "indomaret"
+                      ? "i-kupon"
+                      : "kode"
+                  }}
+                  voucher {{ productName }}
                 </h3>
               </div>
             </template>
@@ -55,7 +58,12 @@
             </div>
 
             <p class="caps--small">
-              i-Kupon berlaku hinggal
+              {{
+                retailName === "Indomaret" || retailName === "indomaret"
+                  ? "i-kupon"
+                  : "Kode voucher"
+              }}
+              berlaku hinggal
               <b>
                 {{
                   dateMonthTextYear(
@@ -68,7 +76,13 @@
             </p>
             <br />
             <p class="caps--small">
-              Kami juga telah mengirimkan i-Kupon beserta
+              Kami juga telah mengirimkan
+              {{
+                retailName === "Indomaret" || retailName === "indomaret"
+                  ? "i-kupon"
+                  : "kode voucher"
+              }}
+              beserta
               <b
                 >cara pemakaian nya melalui email <b>{{ item.email }}</b></b
               >

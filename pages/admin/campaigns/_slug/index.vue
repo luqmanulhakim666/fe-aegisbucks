@@ -23,6 +23,7 @@
       <v-tabs-items class="mt-10 transparent" v-model="state.tab">
         <v-tab-item>
           <form-campaign-general
+            v-if="state.tab === 0"
             :form="form"
             :users="items.users"
             :brands="items.brands"
@@ -34,6 +35,7 @@
 
         <v-tab-item>
           <form-campaign-products
+            v-if="state.tab === 1"
             :products="items.products"
             :form="form"
             @get:detail="fetchCampaignDetail"
@@ -42,13 +44,14 @@
 
         <v-tab-item>
           <form-campaign-voucher
+            v-if="state.tab === 2"
             :products="form.campaignProducts"
             :partners="items.partners"
             :form="form"
           />
         </v-tab-item>
         <v-tab-item>
-          <form-campaign-templates :form="form" />
+          <form-campaign-templates v-if="state.tab === 3" :form="form" />
         </v-tab-item>
         <v-tab-item>
           <form-campaign-preview

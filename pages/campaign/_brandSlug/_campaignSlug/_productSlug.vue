@@ -15,7 +15,7 @@
           />
 
           <div class="d-flex flex-column justify-center align-center">
-            <p class="section-title h7--xxsmall mt-2 mb-4">
+            <p class="section-title text-center h7--xxsmall mt-2 mb-4">
               {{ product.promoLabel }}
             </p>
 
@@ -67,12 +67,13 @@
               @on:select="onSelectRetailPartner"
             />
 
-            <p class="text-center h5--small mb-4">
-              Isi data dan dapatkan vouchernya
-            </p>
-
-            <!-- FORM SECTION -->
-            <campaign-form :fields="form.userInputs" />
+            <template v-if="hasFormInput">
+              <p class="text-center h5--small mb-4">
+                Isi data dan dapatkan vouchernya
+              </p>
+              <!-- FORM SECTION -->
+              <campaign-form :fields="form.userInputs" />
+            </template>
           </v-form>
 
           <!-- Show Google login button if not logged in -->
@@ -189,6 +190,14 @@ export default {
         productId: this.product.id,
       });
     }
+  },
+
+  computed: {
+    hasFormInput() {
+      const form = this.form.userInputs;
+
+      return form?.length > 0;
+    },
   },
 
   methods: {
