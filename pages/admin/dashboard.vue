@@ -10,3 +10,18 @@
     > -->
   </div>
 </template>
+
+<script>
+import meta from "@/mixins/meta";
+export default {
+  mixins: [meta],
+  data: () => ({
+    meta: {
+      title: "Dashboard",
+    },
+  }),
+  mounted() {
+    this.setMeta("Dashboard");
+  },
+};
+</script>
