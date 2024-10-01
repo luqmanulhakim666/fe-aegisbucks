@@ -18,6 +18,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.14.0'
+          
+      - name: Inject .env
+        continue-on-error: true
+        run: |
+          cat << EOF > ./.env
+          ${{ secrets.ENV }}
+          EOF
 
       - name: Install dependencies
         run: npm install
