@@ -86,32 +86,32 @@
             /> -->
           <!-- class="d-none" -->
           <!-- </template> -->
+          {{ isAuthenticated }}
 
-          <template v-if="!isAuthenticated && campaign.loginGmail">
-            <general-google-login />
-          </template>
+          <general-google-login />
+          <!-- <template v-if="!isAuthenticated && campaign.loginGmail">
+          </template> -->
 
           <!-- Submit button only if authenticated -->
-          <template v-if="isAuthenticated && campaign.loginGmail">
-            <div
-              class="d-flex rounded-xl py-3 justify-center grey lighten-3 mb-2"
-            >
-              <v-icon class="mr-2">mdi-email</v-icon>
-              <p class="h7--xxsmall">{{ profile.email }}</p>
-            </div>
-            <v-btn
-              block
-              large
-              depressed
-              class="text-capitalize h6--xsmall"
-              @click="onSubmit()"
-              :loading="state.isLoading"
-              :disabled="!isAuthenticated"
-              :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
-            >
-              Dapatkan Voucher Sekarang
-            </v-btn>
-          </template>
+          <!-- <template v-if="isAuthenticated && campaign.loginGmail"> -->
+          <div
+            class="d-flex rounded-xl py-3 justify-center grey lighten-3 mb-2"
+          >
+            <v-icon class="mr-2">mdi-email</v-icon>
+            <!-- <p class="h7--xxsmall">{{ profile.email }}</p> -->
+          </div>
+          <v-btn
+            block
+            large
+            depressed
+            class="text-capitalize h6--xsmall"
+            @click="onSubmit()"
+            :loading="state.isLoading"
+            :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
+          >
+            Dapatkan Voucher Sekarang
+          </v-btn>
+          <!-- </template> -->
 
           <template v-if="!campaign.loginGmail">
             <v-btn
@@ -200,6 +200,8 @@ export default {
         productId: this.product.id,
       });
     }
+
+    console.log("profile", this.profile);
   },
 
   computed: {

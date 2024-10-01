@@ -176,6 +176,8 @@ export const actions = {
     if (!googleToken || !googleProfile) {
       commit("SET_IS_GOOGLE_AUTH", false);
       commit("SET_GOOGLE_PROFILE", {});
+      Cookie.remove("googleToken");
+      Cookie.remove("googleProfile");
     }
   },
 
