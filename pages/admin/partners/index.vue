@@ -82,8 +82,9 @@
 <script>
 import media from "@/mixins/media";
 import routes from "@/mixins/routes";
+import meta from "@/mixins/meta";
 export default {
-  mixins: [media, routes],
+  mixins: [media, routes, meta],
   middleware: ["authenticated", "authorized"],
   meta: {
     page: "admin",

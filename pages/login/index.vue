@@ -29,19 +29,19 @@
 
 <script>
 import rules from "@/mixins/rules";
+import meta from "@/mixins/meta";
 export default {
-  mixins: [rules],
+  mixins: [rules, meta],
   middleware: "unauthenticated",
   layout: "empty",
   data: () => ({
+    meta: {
+      title: "Dashboard",
+    },
     form: {
       email: "",
       password: "",
     },
-    // form: {
-    //   email: "admin@letsbuyasia.id",
-    //   password: "@Admin12345",
-    // },
     state: {
       isValid: true,
       isLoading: false,

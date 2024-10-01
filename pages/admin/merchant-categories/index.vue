@@ -73,15 +73,16 @@
 
 <script>
 import routes from "@/mixins/routes";
+import meta from "@/mixins/meta";
 export default {
-  mixins: [routes],
+  mixins: [routes, meta],
   middleware: ["authenticated", "authorized"],
   meta: {
     page: "admin",
   },
   data: () => ({
     meta: {
-      title: "Berita",
+      title: "Merchant Categories",
     },
     form: {
       name: "",

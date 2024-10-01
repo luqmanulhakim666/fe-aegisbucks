@@ -43,8 +43,9 @@
 
 <script>
 import rules from "@/mixins/rules";
+import meta from "@/mixins/meta";
 export default {
-  mixins: [rules],
+  mixins: [rules, meta],
   middleware: ["authenticated", "authorized"],
   meta: {
     page: "admin",

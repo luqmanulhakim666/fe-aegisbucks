@@ -49,8 +49,8 @@ export default {
       this.$store.dispatch("campaign/tracking", payload);
     },
 
-    checkGoogleAuth() {
-      this.$store.dispatch("auth/loadGoogleAuth");
+    async checkGoogleAuth() {
+      await this.$store.dispatch("auth/loadGoogleAuth");
     },
   },
 

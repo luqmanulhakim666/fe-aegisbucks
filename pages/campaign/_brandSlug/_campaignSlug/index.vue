@@ -27,8 +27,10 @@
 
 <script>
 import tracking from "@/mixins/tracking";
+import meta from "@/mixins/meta";
+import media from "@/mixins/media";
 export default {
-  mixins: [tracking],
+  mixins: [tracking, meta, media],
 
   async asyncData({ store, route, error, redirect }) {
     let campaign = null;
@@ -57,6 +59,11 @@ export default {
   layout: "campaign",
 
   data: () => ({
+    meta: {
+      title: "",
+      image: "",
+      description: "",
+    },
     items: {
       primaryColor: null,
       secondaryColor: null,
@@ -72,6 +79,9 @@ export default {
     if (this.campaign?.id) {
       this.setLandingPageData();
       this.checkGoogleAuth();
+      this.meta.title = `Campaign ${this.campaign.brand.name} ${this.campaign.name} `;
+      this.meta.image = this.getImage(this.campaign.coverSection[0]);
+      this.meta.description = this.campaign.slug;
     }
   },
 
