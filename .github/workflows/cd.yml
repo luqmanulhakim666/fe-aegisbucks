@@ -35,7 +35,7 @@ jobs:
           npm install --omit=dev
 
       - name: Archive build files
-        run: tar -czf build.tar.gz .nuxt node_modules .env
+        run: tar -czf build.tar.gz .nuxt node_modules .env nuxt.config.js
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
