@@ -5,7 +5,7 @@ module.exports = {
     API_URL: process.env.API_URL,
   },
   server: {
-    port: 8080,
+    port: process.env.PORT,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
