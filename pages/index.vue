@@ -3,19 +3,19 @@
 </template>
 
 <script>
-// import meta from "@/mixins/meta";
+import meta from "@/mixins/meta";
 export default {
   layout: "empty",
-  // middleware: "unauthenticated",
-  // meta: [meta],
+  middleware: "unauthenticated",
+  meta: [meta],
 
   created() {
     this.$router.push("/login");
   },
   data: () => ({
-    // meta: {
-    //   title: "Beranda",
-    // },
+    meta: {
+      title: "Go To Go",
+    },
   }),
 };
 </script>

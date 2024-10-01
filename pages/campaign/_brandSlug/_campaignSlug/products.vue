@@ -47,6 +47,7 @@
 <script>
 import media from "@/mixins/media";
 import tracking from "@/mixins/tracking";
+import meta from "@/mixins/meta";
 export default {
   async asyncData({ store, route, redirect }) {
     let loading = true;
@@ -68,9 +69,14 @@ export default {
 
     return { campaign: campaign, loading: loading };
   },
-  mixins: [media, tracking],
+  mixins: [media, tracking, meta],
   layout: "campaign",
   data: () => ({
+    meta: {
+      title: "",
+      image: "",
+      description: "",
+    },
     items: {
       primaryColor: null,
       secondaryColor: null,
@@ -82,7 +88,12 @@ export default {
   }),
 
   created() {
-    this.setLandingPageData();
+    if (this.campaign?.id) {
+      this.setLandingPageData();
+      this.meta.title = `Campaign Products ${this.campaign.brand.name} ${this.campaign.name} `;
+      this.meta.image = this.getImage(this.campaign.coverSection[0]);
+      this.meta.description = this.campaign.slug;
+    }
   },
 
   mounted() {
@@ -157,11 +168,15 @@ export default {
       });
 
       if (this.isPreview) {
-        window.location.href = `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}?__preview=true`;
+        this.$router.push(
+          `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}?__preview=true`
+        );
         return;
       }
 
-      window.location.href = `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}`;
+      this.$router.push(
+        `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}`
+      );
     },
   },
 };

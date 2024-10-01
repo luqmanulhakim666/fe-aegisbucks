@@ -5,7 +5,6 @@ module.exports = {
   target: "server",
   publicRuntimeConfig: {
     API_URL: process.env.API_URL,
-    TEST_URL: "https://google.com",
   },
   server: {
     port: process.env.PORT,
@@ -23,13 +22,6 @@ module.exports = {
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { hid: "description", name: "description", content: "" },
       { name: "format-detection", content: "telephone=no" },
-    ],
-    script: [
-      // {
-      //   src: "https://accounts.google.com/gsi/client",
-      //   async: true,
-      //   defer: true,
-      // },
     ],
   },
 

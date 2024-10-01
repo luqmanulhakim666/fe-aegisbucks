@@ -1,4 +1,5 @@
 const Cookie = process.client ? require("js-cookie") : undefined;
+const cookieparser = process.server ? require("cookieparser") : undefined;
 
 const defaultState = {
   token: null,
@@ -163,24 +164,40 @@ export const actions = {
    * 2. Set token to store and axios
    *
    */
-  async loadGoogleAuth({ dispatch, commit }) {
+
+  async loadGoogleAuth({ dispatch, commit, req }) {
     let googleToken = null;
     let googleProfile = null;
-    googleToken = Cookie.get("googleToken");
-    googleProfile = Cookie.get("googleProfile");
+
+    // Server-side cookie handling (SSR)
+    if (process.server && req && req.headers.cookie) {
+      const parsedCookies = cookieparser.parse(req.headers.cookie);
+      googleToken = parsedCookies.googleToken;
+      googleProfile = parsedCookies.googleProfile;
+    }
+
+    // Client-side cookie handling
+    if (process.client) {
+      googleToken = Cookie.get("googleToken");
+      googleProfile = Cookie.get("googleProfile");
+    }
+
+    // Logic to commit based on cookie availability
+    if (!googleToken || !googleProfile) {
+      commit("SET_IS_GOOGLE_AUTH", false);
+      commit("SET_GOOGLE_PROFILE", {});
+      if (process.client) {
+        Cookie.remove("googleToken");
+        Cookie.remove("googleProfile");
+      }
+      return;
+    }
 
     if (googleToken && googleProfile) {
       commit("SET_IS_GOOGLE_AUTH", true);
       commit("SET_GOOGLE_PROFILE", JSON.parse(googleProfile));
     }
-    if (!googleToken || !googleProfile) {
-      commit("SET_IS_GOOGLE_AUTH", false);
-      commit("SET_GOOGLE_PROFILE", {});
-      Cookie.remove("googleToken");
-      Cookie.remove("googleProfile");
-    }
   },
-
   /**
    * Set profile
    *
