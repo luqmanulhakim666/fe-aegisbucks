@@ -1,6 +1,4 @@
-import VueJwtDecode from "vue-jwt-decode";
 const Cookie = process.client ? require("js-cookie") : undefined;
-const cookieparser = process.server ? require("cookieparser") : undefined;
 
 const defaultState = {
   token: null,
@@ -156,13 +154,8 @@ export const actions = {
    *
    */
   async setGoogleToken({ commit }, token) {
-    // Handle login success and decode JWT token
-    const decodedToken = VueJwtDecode.decode(token);
-
-    // Store the token in cookies
     Cookie.set("googleToken", token, { expires: 30 }); // Expires in 7 days
     commit("SET_IS_GOOGLE_AUTH", true);
-    commit("SET_GOOGLE_PROFILE", decodedToken);
   },
 
   /**
@@ -170,30 +163,19 @@ export const actions = {
    * 2. Set token to store and axios
    *
    */
-  async loadGoogleAuth({ dispatch, commit }, context = {}) {
-    let token = null;
+  async loadGoogleAuth({ dispatch, commit }) {
+    let googleToken = null;
+    let googleProfile = null;
+    googleToken = Cookie.get("googleToken");
+    googleProfile = Cookie.get("googleProfile");
 
-    // Server-side cookie handling
-    if (process.server && context.req) {
-      const cookies = context.req.headers.cookie;
-      if (cookies) {
-        const parsedCookies = cookieparser.parse(cookies);
-        token = parsedCookies.googleToken;
-      }
+    if (googleToken && googleProfile) {
+      commit("SET_IS_GOOGLE_AUTH", true);
+      commit("SET_GOOGLE_PROFILE", JSON.parse(googleProfile));
     }
-
-    // Client-side cookie handling
-    if (process.client && Cookie) {
-      token = Cookie.get("googleToken");
-    }
-
-    if (token) {
-      try {
-        await dispatch("setGoogleToken", token);
-      } catch (error) {
-        console.error("Failed to decode token", error);
-        commit("SET_IS_GOOGLE_AUTH", false);
-      }
+    if (!googleToken || !googleProfile) {
+      commit("SET_IS_GOOGLE_AUTH", false);
+      commit("SET_GOOGLE_PROFILE", {});
     }
   },
 
