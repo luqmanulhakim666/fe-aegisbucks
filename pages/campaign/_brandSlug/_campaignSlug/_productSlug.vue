@@ -79,7 +79,9 @@
           <!-- Show Google login button if not logged in -->
           <template v-if="campaign.loginGmail">
             <general-google-sign-in
-              v-if="!isAuthenticated"
+              :class="[
+                isAuthenticated ? 'd-none' : 'd-flex mx-auto justify-center',
+              ]"
               @loginSuccess="handleGoogleLogin"
             />
             <!-- class="d-none" -->
