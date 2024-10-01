@@ -4,6 +4,12 @@ export default (ctx) => {
   let { $axios } = ctx;
   let url = "/user";
   return {
+    async handleGoogleLogin(query = {}) {
+      let q = qs.stringify(query);
+
+      return await $axios.get(`/auth/google/callback?${q}}`);
+    },
+
     async login(body) {
       return await $axios.post(`${url}/signin`, body);
     },
