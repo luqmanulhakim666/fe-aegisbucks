@@ -420,8 +420,6 @@ export default {
 
       const url = `${host}/campaign/${this.brandSlug}/${this.campaignSlug}/term-and-conditions`;
 
-      console.log(url);
-
       navigator.clipboard.writeText(url).then(
         () => {
           this.$store.dispatch("snack", [

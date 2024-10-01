@@ -182,7 +182,10 @@ export default {
     return { id: id, campaign: campaign };
   },
   mixins: [meta, pipe],
-
+  middleware: ["authenticated", "authorized"],
+  meta: {
+    page: "admin",
+  },
   data: () => ({
     body: {
       summary: {
