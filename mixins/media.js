@@ -16,21 +16,27 @@ export default {
 
   methods: {
     getImage(val) {
-      let url = "";
+      // let url = "";
 
-      if (val?.image?.url) {
-        url = val?.image?.url;
+      if (val?.id) {
+        return `${this.$config.API_URL}/file/${val?.id}/file`;
       }
 
-      if (val?.imageId) {
-        url = `${this.$config.API_URL}/file/${val?.imageId}/file`;
-      }
+      return `${this.$config.API_URL}/file/${val}/file`;
 
-      if (!val?.image?.url && !val?.imageId) {
-        url = `${this.$config.API_URL}/file/${val?.id}/file`;
-      }
+      // if (val?.image?.url) {
+      //   url = val?.image?.url;
+      // }
 
-      return url;
+      // if (val?.imageId) {
+      //   url = `${this.$config.API_URL}/file/${val?.imageId}/file`;
+      // }
+
+      // if (!val?.image?.url && !val?.imageId) {
+      //   url = `${this.$config.API_URL}/file/${val?.id}/file`;
+      // }
+
+      // return url;
     },
 
     async getOneMedia(id) {
