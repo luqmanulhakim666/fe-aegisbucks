@@ -17,7 +17,7 @@ export default {
       const clientId =
         "122849428774-ovopn2m3pv578iv8majn46lcofbg8lc7.apps.googleusercontent.com";
       const redirectUri = encodeURIComponent(
-        "http://localhost:8080/google/callback"
+        "https://go2go.id/google/callback"
       );
       const scope = "profile email";
       const responseType = "token";
