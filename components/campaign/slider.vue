@@ -6,6 +6,7 @@
       hide-delimiters
       :show-arrows="showArrow && showSliderDots"
       class="carousel"
+      show-arrows-on-hover
       :cycle="cycle"
     >
       <v-carousel-item v-for="(item, i) in items" :key="i">
@@ -20,77 +21,18 @@
         </template>
 
         <template v-if="!isImage">
-          <div
-            class="d-flex full-width flex-column align-center justify-center container"
-          >
-            <template v-if="!title">
-              <v-icon
-                class="text-center mx-auto d-flex success--text"
-                size="150"
-                >mdi-check-circle</v-icon
-              >
-
-              <div class="d-flex flex-column justify-center">
-                <h3 class="section-title h3--xsmall text-center mb-6">
-                  Selamat, Kamu berhasil <br />
-                  mendapatkan
-                  {{
-                    retailName === "Indomaret" || retailName === "indomaret"
-                      ? "i-kupon"
-                      : "kode"
-                  }}
-                  voucher {{ productName }}
-                </h3>
-              </div>
-            </template>
-
-            <template v-if="title">
-              <span v-html="title"></span>
-            </template>
-
-            <div class="full-width text-center">
-              <v-divider class="my-6" />
-              <h4 class="success--text h4--default">
-                {{ item.voucherCode.code }}
-              </h4>
-              <VueBarcode :value="item.voucherCode.code"> No Data </VueBarcode>
-              <v-divider class="my-6" />
-            </div>
-
-            <p class="caps--small">
-              {{
-                retailName === "Indomaret" || retailName === "indomaret"
-                  ? "i-kupon"
-                  : "Kode voucher"
-              }}
-              berlaku hinggal
-              <b>
-                {{
-                  dateMonthTextYear(
-                    item.voucherCode.campaignVoucher.expiredDate,
-                    " "
-                  )
-                }}</b
-              >
-              dan dapat digunakan di <b>{{ retailName }}</b>
-            </p>
-            <br />
-            <p class="caps--small">
-              Kami juga telah mengirimkan
-              {{
-                retailName === "Indomaret" || retailName === "indomaret"
-                  ? "i-kupon"
-                  : "kode voucher"
-              }}
-              beserta
-              <b
-                >cara pemakaian nya melalui email <b>{{ item.email }}</b></b
-              >
-            </p>
-
-            <template v-if="description">
-              <span v-html="description"></span>
-            </template>
+          <div class="full-width text-center">
+            <v-divider class="my-6" />
+            <h4 class="success--text h4--default">
+              {{ item.voucherCode.code }}
+            </h4>
+            <VueBarcode
+              class="d-flex mx-auto justify-center"
+              :value="item.voucherCode.code"
+            >
+              No Data
+            </VueBarcode>
+            <v-divider class="pb-6" />
           </div>
         </template>
       </v-carousel-item>
@@ -120,10 +62,6 @@ export default {
     VueBarcode,
   },
   props: {
-    productName: String,
-    retailName: String,
-    title: String,
-    description: String,
     isImage: {
       type: Boolean,
       default: true,

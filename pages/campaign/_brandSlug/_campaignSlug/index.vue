@@ -123,7 +123,6 @@ export default {
       }
 
       this.$router.push(url);
-      console.log(this.campaign);
     },
   },
 };

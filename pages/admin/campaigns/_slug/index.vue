@@ -72,6 +72,10 @@ import meta from "@/mixins/meta";
 import utils from "@/mixins/utils";
 export default {
   mixins: [rules, meta, utils],
+  middleware: ["authenticated", "authorized"],
+  meta: {
+    page: "admin",
+  },
   data: () => ({
     form: {
       userId: "",

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="white">
+    <div class="white pa-6">
       <campaign-slider
         v-if="getImages"
         class="mb-4"
@@ -8,33 +8,120 @@
         :primaryColor="campaign.primaryColor"
         :items="getImages"
       />
-      <campaign-slider
-        :items="item.vouchers"
-        :isImage="false"
-        :productName="item.product.name"
-        :retailName="item.retail.name"
-        :title="getTitle"
-        :description="getDescription"
-        showArrow
-        :cycle="false"
-      />
-    </div>
 
-    <v-btn
-      v-if="getCTA"
-      @click="goToCtaLink()"
-      block
-      :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
-      class="text-capitalize h6--xsmall mt-8"
-      >{{ getCTA["name"] ? getCTA["name"] : "Click Here" }}</v-btn
-    >
+      <template v-if="!getTitle">
+        <v-icon class="text-center mx-auto d-flex success--text" size="150"
+          >mdi-check-circle</v-icon
+        >
+
+        <div class="d-flex flex-column justify-center">
+          <h3 class="h3--small text-center">
+            Selamat Kamu berhasil mendapatkan {{ getTotalVouchers }}
+            {{ handleVoucherName }}
+          </h3>
+
+          <h3 class="h3--small text-center mb-6">
+            {{ productName }}
+          </h3>
+        </div>
+      </template>
+
+      <template v-if="getTitle">
+        <span v-html="getTitle"></span>
+      </template>
+
+      <div>
+        <v-carousel
+          v-model="index"
+          hide-delimiters
+          height="auto"
+          :show-arrows="getTotalVouchers > 1"
+          class="carousel"
+          show-arrows-on-hover
+          :cycle="false"
+        >
+          <v-carousel-item v-for="(item, i) in item.vouchers" :key="i">
+            <div class="full-width text-center">
+              <v-divider class="my-6" />
+              <h4 class="success--text h4--default">
+                {{ item.voucherCode.code }}
+              </h4>
+              <VueBarcode
+                class="d-flex mx-auto justify-center"
+                :value="item.voucherCode.code"
+              >
+                No Data
+              </VueBarcode>
+              <v-divider class="pb-6" />
+
+              <div class="text-left">
+                <p class="caps--small">
+                  {{ handleVoucherName }}
+                  berlaku hinggal
+                  <b>
+                    {{
+                      dateMonthTextYear(
+                        item.voucherCode.campaignVoucher.expiredDate,
+                        " "
+                      )
+                    }}</b
+                  >
+                  dan dapat digunakan di <b>{{ retailName }}</b>
+                </p>
+                <br />
+
+                <p class="caps--small">
+                  Kami juga telah mengirimkan
+                  {{ handleVoucherName }}
+                  beserta
+                  <b
+                    >cara pemakaian nya melalui email <b>{{ item.email }}</b></b
+                  >
+                </p>
+              </div>
+            </div>
+          </v-carousel-item>
+        </v-carousel>
+
+        <div class="d-flex justify-center mt-6" v-if="getTotalVouchers > 1">
+          <div v-for="i in getTotalVouchers" :key="i">
+            <v-avatar
+              @click="setIndex(i - 1)"
+              size="8"
+              class="mx-2 pointer"
+              :color="
+                i - 1 === index ? campaign.primaryColor : 'grey lighten-2'
+              "
+            ></v-avatar>
+          </div>
+        </div>
+      </div>
+
+      <template v-if="description">
+        <v-divider class="my-6" />
+        <span v-html="description"></span>
+      </template>
+
+      <v-btn
+        v-if="getCTA"
+        @click="goToCtaLink()"
+        block
+        large
+        :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
+        class="text-capitalize h6--xsmall mt-8"
+        >{{ getCTA["name"] ? getCTA["name"] : "Click Here" }}</v-btn
+      >
+    </div>
   </div>
 </template>
 
 <script>
+import VueBarcode from "vue-barcode";
+import pipe from "@/mixins/pipe";
+
 export default {
+  mixins: [pipe],
   async asyncData({ store, route, app, redirect }) {
-    const brandSlug = route.params.brandSlug;
     const campaignId = route.params.campaignSlug;
     const groupId = route.params.success;
     let loading = true;
@@ -51,13 +138,16 @@ export default {
       redirect("/campaign");
     }
 
-    return { data: data };
+    return { data: data, loading: loading };
   },
   layout: "campaign",
-
+  components: {
+    VueBarcode,
+  },
   data: () => ({
     item: {},
     campaign: {},
+    index: 0,
   }),
 
   computed: {
@@ -72,7 +162,7 @@ export default {
       const item = this.campaign.thanksSection?.find((x) => x.type === "title");
       return item?.content;
     },
-    getDescription() {
+    description() {
       const item = this.campaign.thanksSection?.find(
         (x) => x.type === "description"
       );
@@ -81,6 +171,23 @@ export default {
     getCTA() {
       const item = this.campaign.thanksSection?.find((x) => x.type === "cta");
       return item;
+    },
+    retailName() {
+      return this.item.retail?.name;
+    },
+    productName() {
+      return this.item.product?.name;
+    },
+    handleVoucherName() {
+      let name = "Voucher";
+      if (this.productName === "indomaret") {
+        name = "i-kupon";
+      }
+
+      return name;
+    },
+    getTotalVouchers() {
+      return this.item.vouchers?.length;
     },
   },
 
@@ -116,6 +223,23 @@ export default {
 
       window.open(`http://${domain}`, "_blank");
     },
+    setIndex(i) {
+      this.index = i;
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.carousel {
+  // height: calc(65vh - 45px) !important;
+}
+.carousel-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* Ensures image scales and covers the area without distortion */
+}
+::v-deep text {
+  display: none;
+}
+</style>
