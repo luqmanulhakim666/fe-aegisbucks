@@ -21,6 +21,8 @@ export default {
     },
   }),
   mounted() {
+    console.log("hardcode", this.$config.TEST_URL);
+    console.log("process", this.$config.API_URL);
     this.setMeta("Dashboard");
   },
 };
