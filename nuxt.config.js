@@ -1,8 +1,11 @@
+require("dotenv").config();
+
 module.exports = {
   ssr: true,
   target: "server",
   publicRuntimeConfig: {
     API_URL: process.env.API_URL,
+    TEST_URL: "https://google.com",
   },
   server: {
     port: process.env.PORT,
