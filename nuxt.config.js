@@ -22,11 +22,11 @@ module.exports = {
       { name: "format-detection", content: "telephone=no" },
     ],
     script: [
-      {
-        src: "https://accounts.google.com/gsi/client",
-        async: true,
-        defer: true,
-      },
+      // {
+      //   src: "https://accounts.google.com/gsi/client",
+      //   async: true,
+      //   defer: true,
+      // },
     ],
   },
 
