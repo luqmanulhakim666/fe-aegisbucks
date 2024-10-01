@@ -72,4 +72,4 @@ jobs:
           script: |
             cd /app/fe
             tar -xzf build.tar.gz
-            pm2 restart be || pm2 start node_modules/nuxt/bin/nuxt.js --name fe
+            pm2 restart fe || pm2 start node_modules/nuxt/bin/nuxt.js --name fe
