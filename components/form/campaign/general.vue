@@ -217,7 +217,7 @@
         outlined
       />
 
-      <general-form-text-field
+      <!-- <general-form-text-field
         v-model="form.gmailUsername"
         bold
         label="Setting Gmail Username"
@@ -229,7 +229,7 @@
         bold
         label="Setting Gmail Password"
         outlined
-      />
+      /> -->
     </v-form>
 
     <div class="d-flex justify-end mt-8">

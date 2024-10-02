@@ -77,6 +77,9 @@ export default {
     page: "admin",
   },
   data: () => ({
+    meta: {
+      title: "Create Campaign",
+    },
     form: {
       userId: "",
       name: "",
@@ -232,6 +235,8 @@ export default {
       };
 
       const res = await this.$api.partners.getList(payload);
+
+      this.meta.title = res.data.name;
 
       if (res.success) {
         this.items.partners = res.data.list;

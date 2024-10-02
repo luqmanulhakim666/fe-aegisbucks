@@ -38,7 +38,7 @@
             :rules="[required]"
           />
 
-          <general-form-text-field
+          <general-form-text-area
             v-model="form.promoLabel"
             label="Promo Label"
             outlined

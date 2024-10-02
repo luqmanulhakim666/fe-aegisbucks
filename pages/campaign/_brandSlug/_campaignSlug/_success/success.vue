@@ -57,7 +57,7 @@
               <div class="text-left">
                 <p class="caps--small">
                   {{ handleVoucherName }}
-                  berlaku hinggal
+                  berlaku hingga
                   <b>
                     {{
                       dateMonthTextYear(
