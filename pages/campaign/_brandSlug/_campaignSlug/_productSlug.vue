@@ -9,7 +9,7 @@
       />
 
       <div class="d-flex flex-column justify-center align-center">
-        <p class="section-title text-center h7--xxsmall mt-2 mb-4">
+        <p class="product-promo_label text-center h7--xxsmall mt-2 mb-4">
           {{ product.promoLabel }}
         </p>
 
@@ -65,26 +65,15 @@
           </p>
           <!-- FORM SECTION -->
           <campaign-form :fields="form.userInputs" />
+          <!-- END FORM SECTIOn -->
         </template>
       </v-form>
 
-      <!-- Show Google login button if not logged in -->
-      <!-- <template v-if="campaign.loginGmail"> -->
-      <!-- <general-google-sign-in
-              :class="[
-                isAuthenticated ? 'd-none' : 'd-flex mx-auto justify-center',
-              ]"
-              @loginSuccess="handleGoogleLogin"
-            /> -->
-      <!-- class="d-none" -->
-      <!-- </template> -->
-
       <div v-if="campaign.loginGmail">
         <div v-if="!isAuthenticated">
-          <general-google-login />
+          <general-google-login :form="form" />
         </div>
 
-        <!-- Submit button only if authenticated -->
         <div v-else>
           <div
             class="d-flex rounded-xl py-3 justify-center grey lighten-3 mb-2"
@@ -181,7 +170,6 @@ export default {
   created() {
     if (this.product) {
       this.setUserInputs();
-      console.log(this.campaign);
       this.meta.title = `Campaign ${this.campaign.brand.name} ${this.campaign.name} ${this.product.product.slug}`;
       this.meta.image = this.getImage(this.product.product);
       this.meta.description = this.campaign.slug;
@@ -293,3 +281,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.product {
+  &-promo_label {
+    white-space: pre-line;
+  }
+}
+</style>

@@ -129,7 +129,7 @@ export default {
           productId: product.id,
         });
 
-        return (window.location.href = productDetailUrl);
+        return this.$router.push(productDetailUrl);
       }
 
       this.$router.push(url);

@@ -1,4 +1,5 @@
 <template>
+  <!-- DELETE SOON -->
   <div class="google-signin-wrapper">
     <!-- Google Sign-In Button -->
     <div
