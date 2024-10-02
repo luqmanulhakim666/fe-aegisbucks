@@ -10,11 +10,9 @@
       />
 
       <template v-if="!getTitle">
-        <v-icon class="text-center mx-auto d-flex success--text" size="150"
-          >mdi-check-circle</v-icon
-        >
+        <lotties-success />
 
-        <div class="d-flex flex-column justify-center">
+        <div class="d-flex flex-column justify-center mt-n10">
           <h3 class="h3--small text-center">
             Selamat Kamu berhasil mendapatkan {{ getTotalVouchers }}
             {{ handleVoucherName }}
@@ -118,9 +116,10 @@
 <script>
 import VueBarcode from "vue-barcode";
 import pipe from "@/mixins/pipe";
+import meta from "@/mixins/meta";
 
 export default {
-  mixins: [pipe],
+  mixins: [pipe, meta],
   async asyncData({ store, route, app, redirect }) {
     const campaignId = route.params.campaignSlug;
     const groupId = route.params.success;
@@ -145,6 +144,9 @@ export default {
     VueBarcode,
   },
   data: () => ({
+    meta: {
+      title: "",
+    },
     item: {},
     campaign: {},
     index: 0,
@@ -207,7 +209,9 @@ export default {
       });
 
       if (res.success) {
+        console.log(this.item);
         this.campaign = res.data;
+        this.meta.title = `Voucher ${this.item.product.name} ${res.data.brand.name} ${res.data.name}`;
       }
 
       if (!res.success) {
