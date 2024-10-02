@@ -5,10 +5,18 @@
 </template>
 
 <script>
+import meta from "@/mixins/meta";
 const Cookie = process.client ? require("js-cookie") : undefined;
 
 export default {
   layout: "empty",
+  mixins: [meta],
+
+  data: () => ({
+    meta: {
+      title: "Google Verifiying",
+    },
+  }),
   async mounted() {
     const hash = window.location.hash.substr(1);
     const result = hash.split("&").reduce((res, item) => {
