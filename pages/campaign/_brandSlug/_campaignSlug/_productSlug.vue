@@ -173,10 +173,22 @@ export default {
       this.meta.title = `Campaign ${this.campaign.brand.name} ${this.campaign.name} ${this.product.product.slug}`;
       this.meta.image = this.getImage(this.product.product);
       this.meta.description = this.campaign.slug;
+      this.form.campaignId = this.campaign.id;
+      this.form.productId = this.product.id;
     }
   },
 
   mounted() {
+    const formLocalStorage = JSON.parse(localStorage.getItem("form"));
+
+    if (
+      formLocalStorage?.productId === this.form?.productId &&
+      formLocalStorage?.campaignId === this.form?.campaignId
+    ) {
+      this.form = formLocalStorage;
+      this.state.qty = formLocalStorage.count;
+    }
+
     this.checkGoogleAuth();
 
     if (!this.isPreview) {
@@ -266,6 +278,10 @@ export default {
           userInputs: payload.userInputs,
           count: payload.count,
         });
+
+        if (localStorage.getItem("form")) {
+          localStorage.removeItem("form");
+        }
 
         this.$router.push(
           `/campaign/${res.data.brand?.slug}/${res.data?.campaign?.id}/${res.data?.groupId}/success`

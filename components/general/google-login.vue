@@ -1,15 +1,17 @@
 <template>
-  <button
-    class="google-login-btn d-flex justify-center full-width pa-3"
-    @click="loginWithGoogle"
-  >
-    <div
-      class="google-icon-wrapper d-flex justify-center align-center white pa-2"
+  <div>
+    <button
+      class="google-login-btn d-flex justify-center full-width pa-3"
+      @click="loginWithGoogle"
     >
-      <img class="google-icon" src="/google-color.svg" alt="Google icon" />
-    </div>
-    <span>Login with Google</span>
-  </button>
+      <div
+        class="google-icon-wrapper d-flex justify-center align-center white pa-2"
+      >
+        <img class="google-icon" src="/google-color.svg" alt="Google icon" />
+      </div>
+      <span class="ml-6">Login with Google</span>
+    </button>
+  </div>
 </template>
 
 <script>
@@ -19,7 +21,7 @@ let Cookie; // Declare this globally
 export default {
   mixins: [tracking],
   props: {
-    callback: String,
+    form: Object,
   },
   mounted() {
     // Ensure the code only runs on the client-side
@@ -32,6 +34,8 @@ export default {
       if (process.client) {
         // Set the callback URL to cookies (only on client)
         Cookie.set("googleCallback", window.location.href);
+
+        localStorage.setItem("form", JSON.stringify(this.form));
 
         // Get the client ID from environment variables
         const clientId = process.env.GOOGLE_CLIENT_ID;
