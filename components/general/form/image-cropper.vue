@@ -9,36 +9,38 @@
     />
 
     <div class="d-flex align-center mb-2">
-      <p
+      <span
         class="text-capitalize label-text"
         v-if="label"
         v-bind:class="{
           'h6--xsmall': bold,
           'text--default': !bold,
+          'white--text': labelWhite,
+          'dark--text': !labelWhite,
         }"
       >
         {{ label }}
-      </p>
-      <p
-        class="text-capitalize label-text ml-1 error--text"
-        v-if="require"
-        v-bind:class="{
-          'h6--xsmall': bold,
-          'text--default': !bold,
-        }"
-      >
-        *
-      </p>
-      <p
-        class="text-capitalize label-text ml-1 info--text text--lighten-2"
-        v-if="optional"
-        v-bind:class="{
-          'h6--xsmall': bold,
-          'text--default': !bold,
-        }"
-      >
-        (Opsional)
-      </p>
+        <span
+          class="text-capitalize label-text ml-1 error--text"
+          v-if="required"
+          v-bind:class="{
+            'h6--xsmall': bold,
+            'text--default': !bold,
+          }"
+        >
+          *
+        </span>
+        <span
+          class="text-capitalize label-text ml-1 info--text text--lighten-2"
+          v-if="optional"
+          v-bind:class="{
+            'h6--xsmall': bold,
+            'text--default': !bold,
+          }"
+        >
+          (Opsional)
+        </span>
+      </span>
     </div>
     <template v-if="cropper.hasImageId">
       <div class="d-flex align-start">

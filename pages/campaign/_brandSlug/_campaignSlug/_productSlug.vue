@@ -16,14 +16,21 @@
         <p class="text--default dark--text text--lighten-1">Jumlah Voucher</p>
         <div class="d-flex align-center my-4">
           <v-btn
+            v-if="product.limitClaim > 1"
             x-small
             :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
             icon
             @click="handleQuantity('decrease')"
             ><v-icon color="white">mdi-minus</v-icon></v-btn
           >
-          <p class="h6--xsmall mx-4">{{ decimal(state.qty) }}</p>
+          <p
+            :style="`border:1px solid ${campaign.primaryColor}`"
+            class="py-2 px-4 rounded-xl h6--xsmall mx-4"
+          >
+            {{ decimal(state.qty) }}
+          </p>
           <v-btn
+            v-if="product.limitClaim > 1"
             :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
             x-small
             icon

@@ -8,22 +8,39 @@
       @change="onFilePicked"
     />
 
-    <div class="d-flex mt-6">
-      <p class="text-capitalize mb-2 dark--text h6--xsmall">
-        {{ field.label }}
-      </p>
-      <p
-        v-if="field.required"
-        class="text-capitalize mb-2 error--text text--lighten-1 ml-1 h8--supersmall"
+    <div class="d-flex align-center mb-2">
+      <span
+        class="text-capitalize label-text"
+        v-if="label"
+        v-bind:class="{
+          'h6--xsmall': bold,
+          'text--default': !bold,
+          'white--text': labelWhite,
+          'dark--text': !labelWhite,
+        }"
       >
-        *
-      </p>
-      <p
-        v-if="!field.required"
-        class="info--text text--lighten-2 ml-1 h6--xsmall"
-      >
-        (Opsional)
-      </p>
+        {{ label }}
+        <span
+          class="text-capitalize label-text ml-1 error--text"
+          v-if="required"
+          v-bind:class="{
+            'h6--xsmall': bold,
+            'text--default': !bold,
+          }"
+        >
+          *
+        </span>
+        <span
+          class="text-capitalize label-text ml-1 info--text text--lighten-2"
+          v-if="optional"
+          v-bind:class="{
+            'h6--xsmall': bold,
+            'text--default': !bold,
+          }"
+        >
+          (Opsional)
+        </span>
+      </span>
     </div>
 
     <template v-if="field.type === 'text'">
@@ -149,61 +166,61 @@
 </template>
 
 <script>
-import media from '@/mixins/media'
-import rules from '@/mixins/rules'
-import pipe from '@/mixins/pipe'
+import media from "@/mixins/media";
+import rules from "@/mixins/rules";
+import pipe from "@/mixins/pipe";
 export default {
   mixins: [rules, media, pipe],
   props: {
     field: Object,
     readonly: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   computed: {
     isRevised() {
-      return this.field?.status === 'revision'
+      return this.field?.status === "revision";
     },
 
     getValidateUserName() {
-      return this.field?.validatedBy?.name || '-'
+      return this.field?.validatedBy?.name || "-";
     },
 
     getCommentDate(val) {
-      return this.field?.validatedAt
+      return this.field?.validatedAt;
     },
 
     getRevisedComment() {
-      return this.field?.validatedDescription
-    }
+      return this.field?.validatedDescription;
+    },
   },
 
   methods: {
     onPreview() {
       if (this.readonly) {
-        let url = this.field['value']['url']
-        window.open(url)
+        let url = this.field["value"]["url"];
+        window.open(url);
       }
     },
 
     onRemove() {
-      this.mixins.state.media = ''
-      this.field['value'] = ''
-      this.$forceUpdate()
+      this.mixins.state.media = "";
+      this.field["value"] = "";
+      this.$forceUpdate();
     },
     getMediaName(val) {
-      return val?.value?.name || null
-    }
+      return val?.value?.name || null;
+    },
   },
 
   watch: {
-    'mixins.state.media'(val) {
-      this.field['value'] = val
-    }
-  }
-}
+    "mixins.state.media"(val) {
+      this.field["value"] = val;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

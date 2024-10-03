@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex align-center mb-2">
-      <p
+      <span
         class="text-capitalize label-text"
         v-if="label"
         v-bind:class="{
@@ -12,17 +12,17 @@
         }"
       >
         {{ label }}
-      </p>
-      <p
-        class="text-capitalize label-text ml-1 error--text"
-        v-if="required"
-        v-bind:class="{
-          'h6--xsmall': bold,
-          'text--default': !bold,
-        }"
-      >
-        *
-      </p>
+        <span
+          class="text-capitalize label-text ml-1 error--text"
+          v-if="required"
+          v-bind:class="{
+            'h6--xsmall': bold,
+            'text--default': !bold,
+          }"
+        >
+          *
+        </span>
+      </span>
     </div>
 
     <v-select
