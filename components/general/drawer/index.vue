@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-navigation-drawer floating v-model="drawer" fixed app class="drawer">
-      <general-logo class="mx-auto" :max_width="80" />
+      <general-logo class="mx-auto mt-2" :max_width="100" />
       <div class="mt-4">
         <div v-for="(item, i) in menu" :key="i">
           <p class="h7--xxsmall ml-5">{{ item.name }}</p>
@@ -38,7 +38,7 @@ export default {
   },
 
   data: () => ({
-    drawer: true,
+    drawer: false,
     path: "",
   }),
 
