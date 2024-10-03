@@ -36,7 +36,7 @@ export default {
   layout: "empty",
   data: () => ({
     meta: {
-      title: "Dashboard",
+      title: "Login",
     },
     form: {
       email: "",

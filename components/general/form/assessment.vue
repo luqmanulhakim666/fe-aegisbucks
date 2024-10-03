@@ -8,22 +8,39 @@
       @change="onFilePicked"
     />
 
-    <div class="d-flex mt-6">
-      <p class="text-capitalize mb-2 dark--text h6--xsmall">
-        {{ field.label }}
-      </p>
-      <p
-        v-if="field.required"
-        class="text-capitalize mb-2 error--text text--lighten-1 ml-1 h8--supersmall"
+    <div class="d-flex align-center mb-2">
+      <span
+        class="text-capitalize label-text"
+        v-if="label"
+        v-bind:class="{
+          'h6--xsmall': bold,
+          'text--default': !bold,
+          'white--text': labelWhite,
+          'dark--text': !labelWhite,
+        }"
       >
-        *
-      </p>
-      <p
-        v-if="!field.required"
-        class="info--text text--lighten-2 ml-1 h6--xsmall"
-      >
-        (Opsional)
-      </p>
+        {{ label }}
+        <span
+          class="text-capitalize label-text ml-1 error--text"
+          v-if="required"
+          v-bind:class="{
+            'h6--xsmall': bold,
+            'text--default': !bold,
+          }"
+        >
+          *
+        </span>
+        <span
+          class="text-capitalize label-text ml-1 info--text text--lighten-2"
+          v-if="optional"
+          v-bind:class="{
+            'h6--xsmall': bold,
+            'text--default': !bold,
+          }"
+        >
+          (Opsional)
+        </span>
+      </span>
     </div>
 
     <template v-if="field.type === 'text'">
@@ -251,10 +268,10 @@
 </template>
 
 <script>
-import media from '@/mixins/media'
-import rules from '@/mixins/rules'
-import debounce from 'lodash/debounce'
-import utils from '@/mixins/utils'
+import media from "@/mixins/media";
+import rules from "@/mixins/rules";
+import debounce from "lodash/debounce";
+import utils from "@/mixins/utils";
 
 export default {
   mixins: [rules, media, utils],
@@ -264,137 +281,137 @@ export default {
     isProvinceField: Boolean,
     readonly: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data: () => ({
     state: {
       loading: {
         province: false,
-        city: false
-      }
+        city: false,
+      },
     },
     items: {
       provincies: [],
-      cities: []
-    }
+      cities: [],
+    },
   }),
 
   created() {
-    if (this.field?.type === 'province') {
-      this.getProvincies(this.field?.value?.name)
+    if (this.field?.type === "province") {
+      this.getProvincies(this.field?.value?.name);
     }
 
-    if (this.field?.type === 'city') {
-      this.getCities(this.field?.value?.name, this.selectedProvince)
+    if (this.field?.type === "city") {
+      this.getCities(this.field?.value?.name, this.selectedProvince);
     }
   },
 
   methods: {
     onUpdateProvincies: debounce(function (e) {
-      let keyword = e?.target?.value
-      this.getProvincies(keyword)
+      let keyword = e?.target?.value;
+      this.getProvincies(keyword);
     }, 500),
 
     async getProvincies(val) {
-      this.state.loading.province = true
+      this.state.loading.province = true;
       let payload = {
         // keyword: val,
-        limit: 0
-      }
+        limit: 0,
+      };
 
-      let res = await this.$api.general.provincies(payload)
+      let res = await this.$api.general.provincies(payload);
 
       if (res.success) {
         let asc = res?.data?.list?.sort((a, b) => {
-          if (a?.name < b?.name) return -1
-          if (a?.name > b?.name) return 1
-          return 0
-        })
-        this.items.provincies = asc
+          if (a?.name < b?.name) return -1;
+          if (a?.name > b?.name) return 1;
+          return 0;
+        });
+        this.items.provincies = asc;
       }
 
-      this.state.loading.province = false
+      this.state.loading.province = false;
     },
 
     onUpdateCities: debounce(function (e) {
-      const keyword = e?.target?.value
-      this.getCities(keyword, this.selectedProvince)
+      const keyword = e?.target?.value;
+      this.getCities(keyword, this.selectedProvince);
     }, 500),
 
     async getCities(val, key) {
-      this.state.loading.city = true
+      this.state.loading.city = true;
 
       let payload = {
         keyword: val,
         province: key?.id ? key?.key : key,
-        limit: this.selectedProvince ? 0 : 10
-      }
+        limit: this.selectedProvince ? 0 : 10,
+      };
 
       if (this.isProvinceField) {
-        delete payload['keyword']
+        delete payload["keyword"];
       }
 
-      let res = await this.$api.general.cities(payload)
+      let res = await this.$api.general.cities(payload);
 
       if (res.success) {
         let asc = res?.data?.list?.sort((a, b) => {
-          if (a?.name < b?.name) return -1
-          if (a?.name > b?.name) return 1
-          return 0
-        })
-        this.items.cities = asc
+          if (a?.name < b?.name) return -1;
+          if (a?.name > b?.name) return 1;
+          return 0;
+        });
+        this.items.cities = asc;
       }
 
-      this.state.loading.city = false
+      this.state.loading.city = false;
 
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
 
     onPreview() {
       if (this.readonly) {
-        let url = this.field['value']['url']
-        window.open(url)
+        let url = this.field["value"]["url"];
+        window.open(url);
       }
     },
 
     onRemove() {
-      this.mixins.state.media = ''
-      this.field['value'] = ''
-      this.$forceUpdate()
+      this.mixins.state.media = "";
+      this.field["value"] = "";
+      this.$forceUpdate();
     },
 
     getMediaName(val) {
-      return val?.value?.name || null
-    }
+      return val?.value?.name || null;
+    },
   },
 
   watch: {
-    'field.value': {
+    "field.value": {
       handler(val) {
-        if (!!val && this.field?.type === 'currency') {
-          this.field['value'] = val
-            .replace(/\D/g, '')
-            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+        if (!!val && this.field?.type === "currency") {
+          this.field["value"] = val
+            .replace(/\D/g, "")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
-      }
+      },
     },
 
-    'mixins.state.media'(val) {
-      this.field['value'] = val
+    "mixins.state.media"(val) {
+      this.field["value"] = val;
     },
     selectedProvince(newVal, oldVal) {
-      if (this.field?.type === 'city') {
-        this.getCities(this.field?.value?.name, newVal)
+      if (this.field?.type === "city") {
+        this.getCities(this.field?.value?.name, newVal);
 
         if (newVal !== oldVal) {
-          this.field['value'] = ''
+          this.field["value"] = "";
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
