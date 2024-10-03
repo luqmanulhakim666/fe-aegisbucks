@@ -3,7 +3,7 @@
     contain
     :max-width="max_width"
     :max-height="max_height"
-    src="/logo-x.png"
+    src="/logo.png"
     alt="ridi-logo"
   />
 </template>
