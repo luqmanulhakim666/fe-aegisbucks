@@ -20,5 +20,9 @@ export default {
       title: "Dashboard",
     },
   }),
+
+  mounted() {
+    this.setMeta("Dashboard");
+  },
 };
 </script>

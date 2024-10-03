@@ -19,7 +19,9 @@ export default {
 
   methods: {
     goHome() {
-      if (this.$route?.name === "campaign-brandSlug-campaignSlug-success") {
+      if (
+        this.$route?.name === "campaign-brandSlug-campaignSlug-success-success"
+      ) {
         return;
       }
 
