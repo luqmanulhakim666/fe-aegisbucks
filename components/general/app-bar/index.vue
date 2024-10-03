@@ -53,7 +53,7 @@
       size="24"
       class="hidden-lg-and-up transparent"
     >
-      <v-icon size="36" color="#757575">mdi-menu</v-icon>
+      <v-icon size="36" color="white">mdi-menu</v-icon>
     </v-btn>
   </v-app-bar>
 </template>
