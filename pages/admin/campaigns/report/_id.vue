@@ -187,6 +187,9 @@ export default {
     page: "admin",
   },
   data: () => ({
+    meta: {
+      title: "Campaign Report",
+    },
     body: {
       summary: {
         fromDate: "",
