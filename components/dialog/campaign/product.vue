@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" persistent max-width="400">
+  <v-dialog v-model="dialog" persistent max-width="600">
     <div class="white rounded-xl">
       <general-card-dialog-header name="Product" @close="onEmitClose" />
       <div class="pa-4">
@@ -45,6 +45,15 @@
             required
             bold
             :rules="[required]"
+          />
+
+          <general-form-rich-editor
+            class="mb-8"
+            v-model="form.customEmailTemplate"
+            label="Email Template"
+            outlined
+            required
+            bold
           />
 
           <general-form-text-field
@@ -114,6 +123,7 @@ export default {
     form: {
       type: "free",
       promoLabel: "",
+      customEmailTemplate: "",
       productId: {},
       limitClaim: null,
       price: null,
@@ -168,7 +178,7 @@ export default {
     onClearForm() {
       this.form.type = "free";
       this.form.promoLabel = "";
-      this.form.productId = {};
+      (this.form.customEmailTemplate = ""), (this.form.productId = {});
       this.form.limitClaim = null;
       this.form.price = null;
       this.form.discount = null;
