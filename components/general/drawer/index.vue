@@ -32,18 +32,21 @@
 </template>
 
 <script>
+import screen from "@/mixins/screen";
 export default {
+  mixins: [screen],
   props: {
     menu: Array,
   },
 
   data: () => ({
-    drawer: false,
+    drawer: null,
     path: "",
   }),
 
   created() {
     this.activeRoute = this.$route?.path;
+    this.drawer = !this.isMobile;
   },
 
   computed: {
