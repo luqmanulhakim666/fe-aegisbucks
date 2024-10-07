@@ -1,8 +1,8 @@
 import qs from "query-string";
 
 export default (ctx) => {
-  let { $axios, $config, store } = ctx;
-  const token = `Bearer ${store.getters["auth/isToken"]}`;
+  let { $config, store } = ctx;
+  let token = `Bearer ${store.getters["auth/isToken"]}`;
   let url = "/report";
 
   return {
