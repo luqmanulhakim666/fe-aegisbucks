@@ -23,7 +23,7 @@
         <general-thumbnail
           ratio="1"
           :image="getImage(item.image)"
-          class="my-4"
+          class="my-4 d-inline-block"
         />
       </template>
 

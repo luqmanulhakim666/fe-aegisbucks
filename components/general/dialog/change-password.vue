@@ -1,48 +1,48 @@
 <template>
-  <v-dialog v-model="dialog" persistent width="800">
+  <v-dialog v-model="dialog" persistent width="400">
     <div class="white">
       <general-card-dialog-header
-        name="Edit Kata Sandi"
+        name="Change Password"
+        :loading="state.isLoading"
         @close="onEmitClose()"
       />
 
       <div class="pa-6">
         <v-form v-model="state.isValid" ref="form">
           <general-form-text-field
-            v-model.trim="form.oldPassword"
-            bold
-            outlined
-            label="Kata Sandi Sekarang"
-            class="mb-4"
-            hide-details="auto"
-            :rules="[required]"
-          />
-          <general-form-text-field
             v-model.trim="form.newPassword"
             bold
             outlined
-            label="Kata Sandi Baru"
+            label="New Password"
             hide-details="auto"
             class="mb-4"
-            :rules="[required]"
+            :rules="[required, passwordRule]"
+            :append-icon="state.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="state.showPassword ? 'text' : 'password'"
+            @click:append="state.showPassword = !state.showPassword"
           />
           <general-form-text-field
             v-model.trim="form.confirm_password"
             bold
             outlined
-            label="Konfirmasi Kata Sandi"
+            label="Confirm Password"
             hide-details="auto"
             :rules="[required, confirmPasswordRule]"
+            :append-icon="state.showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="state.showConfirmPassword ? 'text' : 'password'"
             @keypress.enter.prevent="onEmitSubmit()"
+            @click:append="
+              state.showConfirmPassword = !state.showConfirmPassword
+            "
           />
         </v-form>
         <div class="d-flex justify-end mt-4">
           <v-btn
             depressed
             class="text-capitalize h6--xsmall secondary lighten-5"
-            :loading="loading"
+            :loading="state.isLoading"
             @click="onEmitSubmit()"
-            >Simpan</v-btn
+            >Change</v-btn
           >
         </div>
       </div>
@@ -51,44 +51,68 @@
 </template>
 
 <script>
-import rules from '@/mixins/rules'
+import rules from "@/mixins/rules";
 export default {
   mixins: [rules],
 
   props: {
-    form: Object,
-    loading: Boolean,
-    dialog: Boolean
+    dialog: Boolean,
   },
 
   data: () => ({
     state: {
-      isValid: true
-    }
+      isValid: true,
+      isLoading: false,
+      showPassword: false,
+      showConfirmPassword: false,
+    },
+    form: {
+      newPassword: "",
+      confirm_password: "",
+    },
   }),
 
   methods: {
     onEmitClose() {
-      this.$emit('on:close')
+      this.$refs.form.reset();
+      this.$emit("on:close");
     },
 
     async onEmitSubmit() {
-      let valid = await this.validate(this.state.isValid)
+      let valid = await this.validate(this.state.isValid);
 
       if (valid) {
-        this.$emit('on:submit')
+        this.state.isLoading = true;
+
+        const res = await this.$api.auth.updateProfile({
+          password: this.form.newPassword,
+        });
+
+        if (res.success) {
+          this.$refs.form.reset();
+          this.$emit("on:close");
+
+          this.setSuccessAlert("Pasword has been change. Please Relogin");
+          this.$store.dispatch("auth/logout");
+        }
+
+        if (!res.success) {
+          this.setFailedAlert(res);
+        }
+
+        this.state.isLoading = false;
       }
-    }
+    },
   },
 
   computed: {
     confirmPasswordRule() {
       let isValid =
         this.form.newPassword === this.form.confirm_password ||
-        'Password not match'
+        "Password not match";
 
-      return isValid
-    }
-  }
-}
+      return isValid;
+    },
+  },
+};
 </script>

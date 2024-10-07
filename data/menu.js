@@ -52,6 +52,19 @@ export const SUPER_ADMIN = [
   },
 ];
 
+export const CUSTOMER = [
+  {
+    name: "Campaign",
+    menus: [
+      {
+        text: "Campaign",
+        icon: "mdi-bullhorn",
+        path: "/customer/campaigns",
+      },
+    ],
+  },
+];
+
 // {
 //   text: "Parameter",
 //   icon: "mdi-layers",

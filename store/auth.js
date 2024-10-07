@@ -52,7 +52,9 @@ export const actions = {
     await dispatch("fetchProfile");
     await dispatch("setRole", role);
 
-    this.$router.push("/admin/dashboard");
+    role === "customer"
+      ? this.$router.push("/customer/campaigns")
+      : this.$router.push("/admin/dashboard");
 
     return res;
   },

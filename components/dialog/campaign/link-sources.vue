@@ -33,6 +33,7 @@
             <v-form v-model="state.isValid" ref="form">
               <div class="d-flex align-center">
                 <general-form-text-field
+                  :readonly="readOnly"
                   class="full-width mt-4"
                   v-model="item.source"
                   outlined
@@ -61,6 +62,7 @@
                 </v-btn>
 
                 <v-btn
+                  v-if="!readOnly"
                   @click="onRemoveItem(index)"
                   small
                   icon
@@ -75,6 +77,7 @@
         </v-data-table>
 
         <v-btn
+          v-if="!readOnly"
           @click="onAddItem()"
           small
           depressed
@@ -83,7 +86,7 @@
           <v-icon small class="mr-2">mdi-plus-circle</v-icon>Add</v-btn
         >
 
-        <div class="d-flex justify-end">
+        <div v-if="!readOnly" class="d-flex justify-end">
           <v-btn
             @click="onSubmit()"
             small
@@ -107,6 +110,10 @@ export default {
   props: {
     campaign: Object,
     dialog: Boolean,
+    readOnly: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data: () => ({

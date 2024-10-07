@@ -16,7 +16,7 @@
       </div>
       <v-btn
         :loading="state.isLoading"
-        class="text-capitalize mt-6 primary"
+        class="text-capitalize mt-6 secondary lighten-5"
         depressed
         block
         @click="onSubmit()"

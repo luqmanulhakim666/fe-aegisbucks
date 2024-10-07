@@ -4,6 +4,7 @@
       sort
       actionCreate="/admin/campaigns/create"
       @on:search="onSearch"
+      :isCreated="false"
       :exportReport="false"
     />
 
@@ -34,6 +35,7 @@
       <template v-slot:[`item.published`]="{ item }">
         <div class="d-flex align-center pa-4">
           <v-switch
+            disabled
             color="success lighten-2"
             inset
             :ripple="false"
@@ -95,6 +97,7 @@
       :dialog="state.dialogLink"
       :campaign="state.selectedItem"
       @on:close="onCloseDialogLink"
+      readOnly
     />
 
     <general-dialog-delete
@@ -123,7 +126,7 @@ export default {
   mixins: [meta, routes, utils, pipe],
   middleware: ["authenticated", "authorized"],
   meta: {
-    page: "admin",
+    page: "customer",
   },
 
   data: () => ({
@@ -213,18 +216,18 @@ export default {
           icon: "mdi-web",
           textColor: "dark--text",
         },
-        {
-          key: "edit",
-          text: "Ubah",
-          icon: "mdi-pencil",
-          textColor: "primary--text",
-        },
-        {
-          key: "delete",
-          text: "Hapus",
-          icon: "mdi-delete",
-          textColor: "error--text",
-        },
+        // {
+        //   key: "edit",
+        //   text: "Ubah",
+        //   icon: "mdi-pencil",
+        //   textColor: "primary--text",
+        // },
+        // {
+        //   key: "delete",
+        //   text: "Hapus",
+        //   icon: "mdi-delete",
+        //   textColor: "error--text",
+        // },
         {
           key: "link-sources",
           text: "Link Sources",
@@ -346,7 +349,7 @@ export default {
           break;
 
         case "report":
-          this.$router.push(`/admin/campaigns/report/${val.id}`);
+          this.$router.push(`/customer/campaigns/report/${val.id}`);
           break;
 
         default:

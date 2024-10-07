@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar fixed app class="app-bar primary px-sm-7 px-2" flat>
+  <v-app-bar fixed app class="app-bar dark darken-1 px-sm-7 px-2" flat>
     <v-icon
       size="18"
       class="mr-5 pointer white--text"
@@ -17,16 +17,19 @@
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <div class="d-flex align-center" v-bind="attrs" v-on="on">
-            <p class="h7--xxsmall white--text">{{ profile.name }}</p>
+            <div class="mr-2">
+              <p class="h7--xxsmall white--text">{{ profile.name }}</p>
+              <p class="text--small white--text">{{ profile.email }}</p>
+            </div>
             <v-icon size="26" color="white">mdi-chevron-down</v-icon>
           </div>
         </template>
         <v-list>
-          <v-list-item @click="$router.push(`/users/${profile.id}`)">
+          <v-list-item @click="showPasswordDialog">
             <v-list-item-title class="text--default d-flex align-center">
-              <v-icon size="16" class="mr-2">mdi-account</v-icon>
-              Profile</v-list-item-title
-            >
+              <v-icon size="16" class="mr-2">mdi-lock</v-icon>
+              Change Password
+            </v-list-item-title>
           </v-list-item>
           <!-- <v-list-item @click="$router.push(`/change-password`)">
             <v-list-item-title class="text--default d-flex align-center">
@@ -55,11 +58,21 @@
     >
       <v-icon size="36" color="white">mdi-menu</v-icon>
     </v-btn>
+
+    <general-dialog-change-password
+      :dialog="state.isDialog"
+      @on:close="showPasswordDialog"
+    />
   </v-app-bar>
 </template>
 
 <script>
 export default {
+  data: () => ({
+    state: {
+      isDialog: false,
+    },
+  }),
   computed: {
     meta() {
       return this.$store.state.meta;
@@ -67,9 +80,15 @@ export default {
     profile() {
       return this.$store.getters["auth/profile"];
     },
+    role() {
+      return this.$store.getters["auth/role"];
+    },
   },
 
   methods: {
+    showPasswordDialog() {
+      this.state.isDialog = !this.state.isDialog;
+    },
     onGoBack() {
       this.$router.go(-1);
     },
@@ -80,8 +99,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.app-bar {
-}
-</style>

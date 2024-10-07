@@ -7,8 +7,6 @@
         v-bind:class="{
           'h6--xsmall': bold,
           'text--default': !bold,
-          'white--text': labelWhite,
-          'dark--text': !labelWhite,
         }"
       >
         {{ label }}

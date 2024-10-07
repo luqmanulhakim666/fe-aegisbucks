@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { SUPER_ADMIN } from "@/data/menu";
+import { SUPER_ADMIN, CUSTOMER } from "@/data/menu";
 export default {
   name: "DefaultLayout",
   data: () => ({
@@ -28,7 +28,8 @@ export default {
 
   methods: {
     async setMenu() {
-      this.items = SUPER_ADMIN;
+      const role = this.$store.getters["auth/role"];
+      this.items = role === "customer" ? CUSTOMER : SUPER_ADMIN;
     },
   },
 };
