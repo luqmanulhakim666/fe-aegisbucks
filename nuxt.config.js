@@ -88,7 +88,7 @@ module.exports = {
           },
           secondary: {
             base: "#E27106",
-            lighten5: "#FF4C24",
+            lighten5: "#FFB300",
             lighten4: "#FDEECC",
             lighten3: "#FCD899",
             lighten2: "#F6BB66",
@@ -138,6 +138,10 @@ module.exports = {
             lighten3: "#EAEAEA",
             lighten2: "#C1C1C1",
             lighten1: "#464646",
+            darken1: "#646D76", // Slightly darker shade
+            darken2: "#E3E6E8", // Dark gray-blue
+            darken3: "#939EA7", // Very dark gray-blue
+            darken4: "#7A8A94",
           },
         },
       },

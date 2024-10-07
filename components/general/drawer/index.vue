@@ -96,15 +96,15 @@ export default {
   z-index: 1;
   &--active {
     // background: var(--v-primary-base);
-    border-left: 3px solid var(--v-primary-base);
-    color: var(--v-primary-base) !important;
+    border-left: 3px solid var(--v-dark-darken1);
+    color: var(--v-dark-darken1) !important;
 
     .v-list-item__title {
-      color: var(--v-primary-base) !important;
+      color: var(--v-dark-darken1) !important;
     }
 
     .v-icon {
-      color: var(--v-primary-base) !important;
+      color: var(--v-dark-darken1) !important;
     }
 
     &_child {
