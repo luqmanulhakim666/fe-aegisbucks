@@ -2,7 +2,6 @@ import qs from "query-string";
 
 export default (ctx) => {
   let { $axios, $config, store } = ctx;
-  const token = `Bearer ${store.getters["auth/isToken"]}`;
   let url = "/campaign";
   return {
     async getList(query = {}) {
@@ -129,8 +128,8 @@ export default (ctx) => {
         );
       },
 
-      export(campaignId, data, query = {}) {
-        query.authorization = token;
+      export(campaignId, data, query = {}, token) {
+        query.authorization = `Bearer ${token}`;
         let q = qs.stringify(query);
         const api = `${$config.API_URL}`;
 

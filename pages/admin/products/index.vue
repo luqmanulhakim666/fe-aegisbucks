@@ -250,7 +250,9 @@ export default {
     },
 
     onExport() {
-      const url = this.$api.reports.export("product", this.body);
+      const token = this.$store.getters["auth/isToken"];
+
+      const url = this.$api.reports.export("product", this.body, token);
       window.open(url);
     },
   },
