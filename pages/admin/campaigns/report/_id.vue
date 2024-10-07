@@ -558,28 +558,37 @@ export default {
     },
 
     onExportPageViews() {
+      const token = this.$store.getters["auth/isToken"];
+
       const url = this.$api.campaigns.report.export(
         this.campaign?.id,
         "page-views",
-        this.body.pageViews
+        this.body.pageViews,
+        token
       );
       window.open(url);
     },
 
     onExportProductPartner() {
+      const token = this.$store.getters["auth/isToken"];
+
       const url = this.$api.campaigns.report.export(
         this.campaign?.id,
         "retail-product-stocks",
-        this.body.productStocks
+        this.body.productStocks,
+        token
       );
       window.open(url);
     },
 
     onExportVoucherClaims() {
+      const token = this.$store.getters["auth/isToken"];
+
       const url = this.$api.campaigns.report.export(
         this.campaign?.id,
         "voucher-claims",
-        this.body.voucherClaims
+        this.body.voucherClaims,
+        token
       );
       window.open(url);
     },

@@ -2,12 +2,11 @@ import qs from "query-string";
 
 export default (ctx) => {
   let { $config, store } = ctx;
-  let token = `Bearer ${store.getters["auth/isToken"]}`;
   let url = "/report";
 
   return {
-    export(data, query = {}) {
-      query.authorization = token;
+    export(data, query = {}, token) {
+      query.authorization = `Bearer ${token}`;
       let q = qs.stringify(query);
       const api = `${$config.API_URL}`;
 

@@ -297,7 +297,9 @@ export default {
     },
 
     onExport() {
-      const url = this.$api.reports.export("user", this.body);
+      const token = this.$store.getters["auth/isToken"];
+
+      const url = this.$api.reports.export("user", this.body, token);
       window.open(url);
     },
 

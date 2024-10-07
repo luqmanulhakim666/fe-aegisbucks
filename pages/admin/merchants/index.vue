@@ -5,6 +5,7 @@
       actionCreate="/admin/merchants/create"
       @on:sort="onSort"
       @on:search="onSearch"
+      :exportReport="false"
     />
 
     <v-data-table
