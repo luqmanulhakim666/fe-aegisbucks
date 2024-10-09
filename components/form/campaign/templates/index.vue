@@ -339,8 +339,17 @@ export default {
         }),
 
         thanksSection: this.thankYouPageSections.images?.map((x) => {
+          const {
+            finalCroppedImage,
+            createdAt,
+            fileName,
+            mimetype,
+            size,
+            updatedAt,
+            ...data
+          } = x;
           return {
-            ...x,
+            ...data,
             id: x.id,
             type: x.type,
             name: x.name,

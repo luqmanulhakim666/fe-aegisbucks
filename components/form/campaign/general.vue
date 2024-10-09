@@ -202,7 +202,6 @@
           dense
           hide-details="auto"
           class="text-capitalize text--default"
-          :rules="[required]"
         >
           <template v-slot:label>
             <p class="text--default">Google Recaptcha</p>

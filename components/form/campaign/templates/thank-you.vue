@@ -58,7 +58,7 @@
               alt="img"
             />
             <div class="img-preview-btn">
-              <v-btn icon @click="onEmitRemove(index)"
+              <v-btn icon @click="onEmitRemove(cropper.id)"
                 ><v-icon color="error">mdi-close-circle</v-icon></v-btn
               >
             </div>
@@ -77,13 +77,13 @@
         </div>
       </div>
 
-      <general-form-text-field
+      <!-- <general-form-text-field
         hide-details="auto"
         dense
         class="hide-input mt-2"
         v-model="cropper.images"
         :rules="[arrayRule]"
-      />
+      /> -->
       <v-divider class="my-8" />
 
       <!-- TITLE -->
@@ -497,7 +497,9 @@ export default {
       this.cropper.isEdited = !this.cropper.isEdited;
     },
 
-    onEmitRemove(index) {
+    onEmitRemove(id) {
+      const index = this.cropper.images?.findIndex((x) => x.id === id);
+
       this.cropper.images.splice(index, 1);
       this.cropper.hasImageId = false;
       this.cropper.finalCroppedImage = null;

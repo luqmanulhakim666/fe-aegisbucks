@@ -5,11 +5,13 @@
     </template>
     <template v-if="!loading">
       <div v-if="campaign">
-        <campaign-slider
-          height="65vh"
-          :items="items.coverSections"
-          :primaryColor="items.primaryColor"
-        />
+        <template v-if="!isEmptySlider">
+          <campaign-slider
+            height="65vh"
+            :items="items.coverSections"
+            :primaryColor="items.primaryColor"
+          />
+        </template>
         <v-btn
           depressed
           class="h7--xxsmall text-capitalize mt-6"
@@ -80,9 +82,20 @@ export default {
       this.setLandingPageData();
       this.checkGoogleAuth();
       this.meta.title = `Campaign ${this.campaign.brand.name} ${this.campaign.name} `;
-      this.meta.image = this.getImage(this.campaign.coverSection[0]);
+      if (this.campaign.coverSection?.length > 0) {
+        this.meta.image = this.getImage(this.campaign.coverSection[0]);
+      }
       this.meta.description = this.campaign.slug;
     }
+  },
+
+  computed: {
+    isEmptySlider() {
+      return (
+        this.campaign?.coverSection === null ||
+        this.campaign?.coverSection?.length === 0
+      );
+    },
   },
 
   mounted() {
