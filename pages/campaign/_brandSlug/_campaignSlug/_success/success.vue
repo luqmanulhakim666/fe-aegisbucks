@@ -209,7 +209,6 @@ export default {
       });
 
       if (res.success) {
-        console.log(this.item);
         this.campaign = res.data;
         this.meta.title = `Voucher ${this.item.product.name} ${res.data.brand.name} ${res.data.name}`;
       }
