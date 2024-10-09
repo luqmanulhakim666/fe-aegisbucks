@@ -5,11 +5,13 @@
     </template>
 
     <template v-if="!loading">
-      <campaign-slider
-        height="250"
-        :primaryColor="campaign.primaryColor"
-        :items="getImages"
-      />
+      <template v-if="!isEmptySlider">
+        <campaign-slider
+          height="250"
+          :primaryColor="campaign.primaryColor"
+          :items="getImages"
+        />
+      </template>
 
       <!-- Content Section -->
       <v-container class="pa-10">
@@ -91,7 +93,9 @@ export default {
     if (this.campaign?.id) {
       this.setLandingPageData();
       this.meta.title = `Campaign Products ${this.campaign.brand.name} ${this.campaign.name} `;
-      this.meta.image = this.getImage(this.campaign.coverSection[0]);
+      if (this.campaign.coverSection?.length > 0) {
+        this.meta.image = this.getImage(this.campaign.coverSection[0]);
+      }
       this.meta.description = this.campaign.slug;
     }
   },
@@ -105,6 +109,12 @@ export default {
   },
 
   computed: {
+    isEmptySlider() {
+      return (
+        this.campaign?.headerSection === null ||
+        this.campaign?.headerSection?.length === 0
+      );
+    },
     hasFooters() {
       return this.items.footerSections.some(
         (item) => item.value?.trim() !== ""
