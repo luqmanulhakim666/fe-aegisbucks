@@ -5,6 +5,7 @@
       actionCreate="/admin/campaigns/create"
       @on:search="onSearch"
       :exportReport="false"
+      @on:sort="onSort"
     />
 
     <v-data-table
@@ -135,7 +136,7 @@ export default {
       page: 1,
       limit: 10,
       keyword: "",
-      sort: "createdAt",
+      sort: "desc",
     },
 
     state: {
@@ -255,6 +256,7 @@ export default {
         this.body.page = Number(val.page) || this.body.page;
         this.body.limit = Number(val.limit) || this.body.limit;
         this.body.keyword = val.keyword || "";
+        this.body.sort = val?.sort || "desc";
       }
     },
 
@@ -328,7 +330,8 @@ export default {
 
         case "open":
           let url = "";
-          const host = this.$config.API_URL.replace("/api", "");
+          // const host = this.$config.API_URL.replace("/api", "");
+          const host = "http://localhost:8080";
           if (!val.published) {
             url = `${host}/campaign/${val.brand.slug}/${val.slug}?__preview=true`;
           }
@@ -380,6 +383,12 @@ export default {
       }
 
       this.state.isLoading = false;
+    },
+
+    onSort(val) {
+      this.body.sort = [val];
+      this.fetch();
+      this.pushQuery("sort", val);
     },
 
     preventDelete(val) {

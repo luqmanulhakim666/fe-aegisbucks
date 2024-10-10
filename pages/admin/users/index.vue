@@ -5,6 +5,7 @@
       actionCreate="/admin/users/create"
       @on:search="onSearch"
       @on:export="onExport"
+      @on:sort="onSort"
     />
 
     <v-tabs
@@ -137,6 +138,7 @@ export default {
       limit: 10,
       keyword: "",
       role: "admin",
+      sort: "desc",
     },
 
     state: {
@@ -205,6 +207,7 @@ export default {
         this.body.page = Number(val.page) || this.body.page;
         this.body.limit = Number(val.limit) || this.body.limit;
         this.body.keyword = val.keyword || "";
+        this.body.sort = val?.sort || "desc";
         this.body.role = val.role || "admin";
         this.state.tab = val.role === "customer" ? 1 : 0;
       }
@@ -240,6 +243,12 @@ export default {
       }
 
       this.state.isLoading = false;
+    },
+
+    onSort(val) {
+      this.body.sort = [val];
+      this.fetch();
+      this.pushQuery("sort", val);
     },
 
     onSearch(val) {

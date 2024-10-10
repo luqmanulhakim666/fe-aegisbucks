@@ -10,31 +10,35 @@
     <v-row class="mt-8">
       <v-col cols="12" lg="7">
         <div class="white rounded-xl">
-          <div class="pa-6 d-flex">
-            <v-icon color="secondary lighten-5" size="44">mdi-bullhorn</v-icon>
-            <div class="ml-4">
-              <div class="d-flex align-start">
-                <div>
-                  <p class="h5--small dark--text text--lighten-5 mr-3">
-                    {{ campaign.name }}
-                  </p>
-                  <p class="text--large dark--text text--lighten-1">
-                    {{ campaign.brand.name }}
-                  </p>
+          <div class="pa-6 d-md-flex justify-md-space-between align-center">
+            <div class="d-flex">
+              <v-icon color="secondary lighten-5" size="44"
+                >mdi-bullhorn</v-icon
+              >
+              <div class="ml-4">
+                <div class="d-flex align-start">
+                  <div>
+                    <p class="h5--small dark--text text--lighten-5 mr-3">
+                      {{ campaign.name }}
+                    </p>
+                    <p class="text--large dark--text text--lighten-1">
+                      {{ campaign.brand.name }}
+                    </p>
+                  </div>
                 </div>
-                <v-card
-                  flat
-                  :class="
-                    campaign.published
-                      ? ' h8--supersmall success white--text lighten-2'
-                      : 'h8--supersmall  error white--text lighten-1'
-                  "
-                  class="py-2 px-4 rounded-pill"
-                >
-                  {{ campaign.published ? "Active" : "Inactive" }}
-                </v-card>
               </div>
             </div>
+            <v-card
+              flat
+              :class="
+                campaign.published
+                  ? ' h8--supersmall success white--text lighten-2'
+                  : 'h8--supersmall  error white--text lighten-1'
+              "
+              class="py-2 px-4 rounded-pill d-inline-block mt-4 mt-md-0"
+            >
+              {{ campaign.published ? "Active" : "Inactive" }}
+            </v-card>
           </div>
           <v-divider> </v-divider>
           <div class="d-md-flex justify-space-between">

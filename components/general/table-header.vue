@@ -38,7 +38,7 @@
 
     <!-- SORT DATE -->
     <general-form-dropdown
-      defaultLabel="Terbaru"
+      defaultLabel="Newest"
       :list="items.sort"
       :active="state.sortKey"
       @set:active="onSetSort"

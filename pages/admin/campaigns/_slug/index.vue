@@ -236,8 +236,6 @@ export default {
 
       const res = await this.$api.partners.getList(payload);
 
-      this.meta.title = res.data.name;
-
       if (res.success) {
         this.items.partners = res.data.list;
       }
@@ -251,9 +249,10 @@ export default {
       this.state.fetchLoading = true;
       const res = await this.$store.dispatch("campaign/getDetail", id);
 
-      res.data.templateId = "1";
-
       this.form = res.data;
+      this.form.templateId = "1";
+
+      this.meta.title = res.data.name;
 
       if (!res.data.primaryColor) {
         this.form.primaryColor = "#2962ff";
