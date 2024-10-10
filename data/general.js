@@ -1,6 +1,6 @@
 export const SORT = [
-  { name: "Terbaru", key: "latest", type: "sort" },
-  { name: "Terlama", key: "oldest", type: "sort" },
+  { name: "Newest", key: "desc", type: "sort" },
+  { name: "Oldest", key: "asc", type: "sort" },
 ];
 
 export const ROLES = [

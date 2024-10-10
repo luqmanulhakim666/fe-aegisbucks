@@ -131,6 +131,7 @@
       />
 
       <dialog-campaign-product
+        :campaign="form"
         :dialog="state.dialog"
         :item="state.selectedItem"
         :products="products"
@@ -330,7 +331,11 @@ export default {
       const payload = {
         name: this.form.name,
         campaignProducts: this.items.selectedProducts?.map((x) => {
-          const data = { ...x, productId: x.productId?.id };
+          const data = {
+            ...x,
+            product: x.productId,
+            productId: x.productId?.id,
+          };
 
           if (data.inputs?.length === 0) {
             delete data.inputs;

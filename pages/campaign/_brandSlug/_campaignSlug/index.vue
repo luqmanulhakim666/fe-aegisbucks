@@ -1,29 +1,24 @@
 <template>
   <div class="container">
-    <template v-if="loading">
-      <general-loading />
-    </template>
-    <template v-if="!loading">
-      <div v-if="campaign">
-        <template v-if="!isEmptySlider">
-          <campaign-slider
-            height="65vh"
-            :items="items.coverSections"
-            :primaryColor="items.primaryColor"
-          />
-        </template>
-        <v-btn
-          depressed
-          class="h7--xxsmall text-capitalize mt-6"
-          :style="`color: ${items.secondaryColor} !important`"
-          block
-          large
-          :color="items.primaryColor"
-          @click="onGetVoucher()"
-          >Dapatkan Voucher</v-btn
-        >
-      </div>
-    </template>
+    <div v-if="campaign">
+      <template v-if="!isEmptySlider">
+        <campaign-slider
+          height="65vh"
+          :items="items.coverSections"
+          :primaryColor="items.primaryColor"
+        />
+      </template>
+      <v-btn
+        depressed
+        class="h7--xxsmall text-capitalize mt-6"
+        :style="`color: ${items.secondaryColor} !important`"
+        block
+        large
+        :color="items.primaryColor"
+        @click="onGetVoucher()"
+        >Dapatkan Voucher</v-btn
+      >
+    </div>
   </div>
 </template>
 
@@ -36,7 +31,6 @@ export default {
 
   async asyncData({ store, route, error, redirect }) {
     let campaign = null;
-    let loading = true;
 
     try {
       const res = await store.dispatch("campaign/getDetailPublic", {
@@ -54,9 +48,8 @@ export default {
       console.error("Error fetching campaign data:", err);
       error({ statusCode: 500, message: "Failed to load campaign data." });
     }
-    loading = false;
 
-    return { campaign: campaign, loading: loading };
+    return { campaign: campaign };
   },
   layout: "campaign",
 

@@ -6,6 +6,7 @@
       @on:sort="onSort"
       @on:search="onSearch"
       @on:export="onExport"
+      sort
     />
 
     <v-data-table
@@ -97,7 +98,7 @@ export default {
       page: 1,
       limit: 10,
       keyword: "",
-      sort: "latest",
+      sort: "desc",
     },
     paging: {},
     state: {
@@ -177,7 +178,7 @@ export default {
       this.body.page = Number(val?.page) || this.body?.page;
       this.body.limit = Number(val?.limit) || this.body?.limit;
       this.body.keyword = val?.keyword;
-      this.body.sort = val?.sort;
+      this.body.sort = val?.sort || "desc";
     },
 
     async fetch() {

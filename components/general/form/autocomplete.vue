@@ -78,6 +78,10 @@ export default {
       type: Boolean,
       default: () => false,
     },
+    optional: {
+      type: Boolean,
+      default: () => false,
+    },
     placeholder: {
       type: String,
       default: () => "Type here",
