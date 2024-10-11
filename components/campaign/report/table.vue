@@ -24,15 +24,21 @@
       </template>
 
       <template v-slot:[`item.createdAt`]="{ item }">
-        <p class="text-capitalize">{{ fullDateTime(item.createdAt) }}</p>
+        <p class="text-capitalize">
+          {{ fullDateMonthTextYear(item.createdAt, "-") }}
+        </p>
       </template>
 
       <template v-slot:[`item.expiredDate`]="{ item }">
-        <p class="text-capitalize">{{ fullDateTime(item.expiredDate) }}</p>
+        <p class="text-capitalize">
+          {{ fullDateMonthTextYear(item.expiredDate, "-") }}
+        </p>
       </template>
 
       <template v-slot:[`item.claimedDate`]="{ item }">
-        <p class="text-capitalize">{{ fullDateTime(item.claimedDate) }}</p>
+        <p class="text-capitalize">
+          {{ fullDateMonthTextYear(item.claimedDate, "-") }}
+        </p>
       </template>
 
       <template v-slot:[`item.claimedStatus`]="{ item }">

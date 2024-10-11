@@ -240,6 +240,7 @@ export default {
           value: "createdAt",
           sortable: false,
           class: "dark--text h7--xxsmall",
+          width: 150,
         },
         {
           text: "Url",
