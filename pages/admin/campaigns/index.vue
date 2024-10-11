@@ -330,8 +330,8 @@ export default {
 
         case "open":
           let url = "";
-          // const host = this.$config.API_URL.replace("/api", "");
-          const host = "http://localhost:8080";
+          const host = this.$config.API_URL.replace("/api", "");
+          // const host = "http://localhost:8080";
           if (!val.published) {
             url = `${host}/campaign/${val.brand.slug}/${val.slug}?__preview=true`;
           }
