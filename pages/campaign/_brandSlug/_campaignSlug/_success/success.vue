@@ -41,9 +41,19 @@
           <v-carousel-item v-for="(item, i) in item.vouchers" :key="i">
             <div class="full-width text-center">
               <v-divider class="my-6" />
-              <h4 class="success--text h4--default">
-                {{ item.voucherCode.code }}
-              </h4>
+              <div style="position: relative">
+                <h4 class="success--text h4--default text-center">
+                  {{ item.voucherCode.code }}
+                </h4>
+                <v-btn
+                  x-small
+                  icon
+                  style="position: absolute; right: 0; bottom: 0"
+                  @click="copyLink(item.voucherCode.code)"
+                >
+                  <v-icon> mdi-content-copy </v-icon>
+                </v-btn>
+              </div>
               <VueBarcode
                 class="d-flex mx-auto justify-center"
                 :value="item.voucherCode.code"
@@ -201,6 +211,24 @@ export default {
   },
 
   methods: {
+    copyLink(voucherCode) {
+      navigator.clipboard.writeText(voucherCode).then(
+        () => {
+          this.$store.dispatch("snack", [
+            "Link copied to clipboard!",
+            "success lighten-2",
+            "mdi-check-circle",
+          ]);
+        },
+        (err) => {
+          this.$store.dispatch("snack", [
+            "Failed to copy link",
+            "error",
+            "mdi-close-circle",
+          ]);
+        }
+      );
+    },
     async getDetailCampaign() {
       const res = await this.$store.dispatch("campaign/getDetailPublic", {
         brandSlug: this.data.brand?.slug,

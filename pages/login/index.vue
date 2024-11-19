@@ -3,7 +3,7 @@
     <div
       class="login-form shadow-base pa-6 rounded-xl d-flex flex-column justify-center"
     >
-      <general-logo class="d-flex mx-auto mb-4" :max_width="80" />
+      <general-logo class="d-flex mx-auto mb-4" :max_width="180" />
       <h4 class="h4--default mb-6 text-center">Login To Your Account</h4>
 
       <v-form v-model="state.isValid" ref="form">
