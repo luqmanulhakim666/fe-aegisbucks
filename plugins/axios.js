@@ -1,9 +1,7 @@
 import qs from "query-string";
 
 export default function ({ store, $axios, redirect, route, env }) {
-  $axios.onRequest((res) => {
-    // console.log('request', res)
-  });
+  $axios.onRequest((res) => {});
 
   $axios.onResponse((res) => {
     return res.data;
