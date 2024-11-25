@@ -192,8 +192,8 @@ export default {
     },
     handleVoucherName() {
       const retailName = this.item?.retail?.name?.toLowerCase();
-      let name = "Voucher";
-      if (retailName) {
+      let name = "voucher";
+      if (retailName === "indomaret") {
         name = "i-kupon";
       }
 
