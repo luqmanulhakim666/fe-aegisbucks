@@ -28,8 +28,10 @@
             :users="items.users"
             :brands="items.brands"
             :loading="state.isLoading"
+            :loadingFetchBrand="state.loadingFetchBrand"
             @on:next="onNext"
             @set:loading="setLoading"
+            @fetch:brand="fetchBrands"
           />
         </v-tab-item>
 
@@ -114,6 +116,7 @@ export default {
     state: {
       isLoading: false,
       fetchLoading: false,
+      loadingFetchBrand: false,
       tab: 0,
     },
     items: {
@@ -158,7 +161,10 @@ export default {
 
   created() {
     this.fetchUsers();
-    this.fetchBrands();
+    if (this.isCreated) {
+      this.fetchBrands();
+    }
+
     this.fetchRetailPartners();
 
     if (!this.isCreated) {
@@ -209,6 +215,7 @@ export default {
     },
 
     async fetchBrands(val) {
+      this.state.loadingFetchBrand = true;
       const payload = {
         limit: 10,
         page: 1,
@@ -225,6 +232,8 @@ export default {
       if (!res.success) {
         this.setFailedAlert(res);
       }
+
+      this.state.loadingFetchBrand = false;
     },
 
     async fetchRetailPartners(val) {
@@ -251,6 +260,8 @@ export default {
 
       this.form = res.data;
       this.form.templateId = "1";
+
+      this.fetchBrands(this.form.brand?.name);
 
       this.meta.title = res.data.name;
 

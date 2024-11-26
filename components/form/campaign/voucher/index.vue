@@ -41,10 +41,6 @@
           no-data-text="No Data"
           class="mt-2 border-thin"
         >
-          <template v-slot:[`item.no`]="{ index }">
-            {{ index + 1 }}
-          </template>
-
           <template v-slot:[`item.voucherName`]="{ item }">
             Voucher {{ item.retail.name }}
             {{ item.campaignProduct.product.name }}
@@ -114,6 +110,15 @@
             </v-menu>
           </template>
         </v-data-table>
+
+        <general-pagination
+          class="mt-6"
+          :perPage="body.limit"
+          :total="paging.count"
+          :totalPage="paging.totalPage"
+          :paging="paging"
+          @on:change="onChangePagination"
+        />
       </v-form>
 
       <div class="d-flex justify-end mt-8">
@@ -174,6 +179,11 @@ export default {
     page: "admin",
   },
   data: () => ({
+    body: {
+      page: 1,
+      limit: 10,
+    },
+    paging: {},
     headers: [
       {
         text: "No",
@@ -256,10 +266,19 @@ export default {
       const id = this.$route.params.slug;
       this.state.fetchLoading = true;
 
-      const res = await this.$api.campaigns.voucher.getList(id);
+      const res = await this.$api.campaigns.voucher.getList(id, {
+        ...this.body,
+      });
 
       if (res.success) {
-        this.items.vouchers = res.data.list;
+        this.items.vouchers = res.data.list?.map((x, index) => ({
+          no: (this.body.page - 1) * this.body.limit + index + 1,
+          ...x,
+        }));
+        this.paging = res.data.paging;
+        this.paging["totalPage"] = Math.ceil(
+          this.paging?.count / this.body.limit
+        );
       }
 
       if (!res.success) {
@@ -286,6 +305,11 @@ export default {
       }
 
       this.state.detailMode = !this.state.detailMode;
+    },
+
+    onChangePagination(val) {
+      this.body.page = val;
+      this.fetchVouchers();
     },
 
     onSubmit() {

@@ -46,8 +46,10 @@ export default (ctx) => {
     },
 
     voucher: {
-      async getList(id) {
-        return await $axios.get(`${url}/${id}/voucher?sort=asc`);
+      async getList(id, query = {}) {
+        let q = qs.stringify(query);
+
+        return await $axios.get(`${url}/${id}/voucher?${q}`);
       },
 
       async upload(body) {

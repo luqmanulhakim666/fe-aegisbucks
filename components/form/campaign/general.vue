@@ -27,8 +27,10 @@
         You cannot change the Brand because You are already added campaign
         product*
       </p>
-      <general-form-select
+
+      <general-form-autocomplete
         v-model="form.brandId"
+        :loading="loadingFetchBrand"
         :items="brands"
         item-value="id"
         item-text="name"
@@ -39,6 +41,7 @@
         :rules="[required]"
         outlined
         :disabled="brandRule"
+        @keydown="onSelectBrand"
       />
 
       <general-form-rich-editor
@@ -251,6 +254,7 @@ import rules from "@/mixins/rules";
 import utils from "@/mixins/utils";
 import pipe from "@/mixins/pipe";
 import draggable from "vuedraggable";
+import debounce from "lodash/debounce";
 
 export default {
   mixins: [rules, utils, pipe],
@@ -259,15 +263,18 @@ export default {
   },
   props: {
     loading: Boolean,
+    loadingFetchBrand: Boolean,
     form: Object,
     users: Array,
     brands: Array,
   },
 
   data: () => ({
+    search: null,
     selectedItemIndex: 0,
     state: {
       isValid: true,
+      loadingFetchBrand: false,
     },
     items: {
       auth_settings: AUTH_SETTINGS,
@@ -286,6 +293,10 @@ export default {
   },
 
   methods: {
+    onSelectBrand: debounce(function (val) {
+      const keyword = val.target._value;
+      this.$emit("fetch:brand", keyword);
+    }, 500),
     selectedItem(index) {
       this.selectedItemIndex = index;
     },
