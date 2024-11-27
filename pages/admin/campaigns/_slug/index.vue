@@ -112,6 +112,7 @@ export default {
         mm: "",
         ss: "",
       },
+      hubspotKey: null,
     },
     state: {
       isLoading: false,

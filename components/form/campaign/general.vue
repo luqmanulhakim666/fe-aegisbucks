@@ -219,6 +219,13 @@
         outlined
       />
 
+      <general-form-text-field
+        v-model="form.hubspotKey"
+        bold
+        label="Hubspot Key"
+        outlined
+      />
+
       <!-- <general-form-text-field
         v-model="form.gmailUsername"
         bold
@@ -340,6 +347,7 @@ export default {
         gmailUsername: this.form.gmailUsername,
         gmailPassword: this.form.gmailPassword,
         additionalInformation: this.form.additionalInformation,
+        hubspotKey: this.form.hubspotKey,
       };
 
       if (this.isCreated) {

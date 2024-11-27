@@ -51,7 +51,7 @@
                 cldense
                 hide-details="auto"
                 :ripple="false"
-                :value="option['key']"
+                :value="option['value']"
                 :rules="[arrayRule]"
               >
               </v-checkbox>
