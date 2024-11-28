@@ -14,7 +14,7 @@ export default {
   },
   data: () => ({
     meta: {
-      title: "Go To Go",
+      title: "LetsbuyAsia",
     },
   }),
 };
