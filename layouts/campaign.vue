@@ -13,6 +13,37 @@
 
 <script>
 export default {
+  head() {
+    const data = this.$store.getters["campaign/data"];
+    const metaPixelCode = data?.googleAnalyticScript;
+
+    if (metaPixelCode) {
+      const scriptMatch = metaPixelCode.match(
+        /<script[^>]*>([\s\S]*?)<\/script>/
+      );
+      const noscriptMatch = metaPixelCode.match(
+        /<noscript[^>]*>([\s\S]*?)<\/noscript>/
+      );
+
+      const scriptContent = scriptMatch ? scriptMatch[1].trim() : null;
+      const noscriptContent = noscriptMatch ? noscriptMatch[1].trim() : null;
+
+      return {
+        script: [
+          {
+            scriptContent,
+          },
+        ],
+        noscript: [
+          {
+            noscriptContent,
+          },
+        ],
+        __dangerouslyDisableSanitizers: ["script", "noscript"], // Prevent escaping of the script content
+      };
+    }
+  },
+
   computed: {
     campaign() {
       const data = this.$store.getters["campaign/data"];
