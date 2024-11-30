@@ -115,6 +115,28 @@
         Dapatkan Voucher Sekarang
       </v-btn>
     </div>
+
+    <v-dialog width="500" v-model="state.isDialog">
+      <div
+        class="white pa-6 rounded-xl d-flex flex-column align-center justify-center"
+      >
+        <v-icon size="62" color="error">mdi-close-octagon</v-icon>
+        <h5 class="text-center h5--small dark--text text-lighten-4 mt-8">
+          Email Business tidak diizinkan
+        </h5>
+        <h5 class="text-center h5--small dark--text text-lighten-4">
+          Harap login dengan akun @gmail.com
+        </h5>
+
+        <v-btn
+          @click="onCloseDialog()"
+          block
+          depressed
+          class="mt-8 secondary text-capitalize h7--xxsmall"
+          >Tutup</v-btn
+        >
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -169,6 +191,7 @@ export default {
     },
     state: {
       isLoading: false,
+      isDialog: false,
       isValid: true,
       qty: 1,
     },
@@ -239,7 +262,24 @@ export default {
       this.form.count = this.state.qty;
     },
 
+    onCloseDialog() {
+      const Cookie = process.client ? require("js-cookie") : undefined;
+
+      if (process.client) {
+        Cookie.remove("googleToken");
+        Cookie.remove("googleProfile");
+      }
+
+      window.location.reload();
+    },
+
     async onSubmit() {
+      if (!this.profile?.email?.includes("@gmail.com")) {
+        this.state.isDialog = true;
+
+        return;
+      }
+
       const valid = await this.validate(this.state.isValid);
 
       if (!valid) return;
