@@ -65,6 +65,7 @@ module.exports = {
   modules: [
     "@nuxtjs/axios",
     "@nuxtjs/dayjs",
+    "nuxt-user-agent",
     ["@nuxtjs/dotenv", { systemvars: true }],
   ],
 

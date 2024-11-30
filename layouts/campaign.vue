@@ -2,6 +2,10 @@
   <v-app :style="setBackground">
     <v-main>
       <campaign-navbar :logo="logo" />
+      <div v-if="campaign.id === '0192140a-6efa-7ee4-83ad-28a05032595d'">
+        {{ ua }}
+      </div>
+
       <Nuxt class="campaign" />
       <v-footer height="auto" class="dark lighten-3">
         <campaign-footer />
@@ -45,6 +49,13 @@ export default {
   },
 
   computed: {
+    ua() {
+      // user agent
+      let browser = this.$nuxt.$ua.browser();
+
+      return String(browser).toLowerCase();
+    },
+
     campaign() {
       const data = this.$store.getters["campaign/data"];
 
