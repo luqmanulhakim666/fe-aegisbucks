@@ -1,13 +1,5 @@
 <template>
   <div>
-    <v-dialog v-model="state.isDialog" width="500px">
-      <div class="white">
-        lorem ipsum
-        {{ campaignId }}
-        {{ currentUrl }}
-        {{ uaCategory }}
-      </div>
-    </v-dialog>
     <div v-if="campaignId === '0192140a-6efa-7ee4-83ad-28a05032595d'">
       {{ uaCategory }}
       <v-btn @click="openWebBrowser()">open link</v-btn>
@@ -21,7 +13,7 @@
       >
         <img class="google-icon" src="/google-color.svg" alt="Google icon" />
       </div>
-      <span class="ml-6">Login with Google {{ ua }}</span>
+      <span class="ml-6">Login with Google </span>
     </button>
   </div>
 </template>
@@ -68,25 +60,22 @@ export default {
   methods: {
     openWebBrowser() {
       const url = this.currentUrl;
+
+      if (this.$nuxt.$ua.isFromIos() || this.$nuxt.$ua.isFromIphone()) {
+        window.open(url, "_blank");
+        return;
+      }
+
       const intentUrl = `intent://${url.replace(
         "https://",
         ""
       )}#Intent;scheme=https;end;`;
       window.location.href = intentUrl;
     },
-    loginWithGoogle() {
-      if (
-        this.ua === "webview" &&
-        this.campaignId === "0192140a-6efa-7ee4-83ad-28a05032595d"
-      ) {
-        const url = this.currentUrl;
-        const intentUrl = `intent://${url.replace(
-          "https://",
-          ""
-        )}#Intent;scheme=https;end;`;
-        window.location.href = intentUrl;
 
-        this.state.isDialog = true;
+    loginWithGoogle() {
+      if (this.ua === "webview") {
+        this.openWebBrowser();
         return;
       }
 
