@@ -172,21 +172,24 @@ export default {
     },
 
     onDetail(val) {
+      const query = this.$route?.query;
       this.trackEvent("Click Campaign Product", {
         campaignId: this.campaign.id,
         productId: val.product.id,
       });
 
       if (this.isPreview) {
-        this.$router.push(
-          `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}?__preview=true`
-        );
+        this.$router.push({
+          path: `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}?__preview=true`,
+          query: query,
+        });
         return;
       }
 
-      this.$router.push(
-        `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}`
-      );
+      this.$router.push({
+        path: `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/${val.product.slug}`,
+        query: query,
+      });
     },
   },
 };

@@ -119,7 +119,9 @@ export default {
     },
 
     onGetVoucher() {
-      const url = this.isPreview
+      const query = this.$route?.query;
+
+      let url = this.isPreview
         ? `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/products?__preview=true`
         : `/campaign/${this.campaign.brand.slug}/${this.campaign.slug}/products`;
       const hasOnlyOneProduct = this.campaign?.campaignProducts?.length === 1;
@@ -135,10 +137,10 @@ export default {
           productId: product.id,
         });
 
-        return this.$router.push(productDetailUrl);
+        return this.$router.push({ path: productDetailUrl, query: query });
       }
 
-      this.$router.push(url);
+      this.$router.push({ path: url, query: query });
     },
   },
 };

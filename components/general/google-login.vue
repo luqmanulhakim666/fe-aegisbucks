@@ -1,5 +1,17 @@
 <template>
   <div>
+    <v-dialog v-model="state.isDialog" width="500px">
+      <div class="white">
+        lorem ipsum
+        {{ campaignId }}
+        {{ currentUrl }}
+        {{ uaCategory }}
+      </div>
+    </v-dialog>
+    <div v-if="campaignId === '0192140a-6efa-7ee4-83ad-28a05032595d'">
+      {{ uaCategory }}
+      <v-btn @click="openWebBrowser()">open link</v-btn>
+    </div>
     <button
       class="google-login-btn d-flex justify-center full-width pa-3"
       @click="loginWithGoogle"
@@ -9,7 +21,7 @@
       >
         <img class="google-icon" src="/google-color.svg" alt="Google icon" />
       </div>
-      <span class="ml-6">Login with Google</span>
+      <span class="ml-6">Login with Google {{ ua }}</span>
     </button>
   </div>
 </template>
@@ -22,15 +34,62 @@ export default {
   mixins: [tracking],
   props: {
     form: Object,
+    campaignId: String,
   },
+  data: () => ({
+    state: {
+      isDialog: false,
+    },
+  }),
   mounted() {
     // Ensure the code only runs on the client-side
     if (process.client) {
       Cookie = require("js-cookie"); // Initialize `js-cookie` only in client
     }
   },
+  computed: {
+    uaCategory() {
+      console.log(this.$nuxt.$ua);
+      return this.$nuxt.$ua?._parsed?.category;
+    },
+    currentUrl() {
+      const host = this.$config.API_URL.replace("/api", "");
+      const url = this.$route.fullPath;
+
+      return `${host}${url}`;
+    },
+    ua() {
+      // user agent
+      let browser = this.$nuxt.$ua.browser();
+
+      return String(browser).toLowerCase();
+    },
+  },
   methods: {
+    openWebBrowser() {
+      const url = this.currentUrl;
+      const intentUrl = `intent://${url.replace(
+        "https://",
+        ""
+      )}#Intent;scheme=https;end;`;
+      window.location.href = intentUrl;
+    },
     loginWithGoogle() {
+      if (
+        this.ua === "webview" &&
+        this.campaignId === "0192140a-6efa-7ee4-83ad-28a05032595d"
+      ) {
+        const url = this.currentUrl;
+        const intentUrl = `intent://${url.replace(
+          "https://",
+          ""
+        )}#Intent;scheme=https;end;`;
+        window.location.href = intentUrl;
+
+        this.state.isDialog = true;
+        return;
+      }
+
       if (process.client) {
         // Set the callback URL to cookies (only on client)
         Cookie.set("googleCallback", window.location.href);

@@ -78,7 +78,7 @@
 
       <div v-if="campaign.loginGmail">
         <div v-if="!isAuthenticated">
-          <general-google-login :form="form" />
+          <general-google-login :campaignId="campaign.id" :form="form" />
         </div>
 
         <div v-else>
@@ -286,6 +286,8 @@ export default {
 
       this.state.isLoading = true;
 
+      const query = this.$route?.query;
+
       const payload = {
         campaignId: this.campaign.id,
         retailId: this.form.retailId,
@@ -330,9 +332,10 @@ export default {
           localStorage.removeItem("form");
         }
 
-        this.$router.push(
-          `/campaign/${res.data.brand?.slug}/${res.data?.campaign?.id}/${res.data?.groupId}/success`
-        );
+        this.$router.push({
+          path: `/campaign/${res.data.brand?.slug}/${res.data?.campaign?.id}/${res.data?.groupId}/success`,
+          query: query,
+        });
       }
 
       if (!res.success) {
