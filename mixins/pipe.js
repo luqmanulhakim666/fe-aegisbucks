@@ -1,8 +1,8 @@
 export default {
   methods: {
     toISOString(value) {
+      if (!value) return null;
       if (this.$dayjs(value).isValid()) return this.$dayjs(value).toISOString();
-      return null;
     },
     yearMonthDate(value) {
       if (value) {

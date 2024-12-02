@@ -41,7 +41,6 @@ export default {
   },
   computed: {
     uaCategory() {
-      console.log(this.$nuxt.$ua);
       return this.$nuxt.$ua?._parsed?.category;
     },
     currentUrl() {

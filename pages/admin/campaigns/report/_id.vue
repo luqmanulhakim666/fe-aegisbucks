@@ -153,6 +153,7 @@
     <v-divider class="my-8 dark--text" />
 
     <campaign-report-table
+      filterDateRange
       label="Voucher Claims"
       :items="items.voucherClaims"
       :body="body.voucherClaims"
@@ -162,7 +163,39 @@
       @on:search="fetchVoucherClaims"
       @on:change="onChangePaginationVoucherClaims"
       @on:export="onExportVoucherClaims"
+      @on:fetchVoucherClaims="filterStatusVoucherClaims"
+      @on:fetchDateRange="filterDateRangeVoucherClaims"
     />
+
+    <v-divider class="my-6" />
+
+    <div>
+      <p class="h4--default primary--text mt-4 text--lighten-1">Hubspot API</p>
+      <div class="my-4">
+        <a
+          href="/templates/hubspot-template.csv"
+          download="hubspot-template.csv"
+          >Download CSV</a
+        >
+      </div>
+
+      <input
+        class="d-none"
+        ref="input"
+        type="file"
+        accept=".csv"
+        @change="onFilePicked"
+      />
+
+      <v-btn
+        class="grey lighten-3 secondary--text text--lighten-5 text-capitalize h7--xxsmall"
+        depressed
+        :loading="state.loading.hubspot"
+        @click="onOpenFile"
+      >
+        Upload CSV
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -213,6 +246,9 @@ export default {
         page: 1,
         limit: 10,
         keyword: "",
+        claimed: "",
+        fromDate: "",
+        toDate: "",
       },
     },
 
@@ -224,6 +260,7 @@ export default {
 
     state: {
       loading: {
+        hubspot: false,
         summary: false,
         pageViews: false,
         productStocks: false,
@@ -428,6 +465,50 @@ export default {
   },
 
   methods: {
+    onOpenFile() {
+      this.$refs.input.click();
+    },
+
+    onFilePicked(e) {
+      let file = e.target.files[0];
+
+      if (file !== undefined) {
+        if (file.name.lastIndexOf(".") <= 0) {
+          return;
+        }
+        let fr = new FileReader();
+        fr.onload = () => {
+          this.uploadFile(file);
+        };
+        fr.readAsDataURL(file);
+      }
+    },
+
+    async uploadFile(file) {
+      let body = {
+        file: file,
+      };
+
+      this.state.loading.hubspot = true;
+
+      const id = this.id;
+
+      let res = await this.$api.hubspot.sendContact({
+        body,
+        id,
+      });
+
+      if (res.success) {
+        this.setSuccessAlert("Upload has been uploaded");
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.state.loading.hubspot = false;
+    },
+
     filterDateRange(val) {
       const hours = 23;
       const minutes = 59;
@@ -441,16 +522,41 @@ export default {
         ? this.$dayjs(val[1]).hour(hours).minute(minutes).second(seconds)
         : "";
 
-      let date_from = fromDateInstance.toISOString();
-      let date_to = toDateInstance.toISOString();
+      let date_from = fromDateInstance ? fromDateInstance?.toISOString() : "";
+      let date_to = toDateInstance ? toDateInstance?.toISOString() : "";
       let sameDay = date_from === date_to && !!date_from;
       if (sameDay) {
-        date_to = fromDateInstance.toISOString();
+        date_to = fromDateInstance ? fromDateInstance?.toISOString() : "";
       }
 
       this.body.summary.fromDate = date_from;
       this.body.summary.toDate = date_to;
       this.fetch();
+    },
+
+    filterDateRangeVoucherClaims(val) {
+      const hours = 23;
+      const minutes = 59;
+      const seconds = 59;
+
+      const fromDateInstance = val[0]
+        ? this.$dayjs(val[0]).hour(hours).minute(minutes).second(seconds)
+        : "";
+
+      const toDateInstance = val[1]
+        ? this.$dayjs(val[1]).hour(hours).minute(minutes).second(seconds)
+        : "";
+
+      let date_from = fromDateInstance ? fromDateInstance?.toISOString() : "";
+      let date_to = toDateInstance ? toDateInstance?.toISOString() : "";
+      let sameDay = date_from === date_to && !!date_from;
+      if (sameDay) {
+        date_to = fromDateInstance ? fromDateInstance?.toISOString() : "";
+      }
+
+      this.body.voucherClaims.fromDate = date_from;
+      this.body.voucherClaims.toDate = date_to;
+      this.fetchVoucherClaims();
     },
 
     async fetch() {
@@ -523,9 +629,14 @@ export default {
       this.state.loading.productStocks = false;
     },
 
-    async fetchVoucherClaims() {
-      this.state.loading.voucherClaims = true;
+    filterStatusVoucherClaims(val) {
+      this.body.voucherClaims.page = 1;
 
+      this.body.voucherClaims.claimed = val;
+      this.fetchVoucherClaims();
+    },
+
+    async fetchVoucherClaims() {
       const res = await this.$api.campaigns.report.getVoucherClaims(
         this.id,
         this.body.voucherClaims
