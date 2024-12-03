@@ -197,7 +197,7 @@ export default {
       let result = "";
 
       // if (val.type === "utm") {
-      result = `${host}/campaign/${campaignSlug}/${brandSlug}?utm_source=${utmSource}`;
+      result = `${host}/campaign/${brandSlug}/${campaignSlug}?utm_source=${utmSource}`;
       // }
 
       val.value = result;
