@@ -44,7 +44,43 @@ export default {
     }
   },
 
+  mounted() {
+    if (this.ua === "webview") {
+      const url = this.currentUrl;
+
+      if (this.$nuxt.$ua.isFromIos() || this.$nuxt.$ua.isFromIphone()) {
+        // const ipPublic = "103.196.154.7";
+        // const bridge = window.open(url, "_self");
+        // const safari = `ftp://${ipPublic}/${bridge}`;
+        // window.open(safari, "_self");
+        // return;
+        // const ipAddress = `ftp://${ipPublic}/${url}`; // Assuming `url` is a valid path
+        // window.location.href = ipAddress; // Redirect directly to the FTP URL
+        // return;
+      }
+
+      const intentUrl = `intent://${url.replace(
+        "https://",
+        ""
+      )}#Intent;scheme=https;end;`;
+
+      window.location.href = intentUrl;
+    }
+  },
   computed: {
+    currentUrl() {
+      const host = this.$config.API_URL.replace("/api", "");
+      const url = this.$route.fullPath;
+
+      return `${host}${url}`;
+    },
+    ua() {
+      // user agent
+      let browser = this.$nuxt.$ua.browser();
+
+      return String(browser).toLowerCase();
+    },
+
     campaign() {
       const data = this.$store.getters["campaign/data"];
 

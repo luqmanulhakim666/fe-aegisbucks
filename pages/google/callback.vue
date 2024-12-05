@@ -28,7 +28,6 @@
 
 <script>
 import meta from "@/mixins/meta";
-import { state } from "../../store/auth";
 const Cookie = process.client ? require("js-cookie") : undefined;
 
 export default {

@@ -1,9 +1,5 @@
 <template>
   <div>
-    <div v-if="campaignId === '0192140a-6efa-7ee4-83ad-28a05032595d'">
-      {{ uaCategory }}
-      <v-btn @click="openWebBrowser()">open link</v-btn>
-    </div>
     <button
       class="google-login-btn d-flex justify-center full-width pa-3"
       @click="loginWithGoogle"
@@ -39,45 +35,8 @@ export default {
       Cookie = require("js-cookie"); // Initialize `js-cookie` only in client
     }
   },
-  computed: {
-    uaCategory() {
-      return this.$nuxt.$ua?._parsed?.category;
-    },
-    currentUrl() {
-      const host = this.$config.API_URL.replace("/api", "");
-      const url = this.$route.fullPath;
-
-      return `${host}${url}`;
-    },
-    ua() {
-      // user agent
-      let browser = this.$nuxt.$ua.browser();
-
-      return String(browser).toLowerCase();
-    },
-  },
   methods: {
-    openWebBrowser() {
-      const url = this.currentUrl;
-
-      if (this.$nuxt.$ua.isFromIos() || this.$nuxt.$ua.isFromIphone()) {
-        window.open(url, "_blank");
-        return;
-      }
-
-      const intentUrl = `intent://${url.replace(
-        "https://",
-        ""
-      )}#Intent;scheme=https;end;`;
-      window.location.href = intentUrl;
-    },
-
     loginWithGoogle() {
-      if (this.ua === "webview") {
-        this.openWebBrowser();
-        return;
-      }
-
       if (process.client) {
         // Set the callback URL to cookies (only on client)
         Cookie.set("googleCallback", window.location.href);
