@@ -4,9 +4,25 @@
       class="login-form shadow-base pa-6 rounded-xl d-flex flex-column justify-center"
     >
       <general-logo class="d-flex mx-auto mb-4" :max_width="180" />
-      <p class="p--default mb-4 text-center">Login with:</p>
+      <h4 class="h4--default mb-6 text-center">Login To Your Account</h4>
 
-      <general-google-login />
+      <v-form v-model="state.isValid" ref="form">
+        <form-auth-login :form="form" @on:submit="onSubmit()" />
+      </v-form>
+      <div class="d-flex justify-end mb-4">
+        <nuxt-link to="/auth/forgot-password" class="text--default"
+          >Forgot Password?</nuxt-link
+        >
+      </div>
+      <v-btn
+        :loading="state.isLoading"
+        class="text-capitalize mt-6 secondary lighten-5"
+        depressed
+        block
+        @click="onSubmit()"
+      >
+        <p class="h7--xxsmall">Login</p>
+      </v-btn>
     </div>
   </div>
 </template>
