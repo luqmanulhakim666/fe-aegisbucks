@@ -70,7 +70,7 @@ export const actions = {
     commit("SET_PROFILE", {
       ...defaultState,
     });
-    this.$router.push("/login");
+    this.$router.push("/admin/login");
   },
 
   /**

@@ -5,7 +5,7 @@
     <div
       class="forgot-form shadow-base pa-6 rounded-xl d-flex flex-column justify-center"
     >
-      <v-btn link to="/login" icon><v-icon>mdi-arrow-left</v-icon></v-btn>
+      <v-btn link to="/admin/login" icon><v-icon>mdi-arrow-left</v-icon></v-btn>
       <general-logo class="d-flex mx-auto mb-4" :max_width="80" />
       <h4 class="h4--default mb-6 text-center">Forgot Password</h4>
 
@@ -46,7 +46,7 @@
           depressed
           block
           link
-          to="/login"
+          to="/admin/login"
         >
           <p class="h7--xxsmall">Close</p>
         </v-btn>

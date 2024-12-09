@@ -249,6 +249,7 @@ export default {
         claimed: "",
         fromDate: "",
         toDate: "",
+        sort: "desc",
       },
     },
 
@@ -510,17 +511,9 @@ export default {
     },
 
     filterDateRange(val) {
-      const hours = 23;
-      const minutes = 59;
-      const seconds = 59;
+      const fromDateInstance = val[0] ? this.$dayjs(val[0]).startOf("day") : "";
 
-      const fromDateInstance = val[0]
-        ? this.$dayjs(val[0]).hour(hours).minute(minutes).second(seconds)
-        : "";
-
-      const toDateInstance = val[1]
-        ? this.$dayjs(val[1]).hour(hours).minute(minutes).second(seconds)
-        : "";
+      const toDateInstance = val[1] ? this.$dayjs(val[1]).endOf("day") : "";
 
       let date_from = fromDateInstance ? fromDateInstance?.toISOString() : "";
       let date_to = toDateInstance ? toDateInstance?.toISOString() : "";
@@ -535,17 +528,11 @@ export default {
     },
 
     filterDateRangeVoucherClaims(val) {
-      const hours = 23;
-      const minutes = 59;
-      const seconds = 59;
+      this.body.voucherClaims.page = 1;
 
-      const fromDateInstance = val[0]
-        ? this.$dayjs(val[0]).hour(hours).minute(minutes).second(seconds)
-        : "";
+      const fromDateInstance = val[0] ? this.$dayjs(val[0]).startOf("day") : "";
 
-      const toDateInstance = val[1]
-        ? this.$dayjs(val[1]).hour(hours).minute(minutes).second(seconds)
-        : "";
+      const toDateInstance = val[1] ? this.$dayjs(val[1]).endOf("day") : "";
 
       let date_from = fromDateInstance ? fromDateInstance?.toISOString() : "";
       let date_to = toDateInstance ? toDateInstance?.toISOString() : "";

@@ -18,24 +18,24 @@
 
 <script>
 export default {
-  layout: 'empty',
+  layout: "empty",
   data: () => ({
-    form: {}
+    form: {},
   }),
 
   created() {
-    let isSuccess = this.$route?.query?.success === 'true'
+    let isSuccess = this.$route?.query?.success === "true";
     setTimeout(() => {
       if (isSuccess) {
-        this.$router.push('/login')
+        this.$router.push("/admin/login");
       }
 
       if (!isSuccess) {
-        this.$router.push('/')
+        this.$router.push("/");
       }
-    }, 2000)
-  }
-}
+    }, 2000);
+  },
+};
 </script>
 
 <style lang="scss" scoped>

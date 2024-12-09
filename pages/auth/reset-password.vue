@@ -61,7 +61,7 @@
           depressed
           block
           link
-          to="/login"
+          to="/admin/login"
         >
           <p class="h7--xxsmall">Close</p>
         </v-btn>
@@ -116,7 +116,7 @@ export default {
 
         if (res.success) {
           this.setSuccessAlert("Password has been changed");
-          this.$router.push("/login");
+          this.$router.push("/admin/login");
         }
 
         if (!res.success) {
