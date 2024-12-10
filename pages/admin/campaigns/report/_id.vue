@@ -196,6 +196,33 @@
         Upload CSV
       </v-btn>
     </div>
+
+    <v-dialog v-model="state.loadingUpload" fullscreen persistent>
+      <v-card
+        color="transparent"
+        class="full-width fill-height d-flex flex-column justify-center align-center"
+      >
+        <general-loading />
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="state.resultDialog" width="500" persistent>
+      <div class="white rounded-xl">
+        <general-card-dialog-header
+          name="Duplicate Email"
+          @close="state.resultDialog = false"
+        />
+        <div class="pa-4 white rounded-xl">
+          <v-card flat height="200" class="white overflow-auto">
+            <ul>
+              <li v-for="(item, index) in items.hubspotResults" :key="index">
+                {{ item }}
+              </li>
+            </ul>
+          </v-card>
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -260,6 +287,8 @@ export default {
     },
 
     state: {
+      loadingUpload: false,
+      resultDialog: false,
       loading: {
         hubspot: false,
         summary: false,
@@ -433,6 +462,7 @@ export default {
     },
 
     items: {
+      hubspotResults: [],
       summary: {},
       pageViews: [],
       productStocks: [],
@@ -491,6 +521,7 @@ export default {
       };
 
       this.state.loading.hubspot = true;
+      this.state.loadingUpload = true;
 
       const id = this.id;
 
@@ -500,7 +531,13 @@ export default {
       });
 
       if (res.success) {
-        this.setSuccessAlert("Upload has been uploaded");
+        this.setSuccessAlert("Upload has been completed successfully.");
+
+        if (res.data?.length > 0) {
+          this.items.hubspotResults = res.data;
+
+          this.state.resultDialog = true;
+        }
       }
 
       if (!res.success) {
@@ -508,6 +545,7 @@ export default {
       }
 
       this.state.loading.hubspot = false;
+      this.state.loadingUpload = false;
     },
 
     filterDateRange(val) {
