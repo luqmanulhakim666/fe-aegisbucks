@@ -35,7 +35,6 @@
           height="auto"
           :show-arrows="getTotalVouchers > 1"
           class="carousel"
-          show-arrows-on-hover
           :cycle="false"
         >
           <v-carousel-item v-for="(item, i) in item.vouchers" :key="i">
