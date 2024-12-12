@@ -94,6 +94,7 @@ export default {
       loginGmail: null,
       loginWhatsapp: null,
       googleAnalyticScript: "",
+      facebookMetaPixel: "",
       gmailUsername: "",
       gmailPassword: "",
       templateId: "1",

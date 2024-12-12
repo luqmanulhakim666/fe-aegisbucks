@@ -251,7 +251,7 @@ export default {
       },
       {
         label: "Voucher Code",
-        key: "{{voucherCode}}",
+        key: `<div class="voucher-code"><p>{{voucherCode}}</p></div>`,
       },
       {
         label: "Retail Name",
@@ -290,7 +290,7 @@ export default {
       template = template?.replace(/&lt;/g, "<")?.replace(/&gt;/g, ">");
 
       // Return the modified template
-      return template;
+      return this.replaceAlignClass(template);
     },
     availableProducts() {
       let products = [];
@@ -314,6 +314,12 @@ export default {
   },
 
   methods: {
+    replaceAlignClass(htmlContent) {
+      return htmlContent.replace(
+        /class="ql-align-center"/g,
+        'class="text-center"'
+      );
+    },
     onEmitClose() {
       this.$emit("on:close");
     },

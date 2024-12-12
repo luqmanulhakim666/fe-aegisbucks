@@ -219,6 +219,13 @@
         outlined
       />
 
+      <general-form-text-area
+        v-model="form.facebookMetaPixel"
+        bold
+        label="Facebook Meta Pixel"
+        outlined
+      />
+
       <general-form-text-field
         v-model="form.hubspotKey"
         bold
@@ -344,6 +351,7 @@ export default {
         loginGmail: this.form.loginGmail,
         loginWhatsapp: false,
         googleAnalyticScript: this.form.googleAnalyticScript,
+        facebookMetaPixel: this.form.facebookMetaPixel,
         gmailUsername: this.form.gmailUsername,
         gmailPassword: this.form.gmailPassword,
         additionalInformation: this.form.additionalInformation,
