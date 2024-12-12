@@ -14,35 +14,85 @@
 <script>
 export default {
   head() {
-    const data = this.$store.getters["campaign/data"];
-    const metaPixelCode = data?.googleAnalyticScript;
+    const googleAnalyticsScript = this.campaign?.googleAnalyticScript;
 
-    if (metaPixelCode) {
-      const scriptMatch = metaPixelCode.match(
-        /<script[^>]*>([\s\S]*?)<\/script>/
-      );
-      const noscriptMatch = metaPixelCode.match(
-        /<noscript[^>]*>([\s\S]*?)<\/noscript>/
-      );
+    if (googleAnalyticsScript) {
+      // Regex to extract src with ID and inline script content
+      const scriptRegex = /<script[^>]*src="([^"]*id=([^"]+))"[^>]*><\/script>/;
+      const inlineScriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/;
 
-      const scriptContent = scriptMatch ? scriptMatch[1].trim() : null;
-      const noscriptContent = noscriptMatch ? noscriptMatch[1].trim() : null;
+      const srcMatch = googleAnalyticsScript.match(scriptRegex);
+      const inlineMatch = googleAnalyticsScript.match(inlineScriptRegex);
 
-      return {
-        script: [
-          {
-            scriptContent,
-          },
-        ],
-        noscript: [
-          {
-            noscriptContent,
-          },
-        ],
-        __dangerouslyDisableSanitizers: ["script", "noscript"], // Prevent escaping of the script content
-      };
+      const source = srcMatch ? srcMatch[1] : null; // Full `src` with ID
+      const id = srcMatch ? srcMatch[2] : null; // Only the ID (e.g., 'G-3SYRL7Q7F1')
+      const inlineContent = inlineMatch ? inlineMatch[1].trim() : null;
+
+      // Ensure we have both `src` and `id` before returning head configuration
+      if (source && id) {
+        return {
+          script: [
+            {
+              hid: "google-analytics-src",
+              src: source, // Dynamically include the external script
+              async: true,
+            },
+            {
+              hid: "google-analytics-inline",
+              innerHTML: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${id}');
+            `,
+              type: "text/javascript",
+              charset: "utf-8",
+            },
+          ],
+          __dangerouslyDisableSanitizers: ["script"], // Prevent escaping inline content
+        };
+      }
+
+      console.warn("Google Analytics script or ID is invalid");
     }
+
+    // Return an empty object if no valid script is found
+    return {};
   },
+
+  // head() {
+  //   const data = this.$store.getters["campaign/data"];
+  //   const metaPixelCode = data?.googleAnalyticScript;
+
+  //   if (metaPixelCode) {
+  //     const scriptMatch = metaPixelCode.match(
+  //       /<script[^>]*>([\s\S]*?)<\/script>/
+  //     );
+  //     const noscriptMatch = metaPixelCode.match(
+  //       /<noscript[^>]*>([\s\S]*?)<\/noscript>/
+  //     );
+
+  //     const scriptContent = scriptMatch ? scriptMatch[1].trim() : null;
+  //     const noscriptContent = noscriptMatch ? noscriptMatch[1].trim() : null;
+
+  //     console.log("scriptcontent", scriptContent);
+  //     console.log("noscript", noscriptContent);
+
+  //     return {
+  //       script: [
+  //         {
+  //           scriptContent,
+  //         },
+  //       ],
+  //       noscript: [
+  //         {
+  //           noscriptContent,
+  //         },
+  //       ],
+  //       __dangerouslyDisableSanitizers: ["script", "noscript"], // Prevent escaping of the script content
+  //     };
+  //   }
+  // },
 
   mounted() {
     if (this.ua === "webview") {

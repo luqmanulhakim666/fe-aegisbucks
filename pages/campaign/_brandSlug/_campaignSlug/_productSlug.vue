@@ -68,7 +68,7 @@
 
         <template v-if="hasFormInput">
           <p class="text-center h5--small mb-4">
-            Isi data dan dapatkan vouchernya
+            {{ handleInstruction }}
           </p>
           <!-- FORM SECTION -->
           <campaign-form :fields="form.userInputs" />
@@ -230,6 +230,25 @@ export default {
   },
 
   computed: {
+    handleInstruction() {
+      let label = "Login dan dapatkan vouchernya";
+
+      if (this.hasFormInput) {
+        const type = this.form.userInputs?.map((x) => {
+          return x?.type;
+        });
+
+        if (
+          type.includes("text") ||
+          type.includes("text_area") ||
+          type.includes("select") ||
+          type.includes("number")
+        )
+          label = "Isi data dan dapatkan vouchernya";
+      }
+
+      return label;
+    },
     hasFormInput() {
       const form = this.form.userInputs;
 
