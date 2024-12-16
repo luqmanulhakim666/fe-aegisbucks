@@ -1,5 +1,6 @@
 <template>
   <div class="product container">
+    <general-loading v-if="state.loadingRecaptcha" />
     <div class="white pa-6 rounded-xl">
       <v-img
         class="mx-auto border-thin"
@@ -76,10 +77,17 @@
         </template>
       </v-form>
 
-      <div v-if="campaign.loginGmail">
-        <div v-if="!isAuthenticated">
-          <general-google-login :campaignId="campaign.id" :form="form" />
+      <v-card v-if="!captchaVerified" class="pa-2 mb-4" outlined>
+        <div class="d-flex justify-space-between align-center">
+          <v-checkbox label="I am not a robot" @click="onVerifyCaptcha()" />
+          <v-img max-width="50" src="/recaptcha.png" />
         </div>
+      </v-card>
+
+      <div v-if="campaign.loginGmail">
+        <v-card flat :disabled="!captchaVerified" v-if="!isAuthenticated">
+          <general-google-login :campaignId="campaign.id" :form="form" />
+        </v-card>
 
         <div v-else>
           <div
@@ -146,6 +154,8 @@ import pipe from "@/mixins/pipe";
 import rules from "@/mixins/rules";
 import tracking from "@/mixins/tracking";
 import meta from "@/mixins/meta";
+import { state } from "../../../../store/auth";
+const Cookie = process.client ? require("js-cookie") : undefined;
 
 export default {
   async asyncData({ store, route }) {
@@ -173,6 +183,7 @@ export default {
   mixins: [pipe, media, rules, tracking, meta],
   layout: "campaign",
   data: () => ({
+    captchaVerified: false,
     meta: {
       title: "",
       image: "",
@@ -190,6 +201,7 @@ export default {
       userInputs: [],
     },
     state: {
+      loadingRecaptcha: false,
       isLoading: false,
       isDialog: false,
       isValid: true,
@@ -209,6 +221,16 @@ export default {
   },
 
   mounted() {
+    const isRecaptcha = Cookie.get("recaptcha");
+
+    if (!isRecaptcha) {
+      this.$recaptcha.init();
+    }
+
+    if (isRecaptcha) {
+      this.captchaVerified = true;
+    }
+
     const formLocalStorage = JSON.parse(localStorage.getItem("form"));
 
     if (
@@ -257,6 +279,24 @@ export default {
   },
 
   methods: {
+    async onVerifyCaptcha() {
+      try {
+        this.state.loadingRecaptcha = true;
+        const token = await this.$recaptcha.execute("login");
+        const res = await this.$api.auth.verifyCaptcha({
+          token: token,
+        });
+
+        if (res.success) {
+          Cookie.set("recaptcha", true, { expires: 1 });
+          this.captchaVerified = true;
+        }
+      } catch (error) {
+        console.log("recaptcha err:", error);
+      } finally {
+        this.state.loadingRecaptcha = false;
+      }
+    },
     setUserInputs() {
       this.form.userInputs = JSON.parse(JSON.stringify(this.product?.inputs));
     },

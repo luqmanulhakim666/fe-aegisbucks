@@ -13,6 +13,7 @@
 <style lang="scss" scoped>
 .loading {
   &_circle {
+    z-index: 999;
     position: absolute;
     left: 0;
     right: 0;

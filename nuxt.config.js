@@ -5,6 +5,11 @@ module.exports = {
   target: "server",
   publicRuntimeConfig: {
     API_URL: process.env.API_URL,
+    recaptcha: {
+      siteKey: process.env.RECAPTCHA_KEY,
+      version: 3,
+      size: "compact",
+    },
   },
   server: {
     port: process.env.PORT,
@@ -67,6 +72,7 @@ module.exports = {
     "@nuxtjs/dayjs",
     "nuxt-user-agent",
     ["@nuxtjs/dotenv", { systemvars: true }],
+    "@nuxtjs/recaptcha",
   ],
 
   vuetify: {

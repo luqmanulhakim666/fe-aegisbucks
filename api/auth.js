@@ -4,6 +4,11 @@ export default (ctx) => {
   let { $axios } = ctx;
   let url = "/user";
   return {
+    async verifyCaptcha(query = {}) {
+      const q = qs.stringify(query);
+      return await $axios.post(`/auth/recaptcha/verify?${q}`);
+    },
+
     async handleGoogleLogin(query = {}) {
       let q = qs.stringify(query);
 
