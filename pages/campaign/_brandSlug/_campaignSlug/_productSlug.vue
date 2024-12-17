@@ -100,7 +100,7 @@
             block
             large
             depressed
-            class="text-capitalize h6--xsmall"
+            class="text-capitalize h6--xsmall get_voucher-btn"
             @click="onSubmit()"
             :loading="state.isLoading"
             :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
@@ -115,7 +115,7 @@
         block
         large
         depressed
-        class="text-capitalize h6--xsmall"
+        class="text-capitalize h6--xsmall get_voucher-btn"
         @click="onSubmit()"
         :loading="state.isLoading"
         :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
@@ -182,6 +182,7 @@ export default {
 
   mixins: [pipe, media, rules, tracking, meta],
   layout: "campaign",
+
   data: () => ({
     captchaVerified: false,
     meta: {
@@ -220,7 +221,7 @@ export default {
     }
   },
 
-  mounted() {
+  async mounted() {
     const isRecaptcha = Cookie.get("recaptcha");
 
     if (!isRecaptcha) {
@@ -241,13 +242,17 @@ export default {
       this.state.qty = formLocalStorage.count;
     }
 
-    this.checkGoogleAuth();
+    await this.checkGoogleAuth();
 
     if (!this.isPreview) {
       this.trackEvent("View Campaign Product Detail", {
         campaignId: this.campaign.id,
         productId: this.product.id,
       });
+    }
+
+    if (this.$route.query?.success) {
+      this.$vuetify?.goTo(`.get_voucher-btn`, { offset: 100 });
     }
   },
 

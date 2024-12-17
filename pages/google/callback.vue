@@ -73,7 +73,9 @@ export default {
       await this.$store.dispatch("auth/setGoogleToken", result.access_token);
       await Cookie.set("googleProfile", JSON.stringify(userInfo));
 
-      window.location.href = Cookie.get("googleCallback");
+      const goRedirect = Cookie.get("googleCallback");
+
+      window.location.href = `${goRedirect}?success=true`;
     } catch (error) {
       console.error("Error fetching user info:", error);
     }
