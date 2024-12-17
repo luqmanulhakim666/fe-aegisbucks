@@ -8,6 +8,7 @@ import merchants from "@/api/merchants";
 import campaigns from "@/api/campaigns";
 import reports from "@/api/reports";
 import hubspot from "@/api/hubspot";
+import promos from "@/api/promos";
 
 export default (ctx, inject) => {
   let api = {};
@@ -21,5 +22,6 @@ export default (ctx, inject) => {
   api.campaigns = campaigns(ctx);
   api.reports = reports(ctx);
   api.hubspot = hubspot(ctx);
+  api.promos = promos(ctx);
   inject("api", api);
 };

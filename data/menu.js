@@ -36,6 +36,16 @@ export const SUPER_ADMIN = [
     ],
   },
   {
+    name: "Promo",
+    menus: [
+      {
+        text: "Promo",
+        icon: "mdi-tag-multiple",
+        path: "/admin/promos",
+      },
+    ],
+  },
+  {
     name: "Merchant",
     menus: [
       {
