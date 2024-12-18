@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <homepage-hero/>
     <VueSlickCarousel v-bind="settings.banner" :arrows="false" >
       <div v-for="(item, index) in items.banners" :key="index">
         <general-card-cupons-banner :item="item" />
@@ -100,6 +101,12 @@ export default {
   },
 
   data: () => ({
+    state:{
+      isLoading: false
+    },
+    body: {
+
+    },
     items: {
       banners: BANNERS,
       products: PRODUCTS,
@@ -128,6 +135,11 @@ export default {
     },
   }),
 
+
+  created(){
+this.fetchAll()
+  },
+
   computed: {
     handleSlideToShow() {
       if (this.isMobile) return 1;
@@ -136,6 +148,47 @@ export default {
       return 3;
     },
   },
+
+
+  methods:{
+    fetchData(){
+      const types = ['']
+
+
+    },
+
+    async fetchAll() {
+      this.state.isLoading = true
+
+      let body = {
+        page:1,
+        limit: 10,
+        isActive: true
+      }
+
+      let api = [this.$api.promos.getList(
+        body,
+        body['hasCoupon'] = true
+      ), this.$api.promos.getList(
+        body,
+        body['hasCoupon'] = false
+
+      ),  this.$api.promos.getList(
+        body,
+        body['isSpecial'] = true
+
+      ),
+    ]
+
+      let [resCupon, resNoCupon, resSpecial] = await Promise.all(api)
+
+      console.log(resCupon)
+      console.log(resNoCupon)
+      console.log(resSpecial)
+      this.state.isLoading = false
+
+    },
+  }
 };
 </script>
 
