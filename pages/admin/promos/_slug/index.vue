@@ -65,7 +65,7 @@ export default {
       name: "",
       image: {},
       brandId: "",
-      retailId: "",
+      retails: [],
       expiredDate: "",
       termCondition: "",
       description: "",
@@ -108,9 +108,9 @@ export default {
     }
 
     if (this.isCreated) {
-      this.fetchRetailPartners();
       this.fetchBrands();
     }
+    this.fetchRetailPartners();
   },
 
   mounted() {
@@ -133,7 +133,7 @@ export default {
       this.state.loadingFetchPartners = true;
 
       const payload = {
-        limit: 10,
+        limit: 50,
         page: 1,
         keyword: val || "",
         sort: "desc",
@@ -184,11 +184,11 @@ export default {
       if (res.success) {
         this.form = res.data;
         this.form.image = res.data.image;
-
-        console.log(res.data.expiredDate);
+        this.form.retails = res.data.retails?.map((x) => {
+          return x?.retailId;
+        });
 
         this.fetchBrands(this.form.brand?.name);
-        this.fetchRetailPartners(this.form.retail?.name);
 
         if (res.data.expiredDate) {
           this.form.time = {
@@ -231,7 +231,9 @@ export default {
           name: this.form.name,
           imageId: this.form.image?.id || null,
           brandId: this.form.brandId,
-          retailId: this.form.retailId,
+          retails: this.form.retails?.map((x) => {
+            return x?.retailId;
+          }),
           expiredDate: dateInstance.toISOString(),
           termCondition: this.form.termCondition,
           description: this.form.description,

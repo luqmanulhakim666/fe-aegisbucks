@@ -22,12 +22,12 @@
         <p class="dark--text">{{ item.no }}</p>
       </template>
       <template v-slot:[`item.brand`]="{ item }">
-        {{ item.brand.name }}
+        {{ item.brand ? item.brand.name : "-" }}
       </template>
 
-      <template v-slot:[`item.retail`]="{ item }">
-        {{ item.retail.name }}
-      </template>
+      <!-- <template v-slot:[`item.retail`]="{ item }">
+        {{ item.retail ? item.retail.name : "-" }}
+      </template> -->
 
       <template v-slot:[`item.thumbnail`]="{ item }">
         <general-thumbnail
@@ -155,13 +155,12 @@ export default {
         sortable: false,
         class: "dark--text h7--xxsmall",
       },
-
-      {
-        text: "Retail",
-        value: "retail",
-        sortable: false,
-        class: "dark--text h7--xxsmall",
-      },
+      // {
+      //   text: "Retail",
+      //   value: "retail",
+      //   sortable: false,
+      //   class: "dark--text h7--xxsmall",
+      // },
       {
         text: "Expired Date",
         value: "expiredDate",
