@@ -1,8 +1,7 @@
 <template>
   <v-app>
-    <app-navbar />
+    <app-navbar :profile="profile" />
     <v-main class="o-app">
-      <!-- <v-divider class="white" /> -->
       <Nuxt class="o-app_content" />
       <v-footer absolute class="dark lighten-3">
         <general-footer />
@@ -18,6 +17,12 @@ export default {
   data: () => ({}),
 
   created() {},
+
+  computed: {
+    profile() {
+      return this.$store.getters["auth/profile"];
+    },
+  },
 
   methods: {},
 };

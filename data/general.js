@@ -9,3 +9,5 @@ export const ROLES = [
 ];
 
 export const AUTH_SETTINGS = ["gmail", "whatsapp"];
+
+export const AVATAR = "0193df80-ee16-7774-bb9c-e0e1084cab49";

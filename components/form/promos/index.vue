@@ -24,12 +24,12 @@
         v-for="i in 2"
         :key="i"
         :ripple="false"
-        :value="i === 1"
+        :value="i === 2"
         class="mb-6"
       >
         <template v-slot:label>
           <span class="ml-4 text--default">{{
-            i === 1 ? "Main Offer" : "Cuppon Offer"
+            i === 1 ? "Main Offer" : "Cupon Offer"
           }}</span>
         </template>
       </v-radio>
@@ -63,7 +63,8 @@
     />
 
     <general-form-autocomplete
-      v-model="form.retailId"
+      v-model="form.retails"
+      multiple
       label="Retail"
       :items="partners"
       item-text="name"
@@ -73,8 +74,8 @@
       bold
       :loading="loadingFetchPartners"
       :rules="[required]"
-      @keydown="onSelectPartner"
     />
+    <!-- @keydown="onSelectPartner" -->
 
     <div class="mb-8">
       <div class="d-flex align-center mb-2">
@@ -155,7 +156,7 @@
           label="Call to Action"
           outlined
           bold
-          :rules="[required]"
+          :rules="[required, link]"
         />
       </v-col>
     </v-row>

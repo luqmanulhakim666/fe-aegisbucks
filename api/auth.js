@@ -43,5 +43,9 @@ export default (ctx) => {
     async updateProfile(body) {
       return await $axios.put(`${url}/profile`, body);
     },
+
+    googleLogin() {
+      return "https://letsbuyasia.id/api/user/signin/google";
+    },
   };
 };

@@ -5,32 +5,8 @@
     </template>
 
     <template v-if="!state.isLoading">
-      <homepage-hero />
-
-      <homepage-card
-        class="mb-8"
-        title="Penawaran Utama"
-        :items="items.mainOffers"
-        :settings="settings.product"
-        showButton
-      />
-
-      <homepage-special-offers
-        class="mb-8"
-        :settings="settings.banners"
-        :items="items.banners"
-      />
-
-      <homepage-partners class="my-10" :items="items.retails" />
-
-      <homepage-card
-        title="Penawaran Kupon"
-        :settings="settings.product"
-        :items="items.cuponOffers"
-      />
-
-      <!-- BRANDS -->
-      <homepage-brands :items="items.brands" />
+      ww
+      {{ item }}
     </template>
   </div>
 </template>
@@ -40,6 +16,18 @@ import { BANNERS, PRODUCTS, BRANDS } from "@/data/dummy";
 import meta from "@/mixins/meta";
 import alert from "@/mixins/alert";
 export default {
+  async asyncData({ route, app }) {
+    const id = route.params.id;
+    let item = {};
+
+    const res = await app.$api.promos.getOne(id);
+
+    console.log(res);
+
+    item = res.data;
+
+    return { item: item };
+  },
   layout: "app",
   mixins: [alert],
   middleware: "userAuthenticared",
@@ -82,6 +70,7 @@ export default {
   }),
 
   created() {
+    console.log(this.$route);
     this.fetchAll();
   },
 

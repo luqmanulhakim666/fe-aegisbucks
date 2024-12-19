@@ -23,12 +23,14 @@ export default {
   props: {
     form: Object,
     campaignId: String,
+    isApp: Boolean,
   },
   data: () => ({
     state: {
       isDialog: false,
     },
   }),
+
   mounted() {
     // Ensure the code only runs on the client-side
     if (process.client) {
@@ -38,6 +40,12 @@ export default {
   methods: {
     loginWithGoogle() {
       if (process.client) {
+        if (this.isApp) {
+          Cookie.set("app", true);
+          window.location.href = this.$api.auth.googleLogin();
+          return;
+        }
+
         // Set the callback URL to cookies (only on client)
         Cookie.set("googleCallback", window.location.href);
 

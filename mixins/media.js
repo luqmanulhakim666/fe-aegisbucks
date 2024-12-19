@@ -15,6 +15,10 @@ export default {
   },
 
   methods: {
+    onErrorImage(event) {
+      event.target.src = `${this.$config.API_URL}/file/0193df80-ee16-7774-bb9c-e0e1084cab49/file`;
+    },
+
     getImage(val) {
       let url = "";
 

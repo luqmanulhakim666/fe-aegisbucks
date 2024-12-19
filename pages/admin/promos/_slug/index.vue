@@ -231,9 +231,7 @@ export default {
           name: this.form.name,
           imageId: this.form.image?.id || null,
           brandId: this.form.brandId,
-          retails: this.form.retails?.map((x) => {
-            return x?.retailId;
-          }),
+          retails: this.form.retails,
           expiredDate: dateInstance.toISOString(),
           termCondition: this.form.termCondition,
           description: this.form.description,

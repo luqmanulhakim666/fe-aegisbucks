@@ -3,7 +3,7 @@
     <v-progress-circular
       width="5"
       class="loading_circle"
-      color="primary"
+      color="success"
       size="60"
       indeterminate
     />
