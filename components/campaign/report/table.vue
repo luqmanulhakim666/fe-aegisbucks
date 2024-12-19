@@ -61,6 +61,7 @@
       </v-menu>
 
       <general-form-select
+        v-if="showClaimStatus"
         v-model="status"
         :items="claimStatus"
         item-value="key"
@@ -150,6 +151,10 @@ export default {
     filterDate: {
       type: Boolean,
       default: () => true,
+    },
+    showClaimStatus: {
+      type: Boolean,
+      default: false,
     },
     label: String,
     items: Array,

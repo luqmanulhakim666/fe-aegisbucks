@@ -153,6 +153,7 @@
     <v-divider class="my-8 dark--text" />
 
     <campaign-report-table
+      showClaimStatus
       filterDateRange
       label="Voucher Claims"
       :items="items.voucherClaims"
