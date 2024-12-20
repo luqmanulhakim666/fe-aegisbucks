@@ -58,10 +58,12 @@ export default {
     logo: String,
     profile: Object,
   },
-  mounted() {
-    console.log(AVATAR);
-  },
+
   methods: {
+    onLogout() {
+      this.$store.dispatch("auth/logout");
+    },
+
     onErrorImg(event) {
       event.target.src = `${this.$config.API_URL}/file/0193df80-ee16-7774-bb9c-e0e1084cab49/file`;
     },

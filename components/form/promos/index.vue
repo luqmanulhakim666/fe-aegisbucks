@@ -29,7 +29,7 @@
       >
         <template v-slot:label>
           <span class="ml-4 text--default">{{
-            i === 1 ? "Main Offer" : "Cupon Offer"
+            i === 1 ? "Main Offer" : "Coupon Offer"
           }}</span>
         </template>
       </v-radio>
@@ -201,7 +201,6 @@ export default {
     }, 500),
 
     onSelectPartner: debounce(function (val) {
-      console.log("val", val);
       const keyword = val.target._value;
       this.$emit("fetch:partners", keyword);
     }, 500),

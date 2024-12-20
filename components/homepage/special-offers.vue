@@ -1,7 +1,14 @@
 <template>
-  <VueSlickCarousel v-bind="settings" :arrows="false">
+  <VueSlickCarousel v-bind="settings" :arrows="true">
     <div v-for="(item, index) in items" :key="index">
-      <general-card-cupons-banner :item="item" />
+      <img
+        @click="onDetail(item.id)"
+        alt="Offer image"
+        class="action_card-image full-width full-height cover pointer"
+        height="350"
+        :src="getImage(item)"
+      />
+      <!-- <general-card-coupons-banner :item="item" /> -->
     </div>
   </VueSlickCarousel>
 </template>
@@ -10,13 +17,21 @@
 import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
+import media from "@/mixins/media";
 export default {
+  mixins: [media],
   props: {
     settings: Object,
     items: Array,
   },
   components: {
     VueSlickCarousel,
+  },
+
+  methods: {
+    onDetail(id) {
+      this.$router.push(id);
+    },
   },
 };
 </script>

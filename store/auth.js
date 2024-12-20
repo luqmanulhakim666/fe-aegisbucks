@@ -65,11 +65,18 @@ export const actions = {
    *
    */
   async logout({ commit, dispatch }) {
+    const role = Cookie.get("role");
+
     await dispatch("unsetToken");
     await dispatch("unsetRole");
     commit("SET_PROFILE", {
       ...defaultState,
     });
+
+    if (role === "cust") {
+      this.$router.push("/login");
+      return;
+    }
     this.$router.push("/admin/login");
   },
 

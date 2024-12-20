@@ -18,8 +18,14 @@
         :slidesToShow="handleSlideToShow"
         :arrows="!isMobile"
       >
-        <div v-for="(item, index) in items" :key="index" class="pa-2">
-          <general-card-cupons-action
+        <div
+          v-for="(item, index) in items"
+          :key="index"
+          class="pa-2 fill-height"
+        >
+          <general-card-coupons-action
+            @click="onDetail(item.id)"
+            :id="item.id"
             :showButton="showButton"
             :image="item"
             :name="item.name"

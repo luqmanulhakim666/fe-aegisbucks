@@ -18,7 +18,7 @@
       <homepage-special-offers
         class="mb-8"
         :settings="settings.banners"
-        :items="items.banners"
+        :items="items.specialOffers"
       />
 
       <homepage-partners class="my-10" :items="items.retails" />
@@ -26,7 +26,7 @@
       <homepage-card
         title="Penawaran Kupon"
         :settings="settings.product"
-        :items="items.cuponOffers"
+        :items="items.couponOffers"
       />
 
       <!-- BRANDS -->
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import { BANNERS, PRODUCTS, BRANDS } from "@/data/dummy";
 import meta from "@/mixins/meta";
 import alert from "@/mixins/alert";
 export default {
@@ -52,14 +51,11 @@ export default {
     items: {
       mainOffers: [],
       specialOffers: [],
-      cuponOffers: [],
+      couponOffers: [],
       retails: [],
-      banners: BANNERS,
-      products: PRODUCTS,
-      brands: BRANDS,
     },
     settings: {
-      banner: {
+      banners: {
         dots: true,
         dotsClass: "slick-dots custom-dot-class",
         edgeFriction: 0.35,
@@ -111,10 +107,10 @@ export default {
         this.$api.partners.getList({ page: 1, limit: 12 }),
       ];
 
-      let [resCuponOffers, resMainOffers, resSpecialOffers, resRetail] =
+      let [resCouponOffers, resMainOffers, resSpecialOffers, resRetail] =
         await Promise.all(api);
 
-      this.handleCuponOffers(resCuponOffers);
+      this.handleCouponOffers(resCouponOffers);
       this.handleMainOffers(resMainOffers);
       this.handleSpecialOffers(resSpecialOffers);
       this.handleRetails(resRetail);
@@ -142,9 +138,9 @@ export default {
       }
     },
 
-    handleCuponOffers(res) {
+    handleCouponOffers(res) {
       if (res.success) {
-        this.items.cuponOffers = res.data.list;
+        this.items.couponOffers = res.data.list;
       }
 
       if (!res.success) {
@@ -153,7 +149,6 @@ export default {
     },
 
     handleRetails(res) {
-      console.log(res);
       if (res.success) {
         this.items.retails = res.data.list;
       }

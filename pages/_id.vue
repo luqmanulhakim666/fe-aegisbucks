@@ -5,15 +5,92 @@
     </template>
 
     <template v-if="!state.isLoading">
-      ww
-      {{ item }}
+      <v-img
+        class="cover rounded-xl"
+        height="350"
+        :src="getImage(item)"
+      ></v-img>
+
+      <h3 class="h3--xlarge my-8">{{ item.name }}</h3>
+
+      <div class="d-md-flex justify-space-between align-center">
+        <div class="d-flex align-center">
+          <v-chip
+            outlined
+            color="success lighten-2"
+            class="d-flex mr-1"
+            v-for="(partner, index) in item.retails"
+            :key="index"
+          >
+            <p class="text--default dark--text">{{ partner.retail.name }}</p>
+          </v-chip>
+
+          <div class="ml-4 d-flex align-center">
+            <v-avatar size="10" color="dark lighten-2"></v-avatar>
+            <p class="h7--xxsmall dark--text ml-4">
+              {{ item.brand.name }}
+            </p>
+          </div>
+        </div>
+        <!-- <div class="d-flex">
+          <div v-for="(partner, index) in item.retails"></div>
+          <v-chip>
+            {{ partner.retail }}
+          </v-chip>
+          {{ item.brand }}
+        </div> -->
+
+        <div>
+          <p class="h7--xxsmall dark--text">Berlaku Sampai</p>
+          <p class="text--default dark--text">
+            {{ fullDateMonthTextYear(item.expiredDate, " ") }}
+          </p>
+        </div>
+      </div>
+
+      <campaign-accordion
+        class="my-6"
+        label="Description"
+        :termAndConditions="item.description"
+      />
+      <campaign-accordion
+        class="my-6"
+        label="How To"
+        :termAndConditions="item.howToInfo"
+      />
+      <campaign-accordion
+        class="my-6"
+        label="Term and Conditions"
+        :termAndConditions="item.termCondition"
+      />
+      <campaign-accordion
+        class="my-6"
+        label="Help"
+        :termAndConditions="item.helpInfo"
+      />
+      <campaign-accordion
+        class="my-6"
+        label="Wallet"
+        :termAndConditions="item.walletInfo"
+      />
+
+      <v-btn
+        block
+        depressed
+        color="secondary"
+        class="h6--xsmall white--text text-capitalize my-8"
+        @click="onClaim()"
+      >
+        {{ item.ctaLabel ? item.ctaLabel : "Claim" }}
+      </v-btn>
     </template>
   </div>
 </template>
 
 <script>
-import { BANNERS, PRODUCTS, BRANDS } from "@/data/dummy";
 import meta from "@/mixins/meta";
+import media from "@/mixins/media";
+import pipe from "@/mixins/pipe";
 import alert from "@/mixins/alert";
 export default {
   async asyncData({ route, app }) {
@@ -22,186 +99,31 @@ export default {
 
     const res = await app.$api.promos.getOne(id);
 
-    console.log(res);
-
     item = res.data;
 
     return { item: item };
   },
-  layout: "app",
-  mixins: [alert],
+  mixins: [alert, media, pipe],
   middleware: "userAuthenticared",
   meta: [meta],
+  layout: "app",
   data: () => ({
     state: {
       isLoading: false,
     },
-    body: {},
-    items: {
-      mainOffers: [],
-      specialOffers: [],
-      cuponOffers: [],
-      retails: [],
-      banners: BANNERS,
-      products: PRODUCTS,
-      brands: BRANDS,
-    },
-    settings: {
-      banner: {
-        dots: true,
-        dotsClass: "slick-dots custom-dot-class",
-        edgeFriction: 0.35,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-      },
-      product: {
-        focusOnSelect: true,
-        infinite: true,
-        slidesToScroll: 1,
-        speed: 500,
-        centerPadding: "20px",
-      },
-    },
-    meta: {
-      title: "LetsbuyAsia",
-    },
   }),
 
-  created() {
-    console.log(this.$route);
-    this.fetchAll();
-  },
-
-  computed: {
-    handleSlideToShow() {
-      if (this.isMobile) return 1;
-      if (this.isTablet) return 2;
-      if (this.isDesktop) return 3;
-      return 3;
-    },
-  },
+  computed: {},
 
   methods: {
-    async fetchAll() {
-      this.state.isLoading = true;
+    onClaim() {
+      const url = this.item.ctaUrl;
 
-      let body = {
-        page: 1,
-        limit: 10,
-        isActive: true,
-      };
+      let domain = url.replace(/(^\w+:|^)\/\//, "");
+      if (!url) return;
 
-      let api = [
-        this.$api.promos.getList({ ...body, hasCoupon: true }),
-        this.$api.promos.getList({ ...body, hasCoupon: false }),
-        this.$api.promos.getList({ ...body, isSpecial: true }),
-        this.$api.partners.getList({ page: 1, limit: 12 }),
-      ];
-
-      let [resCuponOffers, resMainOffers, resSpecialOffers, resRetail] =
-        await Promise.all(api);
-
-      this.handleCuponOffers(resCuponOffers);
-      this.handleMainOffers(resMainOffers);
-      this.handleSpecialOffers(resSpecialOffers);
-      this.handleRetails(resRetail);
-
-      this.state.isLoading = false;
-    },
-
-    handleMainOffers(res) {
-      if (res.success) {
-        this.items.mainOffers = res.data.list;
-      }
-
-      if (!res.success) {
-        this.setFailedAlert(res);
-      }
-    },
-
-    handleSpecialOffers(res) {
-      if (res.success) {
-        this.items.specialOffers = res.data.list;
-      }
-
-      if (!res.success) {
-        this.setFailedAlert(res);
-      }
-    },
-
-    handleCuponOffers(res) {
-      if (res.success) {
-        this.items.cuponOffers = res.data.list;
-      }
-
-      if (!res.success) {
-        this.setFailedAlert(res);
-      }
-    },
-
-    handleRetails(res) {
-      console.log(res);
-      if (res.success) {
-        this.items.retails = res.data.list;
-      }
-
-      if (!res.success) {
-        this.setFailedAlert(res);
-      }
+      window.open(`http://${domain}`, "_blank");
     },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-::v-deep {
-  .slick-dots {
-    z-index: 1;
-  }
-  .slick-dots li.slick-active button:before {
-    opacity: unset;
-    color: #e27106;
-    width: 36px;
-    height: 13px;
-    background: #e27106;
-    border-radius: 28px;
-    margin-top: 2px;
-    margin-left: -10px;
-  }
-
-  .slick-arrow {
-    z-index: 1;
-    width: 40px;
-    height: 40px;
-    // border: 2px solid #000;
-    border-radius: 9999px;
-    background-color: rgb(241, 241, 241);
-  }
-
-  .slick-next:before {
-    content: "\02C3";
-    font-size: 14px;
-    font-weight: bold;
-    opacity: 1;
-    color: #000000d7 !important;
-  }
-
-  .slick-prev:before {
-    content: "\02C2";
-    font-size: 14px;
-    font-weight: bold;
-    opacity: 1;
-    color: #000000d7 !important;
-  }
-
-  .slick-next {
-    margin-right: -20px;
-  }
-
-  .slick-prev {
-    margin-left: -20px;
-  }
-}
-</style>

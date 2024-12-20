@@ -18,8 +18,6 @@ export default {
 
     const token = this.$route.query?.token;
 
-    console.log(this.$route);
-
     if (token) {
       await this.$store.dispatch("auth/setToken", token);
       await this.$store.dispatch("auth/fetchProfile");
@@ -29,6 +27,10 @@ export default {
       );
       this.state.isLoading = false;
       this.$router.push("/");
+    }
+
+    if (!token) {
+      this.$router.push("/login");
     }
   },
 };

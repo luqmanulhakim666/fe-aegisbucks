@@ -44,7 +44,6 @@ export default {
     },
   }),
   async mounted() {
-    const isFromApp = Cookie.get("app");
     this.state.isLoading = true;
     const hash = window.location.hash.substr(1);
     const result = hash.split("&").reduce((res, item) => {
@@ -71,22 +70,12 @@ export default {
         return;
       }
 
-      const userGoogleLogin = this.$api.auth.userGoogleLogin();
-
-      console.log("userGoogle Login", userGoogleLogin);
-
       await this.$store.dispatch("auth/setGoogleToken", result.access_token);
       await Cookie.set("googleProfile", JSON.stringify(userInfo));
 
       const goRedirect = Cookie.get("googleCallback");
 
-      if (!isFromApp) {
-        window.location.href = `${goRedirect}?success=true`;
-      }
-
-      if (isFromApp) {
-        window.location.href = goRedirect;
-      }
+      window.location.href = `${goRedirect}?success=true`;
     } catch (error) {
       console.error("Error fetching user info:", error);
     }

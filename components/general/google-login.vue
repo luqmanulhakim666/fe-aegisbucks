@@ -41,7 +41,6 @@ export default {
     loginWithGoogle() {
       if (process.client) {
         if (this.isApp) {
-          Cookie.set("app", true);
           window.location.href = this.$api.auth.googleLogin();
           return;
         }
