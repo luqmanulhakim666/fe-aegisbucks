@@ -18,6 +18,7 @@
             required
             bold
             :rules="[required]"
+            @keydown="onSelectPartners"
           />
 
           <template v-if="!isEdited">
@@ -118,6 +119,7 @@
 import rules from "@/mixins/rules";
 import utils from "@/mixins/utils";
 import pipe from "@/mixins/pipe";
+import debounce from "lodash/debounce";
 
 export default {
   mixins: [rules, utils, pipe],
@@ -166,6 +168,11 @@ export default {
   },
 
   methods: {
+    onSelectPartners: debounce(function (val) {
+      const keyword = val.target._value;
+      this.$emit("fetch:partners", keyword);
+    }, 500),
+
     onEmitClose() {
       this.$emit("on:close");
     },
@@ -261,6 +268,10 @@ export default {
       if ((await val) && !this.isEdited) {
         this.onClearForm();
         this.$forceUpdate();
+      }
+
+      if (this.isEdited) {
+        this.$emit("fetch:partners", this.item.retail?.name);
       }
     },
     "form.limit"(val) {

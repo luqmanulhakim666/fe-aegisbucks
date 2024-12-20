@@ -156,6 +156,7 @@
       :partners="partners"
       :products="products"
       :isEdited="state.isEdited"
+      @fetch:partners="onEmitFetchPartners"
       @on:fetch="fetchVouchers"
       @on:close="state.dialog = false"
     />
@@ -262,6 +263,9 @@ export default {
   },
 
   methods: {
+    onEmitFetchPartners(keyword) {
+      this.$emit("fetch:partners", keyword);
+    },
     async fetchVouchers() {
       const id = this.$route.params.slug;
       this.state.fetchLoading = true;
@@ -289,6 +293,9 @@ export default {
     },
 
     handleDialog(val, index) {
+      if (!val?.productId) {
+        this.onEmitFetchPartners();
+      }
       if (val?.productId) {
         this.state.selectedItem = val;
         this.state.selectedIndex = index;

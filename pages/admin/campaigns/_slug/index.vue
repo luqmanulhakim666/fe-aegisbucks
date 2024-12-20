@@ -50,6 +50,7 @@
             :products="form.campaignProducts"
             :partners="items.partners"
             :form="form"
+            @fetch:partners="fetchRetailPartners"
           />
         </v-tab-item>
         <v-tab-item>
@@ -167,7 +168,7 @@ export default {
       this.fetchBrands();
     }
 
-    this.fetchRetailPartners();
+    // this.fetchRetailPartners();
 
     if (!this.isCreated) {
       this.fetchCampaignDetail(this.$route.params.slug);
