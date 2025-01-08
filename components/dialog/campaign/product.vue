@@ -270,7 +270,7 @@ export default {
         brandName: this.campaign.brand?.name,
         promoLabel: this.form.promoLabel,
         campaignName: this.campaign.name,
-        expiredDate: "25 Jan 2025",
+        expiredDate: "25-Jan-2025 23:59:59",
         usageInstruction:
           "<ol><li>Kunjungi<strong>&nbsp;</strong><strong>Toko</strong></li><li>Ambil&nbsp;<strong>Product</strong></li><li>Saat di kasir, beritahu kasir bahwa Anda punya kode voucher</li><li>Kasir akan scan&nbsp;<strong>Product</strong>&nbsp;dan kemudian&nbsp;scan barcode / input kode voucher Anda</li></ol>",
         voucherCode: "CODE001",
