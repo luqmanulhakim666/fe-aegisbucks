@@ -315,7 +315,7 @@ export default {
 
   methods: {
     replaceAlignClass(htmlContent) {
-      return htmlContent.replace(
+      return htmlContent?.replace(
         /class="ql-align-center"/g,
         'class="text-center"'
       );
