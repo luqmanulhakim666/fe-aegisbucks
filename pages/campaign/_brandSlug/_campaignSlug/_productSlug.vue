@@ -145,6 +145,42 @@
         >
       </div>
     </v-dialog>
+
+    <!-- IG MESSAGE -->
+    <v-dialog width="500" v-model="state.dialogMessage">
+      <div
+        class="white pa-6 rounded-xl d-flex flex-column align-center justify-center"
+      >
+        <v-img width="200" src="/images/empty.svg"></v-img>
+        <h5 class="text-center h5--small dark--text text-lighten-4 mt-8">
+          Maaf voucher habis
+        </h5>
+
+        <p class="text--default mt-4">
+          kirim pesan dibawah ini untuk mendapatkan voucher baru
+        </p>
+
+        <v-card class="dark lighten-3 mt-2 pa-2 rounded-xl" flat>
+          <p class="h7--xxsmall dark--text">"{{ getMessageInstagram }}"</p>
+        </v-card>
+
+        <v-list-item @click="copyLink">
+          <v-list-item-content class="text--default">
+            <div class="d-flex align-center">
+              <v-icon small class="mr-2">mdi-content-copy</v-icon>
+              Salin
+            </div>
+          </v-list-item-content>
+        </v-list-item>
+        <v-btn
+          @click="goToInstagramMessage()"
+          block
+          depressed
+          class="mt-8 secondary text-capitalize h7--xxsmall"
+          >Dapatkan Voucher Baru</v-btn
+        >
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -207,6 +243,7 @@ export default {
       isDialog: false,
       isValid: true,
       qty: 1,
+      dialogMessage: false,
     },
   }),
 
@@ -257,6 +294,10 @@ export default {
   },
 
   computed: {
+    getMessageInstagram() {
+      return `Halo min, saya mau voucher ${this.campaign?.brand.name} ${this.campaign?.name} ${this.campaign?.campaignProduct?.product?.name}`;
+    },
+
     handleInstruction() {
       let label = "Login dan dapatkan vouchernya";
 
@@ -284,6 +325,28 @@ export default {
   },
 
   methods: {
+    copyLink() {
+      const url = this.getMessageInstagram;
+      navigator.clipboard.writeText(url).then(
+        () => {
+          this.$store.dispatch("snack", [
+            "Link copied to clipboard!",
+            "success lighten-2",
+            "mdi-check-circle",
+          ]);
+        },
+        (err) => {
+          this.$store.dispatch("snack", [
+            "Failed to copy link",
+            "error",
+            "mdi-close-circle",
+          ]);
+        }
+      );
+    },
+    goToInstagramMessage() {
+      window.location.href = "https://www.instagram.com/letsbuyasia";
+    },
     async onVerifyCaptcha() {
       try {
         this.state.loadingRecaptcha = true;
@@ -404,6 +467,10 @@ export default {
 
       if (!res.success) {
         this.setFailedAlert(res);
+
+        if (res.error.message === "Mohon maaf voucher sudah habis") {
+          this.state.dialogMessage = true;
+        }
       }
 
       this.state.isLoading = false;
