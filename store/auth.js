@@ -65,7 +65,10 @@ export const actions = {
    *
    */
   async logout({ commit, dispatch }) {
-    const role = Cookie.get("role");
+    let role;
+    if (process.client) {
+      role = Cookie.get("role");
+    }
 
     await dispatch("unsetToken");
     await dispatch("unsetRole");
@@ -73,11 +76,12 @@ export const actions = {
       ...defaultState,
     });
 
-    if (role === "cust") {
-      this.$router.push("/login");
+    if (role === "admin") {
+      this.$router.push("/admin/login");
       return;
     }
-    this.$router.push("/admin/login");
+
+    this.$router.push("/login");
   },
 
   /**
