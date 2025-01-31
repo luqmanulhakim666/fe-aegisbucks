@@ -167,25 +167,24 @@
       <!-- CTA -->
       <template>
         <h5 class="h5--small info--text text--lighten-1">Call To Auction</h5>
-        <div
-          v-if="getIndexCTA < 0"
-          class="drop-file-component mt-8"
+        <v-btn
+          small
+          depressed
+          class="text-capitalize mt-2 mb-4 secondary h7--xxsmall white--text"
           @click="onAddCTA()"
         >
-          <v-icon>mdi-button-cursor</v-icon>
+          <v-icon color="white" class="mr-2" small>mdi-plus-circle</v-icon>
+          Add Call To Auction
+        </v-btn>
 
-          <div class="d-flex mx-auto justify-center mt-1">
-            <v-icon color="dark lighten-5" small>mdi-plus-circle</v-icon>
-            <h6 class="h6--xsmall dark--text text--lighten-5">
-              Add Call To Auction
-            </h6>
-          </div>
-        </div>
-
-        <div v-if="getIndexCTA >= 0">
-          <div class="d-flex">
+        <div v-if="form.ctaItems.length > 0">
+          <div
+            class="d-flex align-start"
+            v-for="(item, index) in form.ctaItems"
+            :key="index"
+          >
             <general-form-text-field
-              v-model="cropper.images[getIndexCTA]['name']"
+              v-model="item.label"
               class="mt-2 mr-4"
               placeholder="Call to Action Text"
               label="Label"
@@ -193,7 +192,7 @@
               hide-details="auto"
             />
             <general-form-text-field
-              v-model="cropper.images[getIndexCTA]['url']"
+              v-model="item.url"
               class="full-width mt-2"
               placeholder="Example: https://yourdomain.com / www.yourdomain.com"
               label="Link"
@@ -201,22 +200,15 @@
               hide-details="auto"
               :rules="[required, link]"
             />
-          </div>
-          <div class="d-flex align-center mt-4">
             <v-btn
-              @click="goToCtaLink()"
-              width="300"
-              :style="`background:${primaryColor};color:${secondaryColor}`"
-              class="text-capitalize h6--xsmall"
-              >{{
-                cropper.images[getIndexCTA]["name"]
-                  ? cropper.images[getIndexCTA]["name"]
-                  : "Click Here"
-              }}</v-btn
+              class="mt-8"
+              small
+              depressed
+              icon
+              @click="onRemoveCTA(index)"
             >
-            <v-btn icon x-small class="ml-2" @click="onRemoveCTA(getIndexCTA)"
-              ><v-icon color="error">mdi-close-circle</v-icon></v-btn
-            >
+              <v-icon color="error" small>mdi-delete</v-icon>
+            </v-btn>
           </div>
         </div>
       </template>
@@ -390,23 +382,6 @@ export default {
     cropper: Object,
   },
 
-  data: () => ({
-    // cropper: {
-    //   images: [],
-    //   isEdited: false,
-    //   media: {},
-    //   isLoading: false,
-    //   progress: 0,
-    //   imageUrl: null,
-    //   imageName: null,
-    //   croppedImage: null,
-    //   finalCroppedImage: null,
-    //   dialog: false,
-    //   hasImageId: false,
-    //   indexFile: null,
-    // },
-  }),
-
   created() {
     this.cropper.hasImageId = !!this.cropper?.image?.id;
   },
@@ -427,10 +402,7 @@ export default {
       );
       return findIndex;
     },
-    getIndexCTA() {
-      const findIndex = this.cropper.images.findIndex((x) => x.type === "cta");
-      return findIndex;
-    },
+
     dragOptions() {
       return {
         animation: 200,
@@ -447,8 +419,8 @@ export default {
       this.cropper.images.splice(this.getIndexTitle, 1);
     },
 
-    onRemoveCTA() {
-      this.cropper.images.splice(this.getIndexCTA, 1);
+    onRemoveCTA(index) {
+      this.form.ctaItems.splice(index, 1);
     },
 
     onRemoveDescription() {
@@ -472,21 +444,11 @@ export default {
     },
 
     onAddCTA() {
-      this.cropper.images.push({
-        id: this.cropper.images?.length + 1,
-        type: "cta",
-        name: "",
+      this.form.ctaItems.push({
+        id: this.form.ctaItems?.length + 1,
+        label: "",
         url: "",
       });
-    },
-
-    goToCtaLink() {
-      const url = this.cropper.images[this.getIndexCTA]["url"];
-
-      let domain = url.replace(/(^\w+:|^)\/\//, "");
-      if (!url) return;
-
-      window.open(`http://${domain}`, "_blank");
     },
 
     getImage(val) {

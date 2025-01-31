@@ -170,10 +170,33 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <form-campaign-templates-thank-you
+                :form="form"
                 acceptFile=".pdf, image/png, image/jpg, image/jpeg"
                 :cropper="thankYouPageSections"
                 :primaryColor="form.primaryColor"
                 :secondaryColor="form.secondaryColor"
+                class="mt-4"
+              />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+
+        <v-expansion-panels
+          :mandatory="state.mandatory.emailHeaderImage"
+          flat
+          class="mb-4 border-thin rounded-lg"
+        >
+          <v-expansion-panel>
+            <v-expansion-panel-header
+              @click="handleExpand('emailHeaderImage')"
+              :color="state.headerColor"
+            >
+              <p class="h6--xsmall">Email Header Image</p>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <form-campaign-templates-email-header
+                acceptFile=".pdf, image/png, image/jpg, image/jpeg"
+                :form="form"
                 class="mt-4"
               />
             </v-expansion-panel-content>
@@ -226,6 +249,7 @@ export default {
         header: true,
         footer: true,
         thankYou: true,
+        emailHeaderImage: true,
       },
     },
     coverSections: {
@@ -319,8 +343,12 @@ export default {
         templateId: "1",
         primaryColor: this.form.primaryColor,
         secondaryColor: this.form.secondaryColor,
+        ctaItems: this.form.ctaItems,
         backgroundImageId: this.form.backgroundImage?.id
           ? this.form.backgroundImage?.id
+          : null,
+        emailHeaderImageId: this.form.emailHeaderImageId?.id
+          ? this.form.emailHeaderImageId?.id
           : null,
         footerSection: this.footerSections,
         coverSection: this.coverSections.images?.map((x) => {

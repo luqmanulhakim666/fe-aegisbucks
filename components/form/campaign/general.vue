@@ -233,19 +233,90 @@
         outlined
       />
 
-      <!-- <general-form-text-field
-        v-model="form.gmailUsername"
-        bold
-        label="Setting Gmail Username"
-        outlined
-      />
-      <general-form-text-field
-        v-model="form.gmailPassword"
-        type="password"
-        bold
-        label="Setting Gmail Password"
-        outlined
-      /> -->
+      <h5 class="h5--small dark--text text--lighten-5 mb-2">
+        Email Configuration
+      </h5>
+      <v-switch
+        label="Enabled"
+        inset
+        :ripple="false"
+        v-model="form.isCustomEmail"
+      >
+        <template v-slot:label>
+          <p class="h6--xsmall">
+            {{ form.isCustomEmail ? "Enabled" : "Disabled" }}
+          </p>
+        </template>
+      </v-switch>
+
+      <template v-if="form.isCustomEmail">
+        <general-form-text-field
+          v-model="form.emailUser"
+          bold
+          label="Username"
+          outlined
+        />
+        <general-form-text-field
+          v-model="form.emailPassword"
+          bold
+          label="Password"
+          outlined
+          :append-icon="state.showEmailPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="state.showEmailPassword ? 'text' : 'password'"
+          @click:append="state.showEmailPassword = !state.showEmailPassword"
+        />
+        <general-form-text-field
+          v-model="form.emailHost"
+          bold
+          label="Host"
+          outlined
+        />
+        <general-form-text-field
+          v-model="form.emailPort"
+          bold
+          label="Port"
+          outlined
+        />
+        <div class="mb-8">
+          <p class="h6--xsmall label-text">Email Secure</p>
+
+          <v-checkbox
+            v-model="form.emailSecure"
+            dense
+            :ripple="false"
+            hide-details="auto"
+            class="text-capitalize text--default"
+          >
+            <template v-slot:label>
+              <p class="text--default">Secure</p>
+            </template>
+          </v-checkbox>
+        </div>
+        <general-form-text-field
+          v-model="form.emailSender"
+          bold
+          label="Email Sender"
+          outlined
+        />
+
+        <div class="d-md-flex align-center">
+          <general-form-text-field
+            v-model="emailReceiver"
+            bold
+            label="Email Receiver (For Testing)"
+            outlined
+          />
+          <v-btn
+            depressed
+            small
+            class="primary text-capitalize h7--xxsmall ml-md-4"
+            :loading="sendEmailTestLoading"
+            :disabled="!emailReceiver"
+            @click="onTestSendEmail()"
+            >Tes Send Email</v-btn
+          >
+        </div>
+      </template>
     </v-form>
 
     <div class="d-flex justify-end mt-8">
@@ -285,14 +356,17 @@ export default {
 
   data: () => ({
     search: null,
+    emailReceiver: "",
     selectedItemIndex: 0,
     state: {
+      showEmailPassword: false,
       isValid: true,
       loadingFetchBrand: false,
     },
     items: {
       auth_settings: AUTH_SETTINGS,
     },
+    sendEmailTestLoading: false,
   }),
 
   computed: {
@@ -307,6 +381,30 @@ export default {
   },
 
   methods: {
+    async onTestSendEmail() {
+      this.sendEmailTestLoading = true;
+      const payload = {
+        receiver: this.emailReceiver,
+        sender: this.form.emailSender + "<info@letsbuyasia.id>",
+        host: this.form.emailHost,
+        port: this.form.emailPort,
+        secure: this.form.emailSecure,
+        user: this.form.emailUser,
+        password: this.form.emailPassword,
+      };
+
+      const res = await this.$api.campaigns.sendEmailTest(payload);
+
+      if (res.success) {
+        this.setSuccessAlert(`Email has been sent to ${this.emailReceiver}`);
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+      this.sendEmailTestLoading = false;
+    },
+
     onSelectBrand: debounce(function (val) {
       const keyword = val.target._value;
       this.$emit("fetch:brand", keyword);
@@ -356,6 +454,13 @@ export default {
         gmailPassword: this.form.gmailPassword,
         additionalInformation: this.form.additionalInformation,
         hubspotKey: this.form.hubspotKey,
+        isCustomEmail: this.form.isCustomEmail,
+        emailHost: this.form.emailHost,
+        emailPassword: this.form.emailPassword,
+        emailPort: Number(this.form.emailPort),
+        emailSecure: this.form.emailSecure,
+        emailSender: this.form.emailSender + "<info@letsbuyasia.id>",
+        emailUser: this.form.emailUser,
       };
 
       if (this.isCreated) {

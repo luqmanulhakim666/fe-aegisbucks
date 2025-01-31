@@ -1,6 +1,7 @@
 <template>
   <div class="d-sm-flex align-center">
     <general-form-text-field
+      v-if="showSearch"
       v-model="search"
       class="searchbar text--large"
       outlined
@@ -69,6 +70,10 @@ import screen from "@/mixins/screen";
 export default {
   mixins: [screen],
   props: {
+    showSearch: {
+      type: Boolean,
+      default: true,
+    },
     body: Object,
     label: String,
     placeholder: {

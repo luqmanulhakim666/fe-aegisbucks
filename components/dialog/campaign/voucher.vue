@@ -197,7 +197,7 @@ export default {
         file: this.form.file,
         retailId: this.form.retailId,
         productId: this.form.productId,
-        expiredDate: dateInstance.toISOString(),
+        expiredDate: dateInstance?.toISOString(),
         limit: this.toInt(this.form.limit),
         usageInstruction: this.form.usageInstruction,
         id: campaignId,

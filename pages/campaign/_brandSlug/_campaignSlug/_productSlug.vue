@@ -443,6 +443,7 @@ export default {
             value: finalValue,
           };
         }),
+        url: window.location.href,
       };
 
       const res = await this.$api.campaigns.claimVoucher(payload);

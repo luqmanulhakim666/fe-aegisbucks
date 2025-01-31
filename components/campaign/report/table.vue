@@ -8,6 +8,7 @@
 
       <general-table-header
         :isCreated="false"
+        :showSearch="showSearch"
         @on:search="onSearch"
         @on:export="onExport"
       />
@@ -140,6 +141,10 @@ import debounce from "lodash/debounce";
 export default {
   mixins: [pipe],
   props: {
+    showSearch: {
+      type: Boolean,
+      default: true,
+    },
     paginate: {
       type: Boolean,
       default: true,

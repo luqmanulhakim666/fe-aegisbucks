@@ -37,6 +37,10 @@ export default (ctx) => {
       return await $axios.post("/user-analytic", body);
     },
 
+    async sendEmailTest(body) {
+      return await $axios.post(`${url}/test-email`, body);
+    },
+
     claim: {
       async detail(campaignId, groupId) {
         return await $axios.get(
@@ -127,6 +131,12 @@ export default (ctx) => {
         let q = `?${qs.stringify(query)}`;
         return await $axios.get(
           `${url}/${campaignId}/report/voucher-claims${q}`
+        );
+      },
+
+      async getClaimByUtm(campaignId) {
+        return await $axios.get(
+          `${url}/${campaignId}/report/voucher-claim-by-utm-source`
         );
       },
 

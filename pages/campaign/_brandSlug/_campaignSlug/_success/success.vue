@@ -109,15 +109,19 @@
         <span v-html="description"></span>
       </template>
 
-      <v-btn
-        v-if="getCTA"
-        @click="goToCtaLink()"
-        block
-        large
-        :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
-        class="text-capitalize h6--xsmall mt-8"
-        >{{ getCTA["name"] ? getCTA["name"] : "Click Here" }}</v-btn
-      >
+      <template v-if="hasCtaItems">
+        <div v-for="(item, index) in campaign.ctaItems" :key="index">
+          <v-btn
+            depressed
+            @click="goToCtaLink(index)"
+            block
+            large
+            :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
+            class="text-capitalize h6--xsmall mt-8"
+            >{{ item.label ? item.label : "Click Here" }}</v-btn
+          >
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -179,9 +183,8 @@ export default {
       );
       return item?.content;
     },
-    getCTA() {
-      const item = this.campaign.thanksSection?.find((x) => x.type === "cta");
-      return item;
+    hasCtaItems() {
+      return this.campaign?.ctaItems?.length > 0;
     },
     retailName() {
       return this.item.retail?.name;
@@ -246,8 +249,8 @@ export default {
       }
     },
 
-    goToCtaLink() {
-      const url = this.getCTA["url"];
+    goToCtaLink(index) {
+      const url = this.campaign?.ctaItems[index]["url"];
 
       let domain = url.replace(/(^\w+:|^)\/\//, "");
       if (!url) return;

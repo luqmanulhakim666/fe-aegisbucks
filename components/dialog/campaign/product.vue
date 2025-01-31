@@ -242,6 +242,10 @@ export default {
         key: "{{promoLabel}}",
       },
       {
+        label: "Header Image",
+        key: "<img style='width:100px' src={{headerImage}} />",
+      },
+      {
         label: "Campaign Name",
         key: "{{campaignName}}",
       },
@@ -252,6 +256,10 @@ export default {
       {
         label: "Voucher Code",
         key: `<div class="voucher-code"><p>{{voucherCode}}</p></div>`,
+      },
+      {
+        label: "voucherBarcode",
+        key: "<img style='width:200px' src={{voucherBarcode}} />",
       },
       {
         label: "Retail Name",
@@ -265,7 +273,9 @@ export default {
       let dummyData = {
         userName: "John Doe",
         userEmail: "johndoe@gmail.com",
+        voucherBarcode: "./images/dummy/barcode.png",
         productName: this.form.productId?.name,
+        headerImage: this.getImage({ id: this.campaign?.emailHeaderImageId }),
         brandLogo: this.getImage({ id: this.campaign?.brand?.logoId }),
         brandName: this.campaign.brand?.name,
         promoLabel: this.form.promoLabel,
