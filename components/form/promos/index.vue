@@ -63,6 +63,22 @@
     />
 
     <general-form-autocomplete
+      :disabled="!form.brandId"
+      v-model="form.productId"
+      :loading="loadingFetchProducts"
+      :items="products"
+      item-value="id"
+      item-text="name"
+      dense
+      required
+      bold
+      label="Product"
+      :rules="[required]"
+      outlined
+      @keydown="onSelectProduct"
+    />
+
+    <general-form-autocomplete
       v-model="form.retails"
       multiple
       label="Retail"
@@ -110,6 +126,15 @@
       bold
     />
 
+    <general-form-rich-editor
+      class="mb-8"
+      required
+      v-model="form.howToInfo"
+      label="How To"
+      outlined
+      bold
+      :rules="[required]"
+    />
     <general-form-rich-editor
       class="mb-8"
       required
@@ -183,8 +208,10 @@ export default {
     form: Object,
     brands: Array,
     partners: Array,
+    products: Array,
     loadingFetchBrands: Boolean,
     loadingFetchPartners: Boolean,
+    loadingFetchProducts: Boolean,
   },
 
   computed: {
@@ -200,6 +227,11 @@ export default {
       this.$emit("fetch:brand", keyword);
     }, 500),
 
+    onSelectProduct: debounce(function (val) {
+      const keyword = val.target._value;
+      this.$emit("fetch:products", keyword);
+    }, 500),
+
     onSelectPartner: debounce(function (val) {
       const keyword = val.target._value;
       this.$emit("fetch:partners", keyword);
@@ -207,6 +239,20 @@ export default {
 
     onRemoveFile() {
       this.form.image = "";
+    },
+  },
+
+  watch: {
+    "form.brandId": {
+      handler(oldVal, newVal) {
+        console.log("oldVa", oldVal);
+        console.log("newVal", newVal);
+
+        if (oldVal !== newVal) {
+          this.$emit("fetch:products", "");
+        }
+      },
+      immediate: true,
     },
   },
 };

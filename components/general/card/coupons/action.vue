@@ -1,31 +1,25 @@
 <template>
   <v-card
     flat
-    class="course__card d-flex flex-column justify-space-between white rounded-xxl pa-4 fill-height pointer elevation-1"
+    class="promo_card d-flex flex-column justify-space-between white rounded-xxl pa-4 fill-height pointer elevation-1"
     @click="onDetail()"
   >
-    <div>
-      <div class="course__card-top">
-        <img
-          alt="Offer image"
-          class="action_card-image full-width rounded-xl"
-          :src="getImage(image)"
-          @error="onErrorImage"
-        />
-      </div>
+    <div class="promo_card-top">
+      <img
+        alt="img"
+        class="full-width rounded-xl"
+        :src="getImage(image)"
+        @error="onErrorImage"
+      />
 
-      <!-- Title -->
-      <div class="course__card__title">
-        <p class="h7--xxsmall dark--text">{{ name }}</p>
-      </div>
+      <p class="promo_card-top_title h7--xxsmall dark--text">{{ name }}</p>
     </div>
 
-    <!-- Progress -->
     <div class="mt-4">
       <div class="d-flex align-center mr-4">
         <v-icon size="12" color="dark lighten-2">mdi-clock</v-icon>
         <p class="p--small ml-2 dark--text text-lighten-2">
-          {{ diffDays }} Days left
+          {{ diffDays }}
         </p>
       </div>
 
@@ -34,7 +28,7 @@
         x-small
         block
         depressed
-        class="lms_card-btn text-capitalize h7--xxsmall mt-4 secondary"
+        class="text-capitalize h7--xxsmall mt-4 secondary lighten-1"
         >Claim</v-btn
       >
     </div>
@@ -47,7 +41,7 @@ import pipe from "@/mixins/pipe";
 export default {
   mixins: [media, pipe],
   props: {
-    id: String,
+    slug: String,
     image: Object,
     name: String,
     expiredDate: String,
@@ -67,69 +61,46 @@ export default {
       const expDate = this.$dayjs(this.expiredDate);
       const today = this.$dayjs(date).format("YYYY-MM-DDD");
 
-      return expDate.diff(today, "day");
+      if (expDate.diff(today, "day") < 0) {
+        return "Expired";
+      }
+
+      return expDate.diff(today, "day") + " Days left";
     },
   },
 
   methods: {
     onDetail() {
-      this.$router.push(this.id);
+      this.$router.push(this.slug);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.course__card {
+.promo_card {
   &-top {
     position: relative;
     &_label {
       position: absolute;
       top: 0;
     }
-  }
-  &__label {
-    position: absolute;
-    z-index: 2;
-  }
 
-  &__tags {
-    height: 43px;
-  }
+    img {
+      height: auto;
+      max-height: 140px;
+      object-fit: contain;
+    }
 
-  &__title {
-    height: 50px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-
-  &__description {
-    height: 40px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-
-  &__img {
-    height: 158px;
-    &-finish {
-      filter: grayscale(100%);
+    &_title {
+      height: 50px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
   }
-}
-
-::v-deep .v-rating .v-icon {
-  padding: 1px !important;
-}
-
-::v-deep .v-card--link:before {
-  background: none;
 }
 </style>

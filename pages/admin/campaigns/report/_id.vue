@@ -153,6 +153,18 @@
     <v-divider class="my-8 dark--text" />
 
     <campaign-report-table
+      label="UTM Reports"
+      :items="items.claimByUtm"
+      :headers="headers.claimByUtm"
+      :isLoading="state.loading.claimByUtm"
+      :paginate="false"
+      :showSearch="false"
+      @on:export="onExportClaimByUtm"
+    />
+
+    <v-divider class="my-8 dark--text" />
+
+    <campaign-report-table
       showClaimStatus
       filterDateRange
       label="Voucher Claims"
@@ -296,10 +308,32 @@ export default {
         pageViews: false,
         productStocks: false,
         voucherClaims: false,
+        claimByUtm: false,
       },
     },
 
     headers: {
+      claimByUtm: [
+        {
+          text: "No",
+          value: "no",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+          width: 30,
+        },
+        {
+          text: "Link",
+          value: "name",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Total",
+          value: "total",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+      ],
       pageViews: [
         {
           text: "No",
@@ -468,6 +502,7 @@ export default {
       pageViews: [],
       productStocks: [],
       voucherClaims: [],
+      claimByUtm: [],
       breadcrumbs: [
         { text: "Campaigns", slug: "/admin/campaigns" },
         { text: "", slug: "" },
@@ -480,6 +515,7 @@ export default {
     this.fetchPageView();
     this.fetchProductStocks();
     this.fetchVoucherClaims();
+    this.fetchClaimByUtm();
   },
 
   mounted() {
@@ -689,6 +725,33 @@ export default {
       this.state.loading.voucherClaims = false;
     },
 
+    async fetchClaimByUtm() {
+      this.state.loading.claimByUtm = true;
+
+      const res = await this.$api.campaigns.report.getClaimByUtm(this.id);
+
+      if (res.success) {
+        let name = "";
+        this.items.claimByUtm = res.data?.map((x, index) => ({
+          no: index + 1,
+          name: x.utmSource?.includes("ig")
+            ? "Instagram"
+            : x.utmSource?.includes("fb")
+            ? "Facebook"
+            : !!x.utmSource
+            ? x.utmSource
+            : "Organic",
+          ...x,
+        }));
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.state.loading.claimByUtm = false;
+    },
+
     onChangePaginationVoucherClaims(val) {
       this.body.voucherClaims.page = val;
       this.fetchVoucherClaims();
@@ -717,6 +780,18 @@ export default {
       const url = this.$api.campaigns.report.export(
         this.campaign?.id,
         "retail-product-stocks",
+        this.body.productStocks,
+        token
+      );
+      window.open(url);
+    },
+
+    onExportClaimByUtm() {
+      const token = this.$store.getters["auth/isToken"];
+
+      const url = this.$api.campaigns.report.export(
+        this.campaign?.id,
+        "voucher-claim-by-utm-source",
         this.body.productStocks,
         token
       );

@@ -5,11 +5,11 @@
     </template>
 
     <template v-if="!state.isLoading">
-      <v-img
-        class="cover rounded-xl"
-        height="350"
-        :src="getImage(item)"
-      ></v-img>
+      <v-btn small class="mb-6" depressed @click="() => $router.push('/')">
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+
+      <v-img class="cover rounded-xl" height="350" :src="getImage(item)" />
 
       <h3 class="h3--xlarge my-8">{{ item.name }}</h3>
 
@@ -94,17 +94,20 @@ import pipe from "@/mixins/pipe";
 import alert from "@/mixins/alert";
 export default {
   async asyncData({ route, app }) {
-    const id = route.params.id;
+    const slug = route.params.slug;
     let item = {};
 
-    const res = await app.$api.promos.getOne(id);
-
-    item = res.data;
+    try {
+      const res = await app.$api.promos.getOne(slug);
+      item = res.data;
+    } catch (error) {
+      console.log(error);
+    }
 
     return { item: item };
   },
   mixins: [alert, media, pipe],
-  middleware: "userAuthenticared",
+  middleware: "userAuthenticated",
   meta: [meta],
   layout: "app",
   data: () => ({
@@ -112,6 +115,16 @@ export default {
       isLoading: false,
     },
   }),
+
+  async created() {
+    try {
+      console.log("w");
+      const res = await this.$api.promos.getOne(id);
+      console.log("res", res);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
   computed: {},
 

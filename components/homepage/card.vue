@@ -2,7 +2,9 @@
   <div>
     <div class="d-flex align-center justify-space-between">
       <p class="h5--small dark--text">{{ title }}</p>
-      <p class="h7--xxsmall pointer dark--text">Lihat Semua</p>
+      <p @click="onSeeMore()" class="h7--xxsmall pointer dark--text">
+        Lihat Semua
+      </p>
     </div>
 
     <template v-if="!items.length">
@@ -24,8 +26,7 @@
           class="pa-2 fill-height"
         >
           <general-card-coupons-action
-            @click="onDetail(item.id)"
-            :id="item.id"
+            :slug="item.slug"
             :showButton="showButton"
             :image="item"
             :name="item.name"
@@ -50,6 +51,10 @@ export default {
     items: Array,
     title: String,
     showButton: false,
+    isCoupon: {
+      type: Boolean,
+      default: null,
+    },
   },
   components: {
     VueSlickCarousel,
@@ -60,6 +65,15 @@ export default {
       if (this.isTablet) return 2;
       if (this.isDesktop) return 3;
       return 3;
+    },
+  },
+  methods: {
+    onSeeMore() {
+      if (this.isCoupon) {
+        return this.$router.push("/search?hasCoupon=true");
+      }
+
+      return this.$router.push("/search?hasCoupon=false");
     },
   },
 };

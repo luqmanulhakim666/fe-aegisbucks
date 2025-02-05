@@ -2,7 +2,9 @@
   <div class="shadow-base app-navbar">
     <div class="app-navbar_wrapper mx-auto px-10 py-4">
       <div class="d-flex justify-space-between">
-        <general-logo :max_width="200" />
+        <div class="pointer" @click="goHome()">
+          <general-logo :max_width="200" />
+        </div>
         <v-menu class="profile" left offset-y nudge-top="-10">
           <template v-slot:activator="{ on, attrs }">
             <v-avatar size="44" dark v-bind="attrs" v-on="on">
@@ -60,6 +62,11 @@ export default {
   },
 
   methods: {
+    goHome() {
+      console.log("ww");
+      this.$router.push("/");
+    },
+
     onLogout() {
       this.$store.dispatch("auth/logout");
     },

@@ -15,10 +15,13 @@
             :form="form"
             :brands="items.brands"
             :partners="items.partners"
+            :products="items.products"
             :loadingFetchBrands="state.loadingFetchBrands"
             :loadingFetchPartners="state.loadingFetchPartners"
+            :loadingFetchProducts="state.loadingFetchProducts"
             @fetch:brand="fetchBrands"
             @fetch:partners="fetchRetailPartners"
+            @fetch:products="fetchProducts"
           />
         </v-form>
       </div>
@@ -65,6 +68,7 @@ export default {
       name: "",
       image: {},
       brandId: "",
+      productId: "",
       retails: [],
       expiredDate: "",
       termCondition: "",
@@ -87,12 +91,14 @@ export default {
       isLoading: false,
       loadingFetchBrands: false,
       loadingFetchPartners: false,
+      loadingFetchProducts: false,
       isValid: true,
       item: {},
     },
     items: {
       brands: [],
       partners: [],
+      products: [],
       breadcrumbs: [
         { text: "Promos", slug: "/admin/promos" },
         { text: "Create New Promos", slug: "" },
@@ -150,6 +156,32 @@ export default {
       }
 
       this.state.loadingFetchPartners = false;
+    },
+
+    async fetchProducts(val) {
+      this.state.loadingFetchProducts = true;
+
+      const payload = {
+        brandId: this.form.brandId,
+        limit: 50,
+        page: 1,
+        keyword: val || "",
+        sort: "desc",
+      };
+
+      const res = await this.$api.products.getList(payload);
+
+      if (res.success) {
+        this.items.products = res.data.list;
+
+        console.log(res);
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.state.loadingFetchProducts = false;
     },
 
     async fetchBrands(val) {
@@ -231,6 +263,7 @@ export default {
           name: this.form.name,
           imageId: this.form.image?.id || null,
           brandId: this.form.brandId,
+          productId: this.form.productId,
           retails: this.form.retails,
           expiredDate: dateInstance.toISOString(),
           termCondition: this.form.termCondition,

@@ -1,7 +1,21 @@
 <template>
   <div class="container">
     <template v-if="state.isLoading">
-      <general-loading />
+      <general-skeleton-promo-card />
+
+      <v-row>
+        <v-col cols="12" md="4" v-for="i in 3" :key="i">
+          <general-skeleton-promo-card />
+        </v-col>
+      </v-row>
+
+      <general-skeleton-promo-card class="my-8" />
+
+      <v-row>
+        <v-col cols="12" md="4" v-for="i in 3" :key="i">
+          <general-skeleton-promo-card />
+        </v-col>
+      </v-row>
     </template>
 
     <template v-if="!state.isLoading">
@@ -13,6 +27,7 @@
         :items="items.mainOffers"
         :settings="settings.product"
         showButton
+        :isCoupon="false"
       />
 
       <homepage-special-offers
@@ -27,10 +42,11 @@
         title="Penawaran Kupon"
         :settings="settings.product"
         :items="items.couponOffers"
+        isCoupon
       />
 
       <!-- BRANDS -->
-      <homepage-brands :items="items.brands" />
+      <!-- <homepage-brands :items="items.brands" /> -->
     </template>
   </div>
 </template>
@@ -40,8 +56,8 @@ import meta from "@/mixins/meta";
 import alert from "@/mixins/alert";
 export default {
   layout: "app",
+  middleware: "userAuthenticated",
   mixins: [alert],
-  middleware: "userAuthenticared",
   meta: [meta],
   data: () => ({
     state: {
@@ -65,6 +81,8 @@ export default {
         slidesToScroll: 1,
       },
       product: {
+        autoplay: true,
+        autoplaySpeed: 1500,
         focusOnSelect: true,
         infinite: true,
         slidesToScroll: 1,
@@ -105,15 +123,22 @@ export default {
         this.$api.promos.getList({ ...body, hasCoupon: false }),
         this.$api.promos.getList({ ...body, isSpecial: true }),
         this.$api.partners.getList({ page: 1, limit: 12 }),
+        // this.$api.brands.getList({ page: 1, limit: 12 }),
       ];
 
-      let [resCouponOffers, resMainOffers, resSpecialOffers, resRetail] =
-        await Promise.all(api);
+      let [
+        resCouponOffers,
+        resMainOffers,
+        resSpecialOffers,
+        resRetail,
+        resBrands,
+      ] = await Promise.all(api);
 
       this.handleCouponOffers(resCouponOffers);
       this.handleMainOffers(resMainOffers);
       this.handleSpecialOffers(resSpecialOffers);
       this.handleRetails(resRetail);
+      // this.handleBrands(resBrands);
 
       this.state.isLoading = false;
     },
@@ -121,6 +146,16 @@ export default {
     handleMainOffers(res) {
       if (res.success) {
         this.items.mainOffers = res.data.list;
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+    },
+
+    handleBrands(res) {
+      if (res.success) {
+        this.items.brands = res.data.list;
       }
 
       if (!res.success) {

@@ -31,9 +31,8 @@ import rules from "@/mixins/rules";
 import meta from "@/mixins/meta";
 export default {
   mixins: [rules, meta],
-  // middleware: "userUnauthenticated",
+  middleware: "userUnauthenticated",
   layout: "empty",
-
   data: () => ({
     items: [
       { label: "Facebook", src: "mdi-facebook" },
