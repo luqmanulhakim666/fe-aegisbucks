@@ -243,7 +243,7 @@ export default {
       },
       {
         label: "Header Image",
-        key: "<img style='width:auto; height: auto; display: flex; margin: auto;' src={{headerImage}} />",
+        key: "<img style='width:100%; height: auto; display: flex; margin: auto;' src={{headerImage}} />",
       },
       {
         label: "Campaign Name",
