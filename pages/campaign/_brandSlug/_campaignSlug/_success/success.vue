@@ -14,7 +14,8 @@
 
         <div class="d-flex flex-column justify-center mt-n10">
           <h3 class="h3--small text-center">
-            Selamat Kamu berhasil mendapatkan {{ getTotalVouchers }}
+            Selamat kamu berhasil mendapatkan <br />
+            {{ getTotalVouchers }}
             {{ handleVoucherName }}
           </h3>
 

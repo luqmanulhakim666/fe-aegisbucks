@@ -243,7 +243,7 @@ export default {
       },
       {
         label: "Header Image",
-        key: "<img style='width:100px' src={{headerImage}} />",
+        key: "<img style='width:auto; height: auto; display: flex; margin: auto;' src={{headerImage}} />",
       },
       {
         label: "Campaign Name",
@@ -259,7 +259,7 @@ export default {
       },
       {
         label: "voucherBarcode",
-        key: "<img style='width:200px' src={{voucherBarcode}} />",
+        key: "<img style='width:200px; display: flex;margin: auto; justify-content: center;' src={{voucherBarcode}} />",
       },
       {
         label: "Retail Name",
