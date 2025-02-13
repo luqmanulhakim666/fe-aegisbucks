@@ -119,6 +119,28 @@
                         {{ button.label }}
                       </v-btn>
                     </v-col>
+
+                    <v-col cols="auto" v-if="campaign.type === 'merchant'">
+                      <v-btn
+                        small
+                        depressed
+                        class="text-capitalize h7--xxsmall rounded-pill primary lighten-2"
+                        @click="onAddText('{{merchantCategoryName}}')"
+                      >
+                        Merchant
+                      </v-btn>
+                    </v-col>
+
+                    <v-col cols="auto" v-if="campaign.type === 'merchant'">
+                      <v-btn
+                        small
+                        depressed
+                        class="text-capitalize h7--xxsmall rounded-pill primary lighten-2"
+                        @click="onAddText('{{merchantCityName}}')"
+                      >
+                        Kota
+                      </v-btn>
+                    </v-col>
                   </v-row>
 
                   <client-only>
@@ -285,6 +307,8 @@ export default {
           "<ol><li>Kunjungi<strong>&nbsp;</strong><strong>Toko</strong></li><li>Ambil&nbsp;<strong>Product</strong></li><li>Saat di kasir, beritahu kasir bahwa Anda punya kode voucher</li><li>Kasir akan scan&nbsp;<strong>Product</strong>&nbsp;dan kemudian&nbsp;scan barcode / input kode voucher Anda</li></ol>",
         voucherCode: "CODE001",
         retailName: "Toko",
+        merchantCategoryName: "Merchant A",
+        merchantCityName: "Jakarta",
       };
 
       // Create a copy of the original customEmailTemplate
@@ -384,6 +408,15 @@ export default {
 
   watch: {
     async dialog(val) {
+      if (this.campaign.type === "merchant") {
+        const findRetailIndex = this.buttons?.findIndex((x) => {
+          return x.key === "{{retailName}}";
+        });
+
+        if (findRetailIndex >= 0) {
+          this.buttons?.splice(findRetailIndex, 1);
+        }
+      }
       if (val && this.item?.productId) {
         this.form = JSON.parse(JSON.stringify(this.item));
       }

@@ -62,7 +62,8 @@
         <!-- Retail Partners -->
         <campaign-retail-partners
           class="mb-4"
-          :retailPartners="campaign.retails"
+          :retailPartners="handleStores"
+          :isRetailType="isRetailType"
           :form="form"
           @on:select="onSelectRetailPartner"
         />
@@ -190,7 +191,6 @@ import pipe from "@/mixins/pipe";
 import rules from "@/mixins/rules";
 import tracking from "@/mixins/tracking";
 import meta from "@/mixins/meta";
-import { state } from "../../../../store/auth";
 const Cookie = process.client ? require("js-cookie") : undefined;
 
 export default {
@@ -269,7 +269,10 @@ export default {
       this.captchaVerified = true;
     }
 
-    const formLocalStorage = JSON.parse(localStorage.getItem("form"));
+    const formLocalStorage =
+      typeof this.formLocalStorage === "object"
+        ? JSON.parse(localStorage.getItem("form"))
+        : {};
 
     if (
       formLocalStorage?.productId === this.form?.productId &&
@@ -294,6 +297,17 @@ export default {
   },
 
   computed: {
+    isRetailType() {
+      return this.campaign?.type === "retail";
+    },
+
+    handleStores() {
+      if (this.isRetailType) {
+        return this.campaign.retails;
+      }
+
+      return this.campaign?.merchantCategories;
+    },
     getMessageInstagram() {
       return `Halo min, saya mau voucher ${this.campaign?.brand.name} ${this.campaign?.name} ${this.campaign?.campaignProduct?.product?.name}`;
     },
@@ -360,7 +374,6 @@ export default {
           this.captchaVerified = true;
         }
       } catch (error) {
-        console.log("recaptcha err:", error);
       } finally {
         this.state.loadingRecaptcha = false;
       }
@@ -445,6 +458,12 @@ export default {
         }),
         url: window.location.href,
       };
+
+      if (this.campaign.type === "merchant") {
+        delete payload.retailId;
+
+        payload["merchantCategoryId"] = this.form.retailId;
+      }
 
       const res = await this.$api.campaigns.claimVoucher(payload);
 

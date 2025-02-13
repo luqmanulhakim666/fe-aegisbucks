@@ -76,6 +76,17 @@
                   >
                   dan dapat digunakan di <b>{{ retailName }}</b>
                 </p>
+
+                <template v-if="!isRetailType">
+                  <p class="caps--small">Kota:</p>
+
+                  <ul>
+                    <li v-for="(city, index) in getCitites" :key="index">
+                      <p class="caps--small text-capitalize">{{ city }}</p>
+                    </li>
+                  </ul>
+                </template>
+
                 <br />
 
                 <p class="caps--small">
@@ -167,6 +178,16 @@ export default {
   }),
 
   computed: {
+    getCitites() {
+      return this.data?.merchantCities?.map((x) => {
+        return x.name?.toLowerCase();
+      });
+    },
+
+    isRetailType() {
+      return this.item.type === "retail";
+    },
+
     getImages() {
       const images = this.campaign.thanksSection?.filter(
         (x) => x.type === "image"
@@ -188,7 +209,11 @@ export default {
       return this.campaign?.ctaItems?.length > 0;
     },
     retailName() {
-      return this.item.retail?.name;
+      if (this.isRetailType) {
+        return this.item.retail?.name;
+      }
+
+      return `${this.item.merchantCategory?.name}`;
     },
     productName() {
       return this.item.product?.name;

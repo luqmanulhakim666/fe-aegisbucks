@@ -17,6 +17,10 @@ export default (ctx) => {
       return await $axios.get(`${url}/${id}`);
     },
 
+    async slug(id) {
+      return await $axios.get(`${url}/${id}/slug`);
+    },
+
     async update(id, body) {
       return await $axios.put(`${url}/${id}`, body);
     },

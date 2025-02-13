@@ -1,3 +1,4 @@
+import general from "@/api/general";
 import auth from "@/api/auth";
 import media from "@/api/media";
 import users from "@/api/users";
@@ -12,6 +13,7 @@ import promos from "@/api/promos";
 
 export default (ctx, inject) => {
   let api = {};
+  api.general = general(ctx);
   api.auth = auth(ctx);
   api.media = media(ctx);
   api.users = users(ctx);

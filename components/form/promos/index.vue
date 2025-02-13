@@ -245,9 +245,6 @@ export default {
   watch: {
     "form.brandId": {
       handler(oldVal, newVal) {
-        console.log("oldVa", oldVal);
-        console.log("newVal", newVal);
-
         if (oldVal !== newVal) {
           this.$emit("fetch:products", "");
         }

@@ -25,6 +25,14 @@ export default (ctx) => {
       return await $axios.delete(`${url}/${id}`);
     },
 
+    async getQrCode(id) {
+      const res = await $axios.get(`${url}/${id}/qrcode`, {
+        responseType: "blob",
+      });
+
+      return res;
+    },
+
     category: {
       async getList(query = {}) {
         let q = qs.stringify(query);

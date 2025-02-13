@@ -11,9 +11,13 @@
       <div class="white pa-6 rounded-xl">
         <v-form v-model="state.isValid" ref="form">
           <form-merchants
-            v-if="!state.isLoading"
             :form="form"
             :categories="items.categories"
+            :regencies="items.regencies"
+            :loadingRegencies="state.loadingRegencies"
+            :loadingCategories="state.loadingCategories"
+            @fetch:regencies="getRegencies"
+            @fetch:categories="fetchCategories"
           />
         </v-form>
       </div>
@@ -63,13 +67,18 @@ export default {
       description: "",
       agreementNumber: "",
       agreementDate: "",
+      cityId: "",
+      image: "",
     },
     state: {
+      loadingRegencies: false,
+      loadingCategories: false,
       isLoading: false,
       isValid: true,
       item: {},
     },
     items: {
+      regencies: [],
       categories: [],
       breadcrumbs: [
         { text: "Merchants", slug: "/admin/merchants" },
@@ -85,7 +94,10 @@ export default {
       this.getOne();
     }
 
-    this.fetchCategories();
+    if (this.isCreated) {
+      this.getRegencies();
+      this.fetchCategories();
+    }
   },
 
   mounted() {
@@ -103,12 +115,29 @@ export default {
   },
 
   methods: {
-    async fetchCategories() {
-      this.state.isLoading = true;
+    async getRegencies(val) {
+      this.state.loadingRegencies = true;
       let payload = {
-        page: 0,
-        limit: 0,
-        keyword: "",
+        keyword: val,
+        limit: 10,
+        sort: "name",
+      };
+
+      let res = await this.$api.general.regencies(payload);
+
+      if (res.success) {
+        this.items.regencies = res.data.list;
+      }
+
+      this.state.loadingRegencies = false;
+    },
+
+    async fetchCategories(val) {
+      this.state.loadingCategories = true;
+      let payload = {
+        page: 1,
+        limit: 10,
+        keyword: val,
       };
 
       let res = await this.$api.merchants.category.getList(payload);
@@ -120,7 +149,7 @@ export default {
       if (!res.success) {
         this.setFailedAlert(res);
       }
-      this.state.isLoading = false;
+      this.state.loadingCategories = false;
     },
     async getOne() {
       this.state.isLoading = true;
@@ -141,6 +170,9 @@ export default {
         this.setFailedAlert(res);
       }
 
+      this.getRegencies(res.data?.city?.name);
+      this.fetchCategories(res.data?.category?.name);
+
       this.state.isLoading = false;
     },
 
@@ -160,6 +192,7 @@ export default {
           description: this.form.description,
           agreementNumber: this.form.agreementNumber,
           agreementDate: this.form.agreementDate,
+          cityId: this.form.cityId,
         };
 
         let res = this.isCreated

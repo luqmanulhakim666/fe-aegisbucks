@@ -41,6 +41,10 @@ export default (ctx) => {
       return await $axios.post(`${url}/test-email`, body);
     },
 
+    async redeem(body) {
+      return await $axios.post(`${url}/redeem-voucher-code-merchant`, body);
+    },
+
     claim: {
       async detail(campaignId, groupId) {
         return await $axios.get(
@@ -56,16 +60,49 @@ export default (ctx) => {
         return await $axios.get(`${url}/${id}/voucher?${q}`);
       },
 
-      async upload(body) {
+      async upload(body, isRetailType) {
         let formData = new window.FormData();
+
+        if (isRetailType) {
+          formData.append("retailId", body.retailId);
+        }
+
+        if (!isRetailType) {
+          body.merchantCategories.forEach((category) => {
+            formData.append("merchantCategories[]", category);
+          });
+
+          body.merchantCities.forEach((city) => {
+            formData.append("merchantCities[]", city);
+          });
+        }
+
         formData.append("file", body.file);
-        formData.append("retailId", body.retailId);
         formData.append("productId", body.productId);
         formData.append("expiredDate", body.expiredDate);
         formData.append("limit", body.limit);
         formData.append("usageInstruction", body.usageInstruction);
 
-        return await $axios.post(`${url}/${body.id}/voucher`, formData);
+        if (!body.autoGenerate) {
+          return await $axios.post(`${url}/${body.id}/voucher`, formData);
+        }
+
+        if (body.autoGenerate) {
+          return this.autoGenerateVoucher(body);
+        }
+      },
+
+      async autoGenerateVoucher(body) {
+        let payload = {
+          productId: body.productId,
+          expiredDate: body.expiredDate,
+          limit: body.limit,
+          usageInstruction: body.usageInstruction,
+          generateOptions: body.generateOptions,
+          merchantCategories: body.merchantCategories,
+          merchantCities: body.merchantCities,
+        };
+        return await $axios.post(`${url}/${body.id}/voucher/generate`, payload);
       },
 
       async update(campaignId, voucherId, body) {

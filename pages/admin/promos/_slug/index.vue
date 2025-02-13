@@ -173,8 +173,6 @@ export default {
 
       if (res.success) {
         this.items.products = res.data.list;
-
-        console.log(res);
       }
 
       if (!res.success) {

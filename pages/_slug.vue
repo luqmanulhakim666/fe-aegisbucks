@@ -98,11 +98,9 @@ export default {
     let item = {};
 
     try {
-      const res = await app.$api.promos.getOne(slug);
+      const res = await app.$api.promos.slug(slug);
       item = res.data;
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
 
     return { item: item };
   },
@@ -115,16 +113,6 @@ export default {
       isLoading: false,
     },
   }),
-
-  async created() {
-    try {
-      console.log("w");
-      const res = await this.$api.promos.getOne(id);
-      console.log("res", res);
-    } catch (error) {
-      console.log(error);
-    }
-  },
 
   computed: {},
 

@@ -25,11 +25,14 @@
       >
         <template v-slot:label>
           <img
+            v-if="isRetailType"
             width="80"
             class="pointer"
             :src="getImage(item.image)"
             alt="img"
           />
+
+          <v-icon v-if="!isRetailType" color="dark"> mdi-store </v-icon>
           <span class="ml-4 text--default">{{ item.name }}</span>
         </template>
       </v-radio>
@@ -44,6 +47,7 @@ export default {
   mixins: [media, rules],
   props: {
     retailPartners: Array,
+    isRetailType: Boolean,
     form: Object,
   },
 

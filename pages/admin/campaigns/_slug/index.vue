@@ -27,6 +27,7 @@
             :form="form"
             :users="items.users"
             :brands="items.brands"
+            :campaignTypes="items.campaignTypes"
             :loading="state.isLoading"
             :loadingFetchBrand="state.loadingFetchBrand"
             @on:next="onNext"
@@ -73,6 +74,7 @@
 import rules from "@/mixins/rules";
 import meta from "@/mixins/meta";
 import utils from "@/mixins/utils";
+import { CAMPAIGN_TYPES } from "@/data/general";
 export default {
   mixins: [rules, meta, utils],
   middleware: ["authenticated", "authorized"],
@@ -123,6 +125,7 @@ export default {
       emailSecure: false,
       emailSender: "",
       emailUser: "",
+      type: "retail",
     },
     state: {
       isLoading: false,
@@ -135,6 +138,7 @@ export default {
       brands: [],
       products: [],
       partners: [],
+      campaignTypes: CAMPAIGN_TYPES,
       tab_headers: [
         {
           name: "General",
@@ -254,7 +258,10 @@ export default {
         keyword: val || "",
       };
 
-      const res = await this.$api.partners.getList(payload);
+      const res =
+        this.form.type === "retail"
+          ? await this.$api.partners.getList(payload)
+          : await this.$api.merchants.getList(payload);
 
       if (res.success) {
         this.items.partners = res.data.list;

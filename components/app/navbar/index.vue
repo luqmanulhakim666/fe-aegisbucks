@@ -63,7 +63,6 @@ export default {
 
   methods: {
     goHome() {
-      console.log("ww");
       this.$router.push("/");
     },
 

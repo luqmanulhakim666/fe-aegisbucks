@@ -17,6 +17,11 @@
       no-data-text="No Data"
       class="mt-4"
     >
+      <template v-slot:[`item.createdAt`]="{ item }">
+        <p class="text-capitalize">
+          {{ fullDateMonthTextYear(item.createdAt, "-") }}
+        </p>
+      </template>
       <template v-slot:[`item.action`]="{ item }">
         <v-menu auto offset-x rounded="xxl">
           <template v-slot:activator="{ on, attrs }">
@@ -75,8 +80,10 @@
 <script>
 import routes from "@/mixins/routes";
 import meta from "@/mixins/meta";
+import pipe from "@/mixins/pipe";
+
 export default {
-  mixins: [routes, meta],
+  mixins: [routes, meta, pipe],
   middleware: ["authenticated", "authorized"],
   meta: {
     page: "admin",
@@ -92,7 +99,7 @@ export default {
       page: 1,
       limit: 10,
       keyword: "",
-      sort: "latest",
+      sort: "desc",
     },
     paging: {},
     state: {
@@ -113,6 +120,12 @@ export default {
       {
         text: "Name",
         value: "name",
+        sortable: false,
+        class: "dark--text h7--xxsmall",
+      },
+      {
+        text: "Created At",
+        value: "createdAt",
         sortable: false,
         class: "dark--text h7--xxsmall",
       },
@@ -142,7 +155,7 @@ export default {
       this.body.page = Number(val?.page) || this.body?.page;
       this.body.limit = Number(val?.limit) || this.body?.limit;
       this.body.keyword = val?.keyword;
-      this.body.sort = val?.sort;
+      this.body.sort = val?.sort || this.body?.sort;
     },
 
     async fetch() {

@@ -56,6 +56,18 @@
                 <span class="h8--supersmall error--text">Hapus</span>
               </v-list-item-title>
             </v-list-item>
+
+            <v-list-item @click="handleQrcodeDialog(item)">
+              <v-list-item-icon class="mr-2">
+                <v-icon size="14" class="dark--text">mdi-qrcode</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title class="dark--text h8--supersmall"
+                  >Show Qrcode</v-list-item-title
+                >
+              </v-list-item-content>
+            </v-list-item>
           </v-list>
         </v-menu>
       </template>
@@ -68,6 +80,12 @@
       :totalPage="paging.totalPage"
       :paging="paging"
       @on:change="onChangePagination"
+    />
+
+    <dialog-campaign-qrcode
+      :dialog="state.dialogQrcode"
+      :item="state.selectedItem"
+      @close="handleQrcodeDialog"
     />
 
     <general-dialog-delete
@@ -98,12 +116,14 @@ export default {
       page: 1,
       limit: 10,
       keyword: "",
-      sort: "latest",
+      sort: "desc",
     },
     paging: {},
     state: {
       isLoading: false,
       dialogDelete: false,
+      dialogQrcode: false,
+
       selectedId: null,
     },
     items: [],
@@ -175,11 +195,17 @@ export default {
   },
 
   methods: {
+    handleQrcodeDialog(item) {
+      if (item?.id) {
+        this.state.selectedItem = item;
+      }
+      this.state.dialogQrcode = !this.state.dialogQrcode;
+    },
     setQuery(val) {
       this.body.page = Number(val?.page) || this.body?.page;
       this.body.limit = Number(val?.limit) || this.body?.limit;
       this.body.keyword = val?.keyword;
-      this.body.sort = val?.sort;
+      this.body.sort = val?.sort || this.body?.sort;
     },
 
     async fetch() {

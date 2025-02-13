@@ -112,7 +112,6 @@ export default {
         console.log(error);
       }
 
-      console.log(query);
       this.state.isLoading = false;
 
       this.keyword = query.keyword;

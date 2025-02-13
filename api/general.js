@@ -1,18 +1,23 @@
-import qs from 'query-string'
+import qs from "query-string";
 
 export default (ctx) => {
-  let { $axios } = ctx
-  let url = '/region'
+  let { $axios } = ctx;
+  let url = "/region";
 
   return {
     async provincies(query = {}) {
-      let q = qs.stringify(query)
-      return await $axios.get(`${url}/provinces?${q}`)
+      let q = qs.stringify(query);
+      return await $axios.get(`${url}/provinces?${q}`);
     },
 
-    async cities(query = {}) {
-      let q = qs.stringify(query)
-      return await $axios.get(`${url}/cities?${q}`)
-    }
-  }
-}
+    async regencies(query = {}) {
+      let q = qs.stringify(query);
+      return await $axios.get(`${url}/regency?${q}`);
+    },
+
+    async districts(query = {}) {
+      let q = qs.stringify(query);
+      return await $axios.get(`${url}/district?${q}`);
+    },
+  };
+};

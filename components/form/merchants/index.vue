@@ -21,7 +21,7 @@
 
     <general-form-autocomplete
       v-model="form.categoryId"
-      label="Brands"
+      label="Merchant Category"
       :items="categories"
       item-text="name"
       item-value="id"
@@ -29,6 +29,8 @@
       required
       bold
       :rules="[required]"
+      :loading="loadingCategories"
+      @keydown="onFetchCategories"
     />
 
     <general-form-text-field
@@ -83,17 +85,37 @@
       outlined
       bold
     />
+    <general-form-autocomplete
+      label="Kota"
+      bold
+      required
+      v-model="form.cityId"
+      className="text-capitalize"
+      outlined
+      hide-details="auto"
+      :items="regencies"
+      item-text="name"
+      item-value="id"
+      :loading="loadingRegencies"
+      :rules="[required]"
+      @keydown="onFetchRegencies"
+    />
   </div>
 </template>
 
 <script>
 import rules from "@/mixins/rules";
 import utils from "@/mixins/utils";
+import debounce from "lodash/debounce";
+
 export default {
   mixins: [rules, utils],
   props: {
     form: Object,
+    regencies: Array,
+    loadingRegencies: Boolean,
     categories: Array,
+    loadingCategories: Boolean,
   },
 
   computed: {
@@ -104,6 +126,16 @@ export default {
   },
 
   methods: {
+    onFetchRegencies: debounce(function (val) {
+      const keyword = val.target._value;
+      this.$emit("fetch:regencies", keyword);
+    }, 500),
+
+    onFetchCategories: debounce(function (val) {
+      const keyword = val.target._value;
+      this.$emit("fetch:categories", keyword);
+    }, 500),
+
     onRemoveFile() {
       this.form.image = "";
       this.form.imageId = "";

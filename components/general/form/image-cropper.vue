@@ -268,7 +268,7 @@ export default {
       croppedImage: null,
       finalCroppedImage: null,
       dialog: false,
-      hasImageId: false,
+      hasImageId: null,
     },
   }),
 

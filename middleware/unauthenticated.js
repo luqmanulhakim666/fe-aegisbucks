@@ -1,11 +1,11 @@
-export default ({ store, redirect, req }) => {
+export default ({ store, redirect }) => {
   const role = store.getters["auth/role"];
 
-  if (role !== "admin") {
-    redirect("/");
-  }
-
   if (store.getters["auth/isLogin"]) {
+    if (role !== "admin") {
+      redirect("/auth/logout");
+    }
+
     redirect(`/${role}/dashboard`);
   }
 };

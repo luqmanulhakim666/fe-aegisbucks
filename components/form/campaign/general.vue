@@ -10,6 +10,27 @@
         :rules="[required]"
       />
 
+      <p class="h6--xsmall label-text mb-2">Campaign Type</p>
+      <v-radio-group
+        row
+        class="mt-0"
+        hide-details
+        v-model="form.type"
+        :rules="[required]"
+      >
+        <v-radio
+          v-for="(item, index) in campaignTypes"
+          :key="index"
+          :ripple="false"
+          :value="item.key"
+          class="mb-6"
+        >
+          <template v-slot:label>
+            <span class="text--default">{{ item.name }}</span>
+          </template>
+        </v-radio>
+      </v-radio-group>
+
       <general-form-select
         v-model="form.userId"
         dense
@@ -352,6 +373,7 @@ export default {
     form: Object,
     users: Array,
     brands: Array,
+    campaignTypes: Array,
   },
 
   data: () => ({
@@ -461,6 +483,7 @@ export default {
         emailSecure: this.form.emailSecure,
         emailSender: this.form.emailSender + "<info@letsbuyasia.id>",
         emailUser: this.form.emailUser,
+        type: this.form.type,
       };
 
       if (this.isCreated) {

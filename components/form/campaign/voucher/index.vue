@@ -4,7 +4,7 @@
       <form-campaign-voucher-detail
         :campaignId="$route.params.slug"
         :voucherId="state.selectedItem.id"
-        :voucherName="`Voucher ${state.selectedItem.retail.name} ${state.selectedItem.campaignProduct.product.name}`"
+        :voucherName="handleVoucherName"
         @go:back="onGoToDetail"
       />
     </template>
@@ -22,7 +22,9 @@
         </v-btn>
 
         <p class="h6--xsmall mt-6 dark--text text--lighten-5">
-          Voucher Partners
+          {{
+            form.type === "retail" ? "Voucher Partners" : "Voucher Merchants"
+          }}
         </p>
 
         <general-form-text-field
@@ -41,6 +43,34 @@
           no-data-text="No Data"
           class="mt-2 border-thin"
         >
+          <template v-slot:[`item.merchantCategory`]="{ item }">
+            <v-row dense>
+              <v-col
+                cols="auto"
+                v-for="(item, index) in item.merchantCategories"
+                :key="index"
+              >
+                <v-chip color="dark lighten-3">
+                  {{ item.merchantCategory.name }}
+                </v-chip>
+              </v-col>
+            </v-row>
+          </template>
+
+          <template v-slot:[`item.merchantCities`]="{ item }">
+            <v-row dense class="my-2">
+              <v-col
+                cols="auto"
+                v-for="(item, index) in item.merchantCities"
+                :key="index"
+              >
+                <v-chip color="dark lighten-3">
+                  {{ item.merchantCity.name }}
+                </v-chip>
+              </v-col>
+            </v-row>
+          </template>
+
           <template v-slot:[`item.voucherName`]="{ item }">
             Voucher {{ item.retail.name }}
             {{ item.campaignProduct.product.name }}
@@ -156,6 +186,7 @@
       :partners="partners"
       :products="products"
       :isEdited="state.isEdited"
+      :isRetailType="isRetailType"
       @fetch:partners="onEmitFetchPartners"
       @on:fetch="fetchVouchers"
       @on:close="state.dialog = false"
@@ -185,57 +216,7 @@ export default {
       limit: 10,
     },
     paging: {},
-    headers: [
-      {
-        text: "No",
-        value: "no",
-        sortable: false,
-        class: "dark--text h7--xxsmall",
-      },
-      {
-        text: "Partner",
-        value: "retail.name",
-        sortable: false,
-        class: "dark--text h7--xxsmall",
-      },
-      {
-        text: "Voucher Name",
-        value: "voucherName",
-        sortable: false,
-        class: "dark--text h7--xxsmall",
-      },
-      {
-        text: "Product",
-        value: "campaignProduct.product.name",
-        sortable: false,
-        class: "dark--text h7--xxsmall",
-      },
-      {
-        text: "Limit per User",
-        value: "limit",
-        sortable: false,
-        class: "dark--text h7--xxsmall",
-      },
-      {
-        text: "Total Voucher",
-        value: "totalCode",
-        sortable: false,
-        class: "dark--text h7--xxsmall",
-      },
-      {
-        text: "Expired Date",
-        value: "expiredDate",
-        sortable: false,
-        class: "dark--text h7--xxsmall",
-      },
-      {
-        text: "Action",
-        value: "action",
-        align: "center",
-        sortable: false,
-        class: "dark--text h7--xxsmall",
-      },
-    ],
+    headers: [],
     meta: {
       title: "",
     },
@@ -262,7 +243,103 @@ export default {
     }
   },
 
+  mounted() {
+    this.setHeader();
+  },
+
+  computed: {
+    handleVoucherName() {
+      return this.isRetailType
+        ? `Voucher ${this.state.selectedItem.retail.name} ${this.state.selectedItem.campaignProduct.product.name}`
+        : "Voucher List";
+    },
+    isRetailType() {
+      return this.form.type === "retail";
+    },
+  },
+
   methods: {
+    setHeader() {
+      this.headers = [
+        {
+          text: "No",
+          value: "no",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Partner",
+          value: "retail.name",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Voucher Name",
+          value: "voucherName",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Product",
+          value: "campaignProduct.product.name",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Limit per User",
+          value: "limit",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Total Voucher",
+          value: "totalCode",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Expired Date",
+          value: "expiredDate",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+        {
+          text: "Action",
+          value: "action",
+          align: "center",
+          sortable: false,
+          class: "dark--text h7--xxsmall",
+        },
+      ];
+      if (!this.isRetailType) {
+        let indexVoucherName = this.headers?.findIndex((x) => {
+          return x.text === "Partner";
+        });
+
+        let indexPartner = this.headers?.findIndex((x) => {
+          return x.value === "voucherName";
+        });
+
+        if (indexVoucherName >= 0) {
+          this.headers.splice(indexVoucherName, 1, {
+            text: "Merchant Category",
+            value: "merchantCategory",
+            sortable: false,
+            class: "dark--text h7--xxsmall",
+          });
+        }
+
+        if (indexPartner >= 0) {
+          this.headers.splice(indexPartner, 1, {
+            text: "Merchant Cities",
+            value: "merchantCities",
+            sortable: false,
+            class: "dark--text h7--xxsmall",
+          });
+        }
+      }
+    },
+
     onEmitFetchPartners(keyword) {
       this.$emit("fetch:partners", keyword);
     },
