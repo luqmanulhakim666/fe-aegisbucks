@@ -3,14 +3,29 @@
     <div
       class="login-form shadow-base pa-6 rounded-xl d-flex flex-column justify-center"
     >
-      <general-logo class="d-flex mx-auto mb-4" :max_width="180" />
-      <p class="p--default mb-4 text-center">Login with:</p>
+      <general-logo class="d-flex mx-auto mb-10" :max_width="180" />
 
-      <v-divider class="mb-4" />
+      <general-form-text-field
+        v-model.trim="form.password"
+        label="Kode Referal"
+        optional
+        placeholder="Kode Referal"
+        appendButton
+        appendName="Gunakan"
+        outlined
+        bold
+      />
+      <div class="d-flex align-center">
+        <v-divider />
+        <p class="p--small mb-4 text-center mt-4 mx-2">Continue with:</p>
+        <v-divider />
+      </div>
+
+      <!-- <v-divider class="mb-4" /> -->
 
       <general-google-login class="mb-4" isApp />
 
-      <div v-for="(item, index) in items" class="mb-4">
+      <!-- <div v-for="(item, index) in items" class="mb-4">
         <button
           class="login-social-media-btn border-thin d-flex justify-center full-width pa-3"
         >
@@ -21,7 +36,7 @@
           </div>
           <span class="ml-6 dark--text">{{ item.label }} </span>
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -46,6 +61,7 @@ export default {
     form: {
       email: "",
       password: "",
+      referalCode: "",
     },
     state: {
       isValid: true,

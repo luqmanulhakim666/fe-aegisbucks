@@ -30,6 +30,17 @@ export default {
   },
 
   methods: {
+    countDown() {
+      if (this.timer > 0) {
+        setTimeout(() => {
+          this.timer = this.timer - Math.floor(60 * 5 * 3.333);
+          this.countDown();
+        }, 1000);
+      } else if (this.timer < 1000) {
+        this.timer = 0;
+      }
+    },
+
     toInt(val) {
       if (val) {
         return parseInt(val?.replace(/\./g, ""));

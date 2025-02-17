@@ -7,7 +7,11 @@
       <div
         class="google-icon-wrapper d-flex justify-center align-center white pa-2"
       >
-        <img class="google-icon" src="/google-color.svg" alt="Google icon" />
+        <img
+          class="google-icon"
+          src="/images/google-color.svg"
+          alt="Google icon"
+        />
       </div>
       <span class="ml-6">Login with Google </span>
     </button>

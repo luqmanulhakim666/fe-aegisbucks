@@ -16,6 +16,7 @@
     <v-btn
       :disabled="!keyword"
       depressed
+      @click="onSearch()"
       class="success text-capitalize h6--xsmall mt-2"
       >Cari</v-btn
     >

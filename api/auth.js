@@ -28,6 +28,10 @@ export default (ctx) => {
       return await $axios.get(`${url}/verify-email?${q}`);
     },
 
+    async sendVerifyEmail() {
+      return $axios.post(`${url}/email/send`);
+    },
+
     async forgotPassword(email) {
       return await $axios.post("/auth/password/forgot", email);
     },

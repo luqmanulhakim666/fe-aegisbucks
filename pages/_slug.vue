@@ -77,8 +77,8 @@
       <v-btn
         block
         depressed
-        color="secondary"
-        class="h6--xsmall white--text text-capitalize my-8"
+        color="success lighten-1"
+        class="h6--xsmall dark--text text-capitalize my-8"
         @click="onClaim()"
       >
         {{ item.ctaLabel ? item.ctaLabel : "Claim" }}

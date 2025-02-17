@@ -54,7 +54,7 @@
           @click="handleAppendClick"
           x-small
           depressed
-          class="secondary lighten-5 text-capitalize text--large"
+          class="secondary lighten-1 rounded-pill h7--xxsmall text-capitalize"
         >
           {{ appendName }}
         </v-btn>

@@ -81,7 +81,7 @@
       <v-card v-if="!captchaVerified" class="pa-2 mb-4" outlined>
         <div class="d-flex justify-space-between align-center">
           <v-checkbox label="I am not a robot" @click="onVerifyCaptcha()" />
-          <v-img max-width="50" src="/recaptcha.png" />
+          <v-img max-width="50" src="/images/recaptcha.png" />
         </div>
       </v-card>
 

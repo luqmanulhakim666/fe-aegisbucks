@@ -147,7 +147,7 @@ export default {
 
     logo() {
       const img = `${this.$config.API_URL}/file/${this.campaign?.brand?.logoId}/file`;
-      return img?.includes("undefined") ? "/logo.png" : img;
+      return img?.includes("undefined") ? "/images/logo.png" : img;
     },
 
     setBackground() {

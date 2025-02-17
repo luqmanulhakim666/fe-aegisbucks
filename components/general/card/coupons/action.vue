@@ -28,7 +28,7 @@
         x-small
         block
         depressed
-        class="text-capitalize h7--xxsmall mt-4 secondary lighten-1"
+        class="text-capitalize h7--xxsmall mt-4 success dark--text lighten-1"
         >Claim</v-btn
       >
     </div>
@@ -79,6 +79,7 @@ export default {
 
 <style lang="scss" scoped>
 .promo_card {
+  width: 100%;
   &-top {
     position: relative;
     &_label {
