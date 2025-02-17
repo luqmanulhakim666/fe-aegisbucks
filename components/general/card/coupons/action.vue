@@ -79,6 +79,7 @@ export default {
 
 <style lang="scss" scoped>
 .promo_card {
+  max-width: 375px;
   width: 100%;
   &-top {
     position: relative;
