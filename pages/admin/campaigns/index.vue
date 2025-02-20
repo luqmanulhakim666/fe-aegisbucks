@@ -32,6 +32,14 @@
         {{ fullDateTime(item.publishedAt, "-") }}
       </template>
 
+      <template v-slot:[`item.campaignUtms`]="{ item }">
+        <ul>
+          <li v-for="(utm, index) in item.campaignUtms" :key="index">
+            <p>{{ utm.source }}</p>
+          </li>
+        </ul>
+      </template>
+
       <template v-slot:[`item.published`]="{ item }">
         <div class="d-flex align-center pa-4">
           <v-switch
@@ -193,6 +201,12 @@ export default {
       {
         text: "Status",
         value: "published",
+        sortable: false,
+        class: "dark--text h7--xxsmall ",
+      },
+      {
+        text: "UTMs",
+        value: "campaignUtms",
         sortable: false,
         class: "dark--text h7--xxsmall ",
       },
