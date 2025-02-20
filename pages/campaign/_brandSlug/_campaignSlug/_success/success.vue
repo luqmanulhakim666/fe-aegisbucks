@@ -1,6 +1,12 @@
 <template>
   <div class="container">
-    <div class="white pa-6">
+    <template v-if="isLoading">
+      <general-skeleton-incubator />
+      <general-skeleton-batch-list />
+      <general-skeleton-promo-card />
+    </template>
+
+    <div class="white pa-6" v-else>
       <campaign-slider
         v-if="getImages"
         class="mb-4"
@@ -175,6 +181,7 @@ export default {
     item: {},
     campaign: {},
     index: 0,
+    isLoading: false,
   }),
 
   computed: {
@@ -185,7 +192,7 @@ export default {
     },
 
     isRetailType() {
-      return this.item.type === "retail";
+      return this.campaign?.type === "retail";
     },
 
     getImages() {
@@ -209,6 +216,7 @@ export default {
       return this.campaign?.ctaItems?.length > 0;
     },
     retailName() {
+      console.log("item", this.item);
       if (this.isRetailType) {
         return this.item.retail?.name;
       }
@@ -259,6 +267,7 @@ export default {
       );
     },
     async getDetailCampaign() {
+      this.isLoading = true;
       const res = await this.$store.dispatch("campaign/getDetailPublic", {
         brandSlug: this.data.brand?.slug,
         campaignSlug: this.data.slug,
@@ -273,6 +282,8 @@ export default {
       if (!res.success) {
         this.setFailedAlert(res);
       }
+
+      this.isLoading = false;
     },
 
     goToCtaLink(index) {
