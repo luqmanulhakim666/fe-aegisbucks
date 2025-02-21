@@ -2,22 +2,24 @@
   <div>
     <div class="d-flex align-center mb-2">
       <span
-        class="text-capitalize label-text"
+        class="label-text"
         v-if="label"
         v-bind:class="{
           'h6--xsmall': bold,
           'text--default': !bold,
           'white--text': labelWhite,
           'dark--text': !labelWhite,
+          'text-capitalize': textCapitalize,
         }"
       >
         {{ label }}
         <span
-          class="text-capitalize label-text ml-1 error--text"
+          class="label-text ml-1 error--text"
           v-if="required"
           v-bind:class="{
             'h6--xsmall': bold,
             'text--default': !bold,
+            'text-capitalize': textCapitalize,
           }"
         >
           *
@@ -61,6 +63,10 @@
 <script>
 export default {
   props: {
+    textCapitalize: {
+      type: Boolean,
+      default: true,
+    },
     bold: {
       type: Boolean,
       default: () => false,

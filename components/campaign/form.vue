@@ -19,12 +19,12 @@
           required
           :label="field.label"
           bold
-          class="text-capitalize"
           outlined
           item-text="key"
           item-value="value"
           :items="field.options"
           :rules="[required]"
+          :textCapitalize="false"
         />
       </template>
 
@@ -118,7 +118,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep a {
-  color: var(--v-primary-base) !important;
+::v-deep {
+  a {
+    color: var(--v-primary-base) !important;
+  }
 }
 </style>
