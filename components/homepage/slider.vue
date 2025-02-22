@@ -8,7 +8,12 @@
     </div>
 
     <template v-if="!items.length">
-      <v-img class="d-flex mx-auto" max-width="200" src="/images/empty.svg" />
+      <v-img
+        lazy
+        class="d-flex mx-auto"
+        max-width="200"
+        src="/images/empty.svg"
+      />
       <p class="h7--xxsmall dark--text text-center mt-4">
         Tidak ada kupon yang tersedia
       </p>
@@ -19,7 +24,7 @@
         <v-slide-group
           v-model="slide"
           show-arrows
-          class="py-2"
+          class="py-2 transparent"
           ref="slideGroup"
         >
           <v-slide-item v-for="(item, index) in items" :key="index">
@@ -29,6 +34,7 @@
               :showButton="showButton"
               :image="item"
               :name="item.name"
+              :isBannerOnly="isBannerOnly"
               :expiredDate="item.expiredDate"
             />
           </v-slide-item>
@@ -76,6 +82,10 @@ export default {
     settings: Object,
     items: Array,
     title: String,
+    isBannerOnly: {
+      type: Boolean,
+      default: false,
+    },
     showButton: false,
     isCoupon: {
       type: Boolean,

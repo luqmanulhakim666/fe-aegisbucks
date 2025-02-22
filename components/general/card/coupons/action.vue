@@ -1,38 +1,69 @@
 <template>
-  <v-card
-    flat
-    class="promo_card d-flex flex-column justify-space-between white rounded-xxl pa-4 fill-height pointer elevation-1"
-    @click="onDetail()"
-  >
-    <div class="promo_card-top">
+  <div class="promo_card">
+    <template v-if="!isBannerOnly">
+      <v-card
+        flat
+        class="d-flex flex-column justify-space-between white rounded-xxl pa-4 fill-height pointer elevation-1"
+        @click="onDetail()"
+      >
+        <div class="promo_card-top">
+          <img
+            alt="img"
+            class="full-width rounded-xl"
+            :src="getImage(image)"
+            @error="onErrorImage"
+          />
+
+          <p class="promo_card-top_title h7--xxsmall dark--text">{{ name }}</p>
+        </div>
+
+        <div class="mt-4">
+          <div class="d-flex align-center mr-4">
+            <v-icon size="12" color="dark lighten-2">mdi-clock</v-icon>
+            <p class="p--small ml-2 dark--text text-lighten-2">
+              {{ diffDays }}
+            </p>
+          </div>
+
+          <v-btn
+            v-if="showButton"
+            x-small
+            block
+            depressed
+            class="text-capitalize h7--xxsmall mt-4 success dark--text lighten-1"
+            >Claim</v-btn
+          >
+        </div>
+      </v-card>
+    </template>
+
+    <template v-if="isBannerOnly">
       <img
-        alt="img"
-        class="full-width rounded-xl"
+        class="promo_card-banner cover fill-height pointer"
         :src="getImage(image)"
-        @error="onErrorImage"
+        alt="banner"
+        @click="onShowImage(image)"
       />
 
-      <p class="promo_card-top_title h7--xxsmall dark--text">{{ name }}</p>
-    </div>
-
-    <div class="mt-4">
-      <div class="d-flex align-center mr-4">
-        <v-icon size="12" color="dark lighten-2">mdi-clock</v-icon>
-        <p class="p--small ml-2 dark--text text-lighten-2">
-          {{ diffDays }}
-        </p>
-      </div>
-
-      <v-btn
-        v-if="showButton"
-        x-small
-        block
-        depressed
-        class="text-capitalize h7--xxsmall mt-4 success dark--text lighten-1"
-        >Claim</v-btn
-      >
-    </div>
-  </v-card>
+      <v-dialog v-model="showImage" hide-overlay width="auto" persistent>
+        <div class="banner-dialog container d-flex justify-center align-center">
+          <div class="image-wrapper">
+            <v-btn
+              icon
+              class="image-wrapper_close-btn"
+              @click="showImage = false"
+              ><v-icon color="" large>mdi-close-circle</v-icon></v-btn
+            >
+            <img
+              class="fill-height image-wrapper_img d-flex mx-auto"
+              :src="getImage(selectedImage)"
+              alt=""
+            />
+          </div>
+        </div>
+      </v-dialog>
+    </template>
+  </div>
 </template>
 
 <script>
@@ -53,7 +84,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    isBannerOnly: Boolean,
   },
+
+  data: () => ({
+    showImage: false,
+    selectedImage: {},
+  }),
 
   computed: {
     diffDays() {
@@ -70,6 +107,10 @@ export default {
   },
 
   methods: {
+    onShowImage(item) {
+      this.showImage = !this.showImage;
+      this.selectedImage = item;
+    },
     onDetail() {
       this.$router.push(this.slug);
     },
@@ -81,6 +122,13 @@ export default {
 .promo_card {
   max-width: 375px;
   width: 100%;
+
+  &-banner {
+    max-width: 195px;
+    width: 100%;
+    height: auto;
+    min-height: 215px;
+  }
   &-top {
     position: relative;
     &_label {
@@ -103,6 +151,37 @@ export default {
       line-clamp: 2;
       -webkit-box-orient: vertical;
     }
+  }
+}
+
+.banner-dialog {
+  height: 100vh;
+}
+
+.image-wrapper {
+  position: relative;
+  &_img {
+    max-width: 90%; /* Adjust as needed */
+    max-height: 90vh;
+    overflow: hidden;
+    height: auto;
+    display: block;
+  }
+
+  &_close-btn {
+    position: absolute;
+    right: 0;
+    top: -25px;
+  }
+}
+
+::v-deep {
+  .v-dialog:not(.v-dialog--fullscreen) {
+    overflow: hidden !important;
+  }
+
+  .v-dialog {
+    box-shadow: none !important;
   }
 }
 </style>

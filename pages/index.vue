@@ -25,7 +25,6 @@
         class="mb-8"
         title="Best Promo to Claim"
         :items="items.couponOffers"
-        :settings="settings.product"
         showButton
         :isCoupon="false"
       />
@@ -35,7 +34,6 @@
         class="mb-8"
         title="Best Deal Minggu Ini"
         :items="items.mainOffers"
-        :settings="settings.product"
         showButton
         :isCoupon="false"
         isBannerOnly
@@ -48,7 +46,6 @@
         class="my-8"
         title="History Voucher"
         :items="items.mainOffers"
-        :settings="settings.product"
         :isCoupon="false"
       />
 
@@ -86,26 +83,7 @@ export default {
       couponOffers: [],
       retails: [],
     },
-    settings: {
-      banners: {
-        dots: true,
-        dotsClass: "slick-dots custom-dot-class",
-        edgeFriction: 0.35,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-      },
-      product: {
-        autoplay: true,
-        autoplaySpeed: 1500,
-        focusOnSelect: true,
-        infinite: true,
-        slidesToScroll: 1,
-        speed: 500,
-        centerPadding: "20px",
-      },
-    },
+
     meta: {
       title: "LetsbuyAsia",
     },
@@ -131,6 +109,7 @@ export default {
       let body = {
         page: 1,
         limit: 10,
+        sort: "desc",
         isActive: true,
       };
 

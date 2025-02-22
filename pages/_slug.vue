@@ -5,8 +5,13 @@
     </template>
 
     <template v-if="!state.isLoading">
-      <v-btn small class="mb-6" depressed @click="() => $router.push('/')">
-        <v-icon>mdi-chevron-left</v-icon>
+      <v-btn
+        small
+        class="mb-6 text-capitalize h7--xxsmall dak--text"
+        depressed
+        @click="() => $router.push('/')"
+      >
+        <v-icon>mdi-chevron-left</v-icon> Kembali
       </v-btn>
 
       <v-img class="cover rounded-xl" height="350" :src="getImage(item)" />
