@@ -24,7 +24,7 @@
       <homepage-slider
         class="mb-8"
         title="Best Promo to Claim"
-        :items="items.mainOffers"
+        :items="items.couponOffers"
         :settings="settings.product"
         showButton
         :isCoupon="false"
@@ -49,7 +49,6 @@
         title="History Voucher"
         :items="items.mainOffers"
         :settings="settings.product"
-        showButton
         :isCoupon="false"
       />
 
