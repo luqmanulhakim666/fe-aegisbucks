@@ -70,7 +70,9 @@
     </div>
 
     <p class="h7--xxsmall mt-4">Email</p>
-    <p class="text--default secondary--text mb-2">Akun belum terverifikasi</p>
+    <p class="text--default secondary--text mb-2" v-if="!profile.emailVerified">
+      Akun belum terverifikasi
+    </p>
     <div
       class="border-thin pa-3 d-flex align-center justify-space-between rounded-lg"
     >

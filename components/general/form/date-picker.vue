@@ -38,10 +38,9 @@
     <v-menu
       v-model="menu"
       :close-on-content-click="false"
-      :nudge-right="40"
       transition="scale-transition"
-      offset-y
       min-width="auto"
+      style="'max-height:500px'"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-text-field
@@ -133,5 +132,9 @@ export default {
 <style lang="scss" scoped>
 .v-input--is-disabled {
   background-color: var(--v-gray-lighten3) !important;
+}
+
+::v-deep .menuable__content__active {
+  max-height: 500px !important;
 }
 </style>

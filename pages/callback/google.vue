@@ -13,7 +13,9 @@ export default {
       isLoading: false,
     },
   }),
-  async created() {
+
+  async mounted() {
+    console.log("callback");
     this.state.isLoading = true;
 
     const token = this.$route.query?.token;
@@ -34,7 +36,7 @@ export default {
       }
 
       this.state.isLoading = false;
-      this.$router.push("/");
+      return this.$router.push("/");
     }
 
     if (!token) {

@@ -38,13 +38,11 @@ export default {
 
       const res = await this.$api.auth.verifyEmail(payload);
 
-      if (res.success) {
-        this.$router.push("/");
-      }
-
       if (!res.success) {
         this.setFailedAlert(res);
       }
+
+      this.$router.push("/");
     }
   },
 };

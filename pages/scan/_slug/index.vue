@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container scan">
     <template v-if="location && cameraAccess">
       <template v-if="!isTakenPicture">
         <div class="scanner-container rounded-lg">
@@ -137,6 +137,7 @@
 export default {
   layout: "app",
   middleware: "userAuthenticated",
+
   data() {
     return {
       location: null,
@@ -161,6 +162,13 @@ export default {
 
   beforeDestroy() {
     this.stopCamera();
+  },
+
+  computed: {
+    isFromPC() {
+      // user agent
+      return this.$nuxt.$ua.isFromPc();
+    },
   },
 
   methods: {
@@ -412,6 +420,9 @@ export default {
 </script>
 
 <style scoped>
+.scan {
+  margin-bottom: 64px;
+}
 .scanner-container {
   display: flex;
   flex-direction: column;

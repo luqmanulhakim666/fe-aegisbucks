@@ -17,7 +17,7 @@
             :items="item.variants"
             item-text="name"
             item-value="id"
-            label="Variants"
+            label="Varian"
             outlined
             required
             bold
@@ -33,7 +33,7 @@
             </v-col>
             <v-col cols="12" sm="6">
               <div class="dark lighten-3 pa-4 rounded-xl">
-                <p class="h6--xsmall dark--text ml-6">Prosses Pengerjaan</p>
+                <p class="h6--xsmall dark--text ml-6">Proses Pengerjaan</p>
                 <div class="d-flex align-center">
                   <v-icon>mdi-clock-outline</v-icon>
                   <p class="h7--xxsmall ml-2 dark--text">
@@ -55,7 +55,7 @@
             block
             class="mt-6 text-capitalize h7--xxsmall success lighten-1 success--text"
             @click="goScan()"
-            >Klik untuk Scan Struck</v-btn
+            >Klik untuk Scan Struk</v-btn
           >
         </v-form>
       </div>

@@ -64,7 +64,7 @@
 
     <app-profile-dialog-email-verify
       :dialog="state.dialogEmailVerify"
-      @on:close="closeCompleteProfileDialog()"
+      @on:close="state.dialogEmailVerify = false"
     />
 
     <app-profile-dialog-complete-profile
