@@ -10,6 +10,8 @@ import campaigns from "@/api/campaigns";
 import reports from "@/api/reports";
 import hubspot from "@/api/hubspot";
 import promos from "@/api/promos";
+import userScan from "@/api/userScan";
+import banners from "@/api/banners";
 
 export default (ctx, inject) => {
   let api = {};
@@ -25,5 +27,7 @@ export default (ctx, inject) => {
   api.reports = reports(ctx);
   api.hubspot = hubspot(ctx);
   api.promos = promos(ctx);
+  api.userScan = userScan(ctx);
+  api.banners = banners(ctx);
   inject("api", api);
 };

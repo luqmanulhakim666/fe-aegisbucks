@@ -5,7 +5,7 @@
     >
       <general-logo class="d-flex mx-auto mb-10" :max_width="180" />
 
-      <general-form-text-field
+      <!-- <general-form-text-field
         v-model.trim="form.password"
         label="Kode Referal"
         optional
@@ -14,7 +14,7 @@
         appendName="Gunakan"
         outlined
         bold
-      />
+      /> -->
       <div class="d-flex align-center">
         <v-divider />
         <p class="p--small mb-4 text-center mt-4 mx-2">Continue with:</p>

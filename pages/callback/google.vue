@@ -25,6 +25,14 @@ export default {
         "auth/setRole",
         this.$store.getters["auth/profile"]["role"]
       );
+
+      const profile = this.$store.getters["auth/profile"];
+      const emailVerified = profile.emailVerified;
+
+      if (!emailVerified) {
+        await this.$api.auth.sendVerifyEmail();
+      }
+
       this.state.isLoading = false;
       this.$router.push("/");
     }

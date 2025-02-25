@@ -12,6 +12,7 @@ module.exports = {
     },
   },
   server: {
+    // host: "0",
     port: process.env.PORT,
   },
 
@@ -38,6 +39,7 @@ module.exports = {
     "@/plugins/api",
     "@/plugins/axios",
     "@/plugins/mixins",
+    { src: "@/plugins/tesseract", ssr: false },
     {
       src: "@plugins/nuxt-quill-plugin",
       ssr: false,
@@ -107,7 +109,7 @@ module.exports = {
             lighten4: "#D1F7C4",
             lighten3: "#93E088",
             lighten2: "#20C933",
-            lighten1: "#D4FDD2",
+            lighten1: "#C0ED54",
           },
           accent: {
             base: "#338A17",

@@ -1,9 +1,490 @@
 <template>
-  <div class="container">camera</div>
+  <div class="container">
+    <template v-if="location && cameraAccess">
+      <template v-if="!isTakenPicture">
+        <div class="scanner-container rounded-lg">
+          <div class="scanner-frame">
+            <div class="corner top-left"></div>
+            <div class="corner top-right"></div>
+            <div class="corner bottom-left"></div>
+            <div class="corner bottom-right"></div>
+
+            <video
+              class="d-flex align-center mx-auto justify-center"
+              ref="video"
+              autoplay
+            ></video>
+          </div>
+        </div>
+      </template>
+
+      <template v-if="isTakenPicture">
+        <v-img
+          class="rounded-xl d-flex mx-auto"
+          width="300"
+          height="300"
+          :src="capturedImage"
+        />
+      </template>
+
+      <div class="text-center">
+        <p class="h5--small success--text lighten-1 mt-6 mb-4 text-center">
+          Scan Struk
+        </p>
+        <p class="text--default dark--text mb-4 text-center">
+          Pastikan seluruh tulisan pada struk terlihat jelas & bukan merupakan
+          struk duplikasi
+        </p>
+
+        <p class="h5--small secondary--text my-4">Tips Scan Struk Belanja</p>
+
+        <p class="text--default dark--text">
+          1. Pastikan Struk dalam keadaan baik & terlihat jelas
+        </p>
+        <p class="text--default dark--text">
+          2. Seluruh tulisan masih terlihat jelas
+        </p>
+        <p class="text--default dark--text">
+          3. Foto pada bidang datar dengan pencahayaan yang jelas
+        </p>
+      </div>
+
+      <v-btn
+        v-if="isTakenPicture"
+        depressed
+        small
+        block
+        outlined
+        class="dark--text text-capitalize h7--xxsmall mt-8"
+        @click="retake()"
+      >
+        Ambil ulang Gambar</v-btn
+      >
+
+      <v-btn
+        v-if="isTakenPicture"
+        depressed
+        small
+        block
+        class="success lighten-1 success--text text-capitalize h7--xxsmall mt-2"
+        :loading="isLoading"
+        @click="uploadFile()"
+      >
+        Upload Gambar</v-btn
+      >
+
+      <v-btn
+        v-if="!isTakenPicture"
+        depressed
+        small
+        block
+        class="success lighten-1 success--text text-capitalize h7--xxsmall mt-8"
+        @click="captureFrame()"
+      >
+        <v-icon class="mr-2">mdi-camera</v-icon>
+        Ambil Gambar</v-btn
+      >
+    </template>
+    <!-- Dialog -->
+    <v-dialog persistent v-model="dialogVisible" class="dialog" width="300">
+      <div class="white rounded-xl">
+        <div class="container">
+          <div class="d-flex flex-column align-center">
+            <v-img width="150" src="/images/selfie.svg" />
+            <p class="text-center h6--xsmall dark--text mt-10 mb-4">
+              Untuk scan struk anda harus memberikan akses terlebih dahulu
+            </p>
+          </div>
+
+          <div class="mb-2">
+            <v-btn
+              block
+              depressed
+              class="text-capitalize h7--xxsmall success lighten-1 dark--text"
+              small
+              v-bind:class="{ success: location }"
+              @click="getLocation()"
+            >
+              <v-icon small color="success" class="mr-2" v-if="location"
+                >mdi-check-circle</v-icon
+              >
+              Izinkan Lokasi
+            </v-btn>
+          </div>
+
+          <div>
+            <v-btn
+              depressed
+              block
+              class="text-capitalize h7--xxsmall success lighten-1 dark--text"
+              small
+              @click="getCameraAccess()"
+              v-bind:class="{ success: cameraAccess }"
+            >
+              <v-icon small color="success" class="mr-2" v-if="cameraAccess">
+                mdi-check-circle
+              </v-icon>
+              Izinkan Kamera
+            </v-btn>
+          </div>
+        </div>
+      </div>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
 export default {
   layout: "app",
+  data() {
+    return {
+      location: null,
+      cameraAccess: false,
+      error: null,
+      dialogVisible: false,
+      stream: null,
+      capturedImage: null,
+      isLoading: false,
+      progress: null,
+      imageName: "",
+      isTakenPicture: false,
+    };
+  },
+
+  async mounted() {
+    await this.checkPermissions();
+    if (!this.location || !this.cameraAccess) {
+      this.dialogVisible = true;
+    }
+  },
+
+  beforeDestroy() {
+    this.stopCamera();
+  },
+
+  methods: {
+    captureFrame() {
+      if (!this.$refs.video) return;
+
+      const video = this.$refs.video;
+      const canvas = document.createElement("canvas");
+
+      // Set canvas size to match video resolution
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      const ctx = canvas.getContext("2d");
+
+      // Draw the video frame onto the canvas
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Compress and convert to image (reduce quality to keep size under 2MB)
+      let quality = 1.0;
+      let imageData = canvas.toDataURL("image/jpeg", quality);
+
+      // Reduce quality until the file is below 2MB
+      while (imageData.length > 2 * 1024 * 1024 && quality > 0.1) {
+        quality -= 0.1;
+        imageData = canvas.toDataURL("image/jpeg", quality);
+      }
+
+      this.capturedImage = imageData;
+
+      this.isTakenPicture = true;
+    },
+
+    retake() {
+      this.isTakenPicture = false;
+      this.capturedImage = null;
+      this.startCamera();
+    },
+
+    async uploadFile() {
+      this.isLoading = true;
+      const byteCharacters = atob(this.capturedImage.split(",")[1]);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const setFile = new File([byteArray], "captured_image.jpg", {
+        type: "image/jpeg",
+      });
+
+      const body = {
+        file: setFile,
+      };
+
+      let onUploadProgress = this.onUploadProgress;
+
+      let res = await this.$api.media.upload({
+        body,
+        onUploadProgress,
+      });
+
+      if (res.success) {
+        const productScanId = this.$route.params?.slug;
+        const variantId = this.$route.query?.variantId;
+        const imageId = res.data?.id;
+        const payload = {
+          productScanId: productScanId,
+          imageId: imageId,
+          variantId: variantId,
+        };
+
+        const scan = await this.$api.userScan.post(payload);
+
+        if (scan.success) {
+          this.$router.push(`/scan/${scan.data.productScanId}/success`);
+        }
+
+        if (!scan.success) {
+          this.setFailedAlert(scan);
+        }
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.isLoading = false;
+    },
+
+    async startCamera() {
+      try {
+        this.stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: {
+              exact: "environment",
+            },
+          },
+        });
+        this.$refs.video.srcObject = this.stream;
+        this.cameraAccess = true;
+      } catch (err) {
+        this.error = "Error accessing the camera.";
+      }
+    },
+
+    stopCamera() {
+      if (this.stream) {
+        this.stream.getTracks().forEach((track) => track.stop());
+      }
+    },
+
+    async checkPermissions() {
+      try {
+        const locationPermission = await navigator.permissions.query({
+          name: "geolocation",
+        });
+        const cameraPermission = await navigator.permissions.query({
+          name: "camera",
+        });
+
+        const locationGranted =
+          localStorage.getItem("locationGranted") === "true";
+        const cameraGranted = localStorage.getItem("cameraGranted") === "true";
+
+        // Check if the user reset permissions
+        if (locationGranted && locationPermission.state !== "granted") {
+          localStorage.removeItem("locationGranted");
+        }
+
+        if (cameraGranted && cameraPermission.state !== "granted") {
+          localStorage.removeItem("cameraGranted");
+        }
+
+        // Re-check after possible reset
+        const finalLocationGranted =
+          localStorage.getItem("locationGranted") === "true";
+        const finalCameraGranted =
+          localStorage.getItem("cameraGranted") === "true";
+
+        if (finalLocationGranted) {
+          this.getLocation();
+        }
+
+        if (finalCameraGranted) {
+          this.cameraAccess = true;
+        }
+
+        if (finalLocationGranted && finalCameraGranted) {
+          this.startCamera();
+        }
+
+        if (!finalLocationGranted || !finalCameraGranted) {
+          this.dialogVisible = true;
+        }
+      } catch (err) {
+        this.error = "Failed to check permissions.";
+      }
+    },
+
+    // 📍 Request Location Permission (After User Agrees)
+    async getLocation() {
+      if (!navigator.geolocation) {
+        this.error = "Geolocation is not supported by your browser.";
+        return;
+      }
+
+      const permissionStatus = await navigator.permissions.query({
+        name: "geolocation",
+      });
+
+      if (permissionStatus.state === "granted") {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            this.location = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+            this.error = null;
+          },
+          (err) => {
+            this.error = err.message;
+          }
+        );
+
+        localStorage.setItem("locationGranted", "true");
+      } else {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            this.location = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+            this.error = null;
+          },
+          (err) => {
+            this.error = err.message;
+          }
+        );
+        localStorage.setItem("locationGranted", "true");
+      }
+    },
+
+    // 📷 Request Camera Permission (After User Agrees)
+    async getCameraAccess() {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const hasCamera = devices.some(
+          (device) => device.kind === "videoinput"
+        );
+
+        if (!hasCamera) {
+          this.error = "No camera detected.";
+          return;
+        }
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+
+        localStorage.setItem("cameraGranted", "true");
+
+        this.cameraAccess = true;
+
+        stream.getTracks().forEach((track) => track.stop()); // Stop camera after checking
+        this.error = null;
+      } catch (err) {
+        this.error = "Camera permission denied.";
+      }
+    },
+  },
+
+  watch: {
+    location(val) {
+      if (val && this.cameraAccess) {
+        this.dialogVisible = false;
+        this.startCamera();
+      }
+    },
+
+    cameraAccess(val) {
+      if (val && this.location?.lat) {
+        this.dialogVisible = false;
+        this.startCamera();
+      }
+    },
+  },
 };
 </script>
+
+<style scoped>
+.scanner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.scanner-frame {
+  position: relative;
+  width: 320px; /* Set the desired width of the scanner */
+  height: 320px; /* Set the desired height of the scanner */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  overflow: hidden;
+  --s: 50px; /* the size on the corner */
+
+  padding: 20px; /* the gap between the border and image */
+  border: 5px solid var(--v-success-lighten1); /* the thickness and color */
+  -webkit-mask: conic-gradient(at var(--s) var(--s), #0000 75%, #000 0) 0 0 /
+      calc(100% - var(--s)) calc(100% - var(--s)),
+    linear-gradient(#000 0 0) content-box;
+}
+
+.corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 5px solid #ccc; /* Color of the frame corner */
+  border-radius: 10px;
+}
+
+.top-left {
+  top: -5px;
+  left: -5px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.top-right {
+  top: -5px;
+  right: -5px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.bottom-left {
+  bottom: -5px;
+  left: -5px;
+  border-right: none;
+  border-top: none;
+}
+
+.bottom-right {
+  bottom: -5px;
+  right: -5px;
+  border-left: none;
+  border-top: none;
+}
+
+.scanner {
+  width: 100%;
+  height: 100%;
+}
+video {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  height: 80%;
+  object-fit: cover; /* Ensures the video fills the frame without distortion */
+  border-radius: inherit; /* Matches the scanner-frame rounded corners */
+}
+</style>

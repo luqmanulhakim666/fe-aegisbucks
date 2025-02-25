@@ -1,0 +1,146 @@
+<template>
+  <div>
+    <template v-if="state.isLoading">
+      <general-loading />
+    </template>
+
+    <template v-if="!state.isLoading">
+      <general-breadcrumbs :lists="items.breadcrumbs" class="mb-9" />
+
+      <!-- FORM -->
+      <div class="white pa-6 rounded-xl">
+        <v-form v-model="state.isValid" ref="form">
+          <form-banners v-if="!state.isLoading" :form="form" />
+        </v-form>
+      </div>
+      <!-- END FORM -->
+
+      <div class="d-flex justify-end mt-8">
+        <v-btn
+          @click="goBack()"
+          class="primary-create-btn text-capitalize h7--xxsmall"
+          depressed
+          :disabled="state.isLoading"
+        >
+          Kembali
+        </v-btn>
+        <v-btn
+          :loading="state.isLoading"
+          class="secondary lighten-5 text-capitalize ml-2 h7--xxsmall"
+          depressed
+          @click="onSubmit()"
+        >
+          Simpan
+        </v-btn>
+      </div>
+    </template>
+  </div>
+</template>
+
+<script>
+import rules from "@/mixins/rules";
+import meta from "@/mixins/meta";
+export default {
+  mixins: [rules, meta],
+  middleware: ["authenticated", "authorized"],
+  meta: {
+    page: "admin",
+  },
+  data: () => ({
+    meta: {
+      title: "",
+    },
+    form: {
+      name: "",
+      isActive: true,
+      imageId: "",
+    },
+    state: {
+      isLoading: false,
+      isValid: true,
+      item: {},
+    },
+    items: {
+      breadcrumbs: [
+        { text: "Banners", slug: "/admin/banners" },
+        { text: "Create New Banner", slug: "" },
+      ],
+    },
+  }),
+
+  created() {
+    this.meta.title = this.isCreated ? "Create New Banner" : "Edit Banner";
+
+    if (!this.isCreated) {
+      this.getOne();
+    }
+  },
+
+  mounted() {
+    let appBar = {
+      title: this.meta.title,
+      child: true,
+    };
+
+    this.$store.commit("SET_META", appBar);
+  },
+  computed: {
+    isCreated() {
+      return this.$route?.params?.slug === "create";
+    },
+  },
+
+  methods: {
+    async getOne() {
+      this.state.isLoading = true;
+      const id = this.$route?.params?.slug;
+
+      const res = await this.$api.banners.getOne(id);
+
+      if (res.success) {
+        this.form = res.data;
+        this.form.image = res.data.image;
+
+        this.items.breadcrumbs[1].text = res.data?.name;
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.state.isLoading = false;
+    },
+
+    async onSubmit() {
+      const valid = await this.validate(this.state.isValid);
+
+      if (valid) {
+        this.state.isLoading = true;
+
+        const payload = {
+          name: this.form.name,
+          imageId: this.form.image?.id,
+          isActive: this.form.isActive,
+        };
+
+        let res = this.isCreated
+          ? await this.$api.banners.create(payload)
+          : await this.$api.banners.update(this.form.id, payload);
+
+        if (res.success) {
+          this.setSuccessAlert("Data has been saved");
+          this.goBack();
+        }
+
+        if (!res.success) {
+          this.setFailedAlert(res);
+        }
+      }
+      this.state.isLoading = false;
+    },
+    goBack() {
+      this.$router.push("/admin/banners");
+    },
+  },
+};
+</script>

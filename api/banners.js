@@ -2,7 +2,7 @@ import qs from "query-string";
 
 export default (ctx) => {
   let { $axios } = ctx;
-  let url = "/user";
+  let url = "/banner";
   return {
     async getList(query = {}) {
       let q = qs.stringify(query);
@@ -21,23 +21,8 @@ export default (ctx) => {
       return await $axios.put(`${url}/${id}`, body);
     },
 
-    async updateUserProfile(body) {
-      return await $axios.put(`${url}/profile`, body);
-    },
-
     async delete(id) {
       return await $axios.delete(`${url}/${id}`);
-    },
-
-    point: {
-      async getList(query = {}) {
-        let q = qs.stringify(query);
-        return await $axios.get(`${url}/point/list?${q}`);
-      },
-
-      async total() {
-        return await $axios.get(`${url}/point/total`);
-      },
     },
   };
 };

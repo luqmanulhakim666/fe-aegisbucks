@@ -3,7 +3,7 @@
     <v-row dense>
       <v-col cols="12" md="3" sm="4" align-self="center">
         <general-avatar
-          image=""
+          :image="profile.imageUrl"
           class="d-flex mx-auto flex-column justify-xs-center align-center d-sm-block mb-6 mb-sm-0"
         />
       </v-col>
@@ -17,14 +17,14 @@
         <p class="h5--small dark--text">{{ profile.name }}</p>
         <p class="text--default dark--text">{{ profile.email }}</p>
 
-        <template v-if="!profile.emailVerified">
-          <p class="text--default dark--text mt-4">akun belum terverifikasi</p>
+        <template v-if="!profile.isCompleteProfile">
           <div class="d-flex align-center mt-2">
             <v-btn
               rounded
               depressed
               small
               class="success text-capitalize h7--xxsmall mr-2"
+              @click="dialogProfile()"
               >Lengkapi Profile</v-btn
             >
             <app-point :points="400" />
@@ -33,7 +33,7 @@
       </v-col>
     </v-row>
 
-    <template v-if="!profile.emailVerified">
+    <template v-if="!profile.isCompleteProfile">
       <div class="d-flex align-center dark lighten-3 justify-center pa-2 mt-10">
         <v-icon size="34" color="secondary lighten-2"
           >mdi-lightbulb-on-outline</v-icon
@@ -45,32 +45,39 @@
       </div>
     </template>
 
-    <v-row>
+    <v-row class="mt-4">
       <v-col cols="12" md="6">
-        <div class="dark lighten-3 rounded-lg mt-4 pa-6">
+        <div
+          class="dark lighten-3 rounded-lg pa-6 fill-height pointer"
+          @click="goToReward()"
+        >
           <p class="ml-5 h6--xsmall">Saldo Reward</p>
-          <app-point :points="600" />
+          <app-point :points="state.totalPoints" />
         </div>
       </v-col>
       <v-col cols="12" md="6">
-        <div class="dark lighten-3 rounded-lg mt-4 pa-6">
-          <p class="ml-5 h6--xsmall">Saldo Reward</p>
-          <app-point :points="600" />
+        <div
+          class="dark lighten-3 rounded-lg pa-6 d-flex align-center fill-height"
+        >
+          <v-img max-width="20" src="/images/medals/silver.png" />
+          <p class="ml-3 h6--xsmall">Silver Member</p>
         </div>
       </v-col>
     </v-row>
 
-    <div class="pa-2 dark lighten-3 mt-4">
+    <div class="pa-2 dark lighten-3 mt-8">
       <p class="h5--small dark--text">Akun</p>
     </div>
 
     <p class="h7--xxsmall mt-4">Email</p>
+    <p class="text--default secondary--text mb-2">Akun belum terverifikasi</p>
     <div
       class="border-thin pa-3 d-flex align-center justify-space-between rounded-lg"
     >
       <p>{{ profile.email }}</p>
 
       <v-btn
+        v-if="!profile.emailVerified"
         @click="onEmailVerify()"
         depressed
         small
@@ -96,6 +103,17 @@
         <p class="text-default">{{ item.label }}</p>
       </div>
     </div>
+    <div class="d-flex align-center mb-6 pointer" @click="onLogout()">
+      <v-icon size="24" class="mr-3 error--text"> mdi-logout</v-icon>
+      <p class="text-default error--text">Logout</p>
+    </div>
+
+    <app-profile-dialog
+      :dialog="state.isDialog"
+      :item="editProfile"
+      @fetch:point="getTotalPoint()"
+      @on:close="dialogProfile"
+    />
   </div>
 </template>
 
@@ -106,9 +124,15 @@ export default {
   mixins: [utils],
   data: () => ({
     hasSentEmail: false,
+    editProfile: {},
+    state: {
+      isDialog: false,
+      totalPoints: 0,
+    },
     loading: {
       verifyEmail: false,
       submit: false,
+      point: false,
     },
     items: [
       {
@@ -131,13 +155,13 @@ export default {
         key: "whatsapp",
         icon: "mdi-file-document-outline",
       },
-      {
-        label: "Logout",
-        key: "whatsapp",
-        icon: "mdi-logout",
-      },
     ],
   }),
+
+  created() {
+    this.getTotalPoint();
+  },
+
   computed: {
     profile() {
       return this.$store.getters["auth/profile"];
@@ -148,11 +172,38 @@ export default {
   },
 
   methods: {
+    goToReward() {
+      this.$router.push("/my-rewards");
+    },
+    onLogout() {
+      this.$store.dispatch("auth/logout");
+    },
+
+    async getTotalPoint() {
+      this.loading.point = false;
+      const res = await this.$api.users.point.total();
+
+      if (res.success) {
+        this.state.totalPoints = res.data?.total;
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+      this.loading.point = true;
+    },
+
+    async dialogProfile() {
+      this.editProfile = await JSON.parse(JSON.stringify(this.profile));
+      this.state.isDialog = !this.state.isDialog;
+    },
+
     async onEmailVerify() {
-      return;
       this.loading.verifyEmail = true;
+
       if (this.hasSentEmail) {
         this.setFailedAlert({ message: "Verifikasi Email Sudah Dikirim" });
+        this.loading.verifyEmail = false;
         return;
       }
 
@@ -169,7 +220,7 @@ export default {
         }
       }
 
-      this.loading.verifyEmail = true;
+      this.loading.verifyEmail = false;
     },
   },
 };

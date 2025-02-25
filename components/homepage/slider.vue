@@ -8,12 +8,7 @@
     </div>
 
     <template v-if="!items.length">
-      <v-img
-        lazy
-        class="d-flex mx-auto"
-        max-width="200"
-        src="/images/empty.svg"
-      />
+      <v-img class="d-flex mx-auto" max-width="200" src="/images/empty.svg" />
       <p class="h7--xxsmall dark--text text-center mt-4">
         Tidak ada kupon yang tersedia
       </p>
@@ -36,6 +31,7 @@
               :name="item.name"
               :isBannerOnly="isBannerOnly"
               :expiredDate="item.expiredDate"
+              :ctaUrl="item.ctaUrl"
             />
           </v-slide-item>
 

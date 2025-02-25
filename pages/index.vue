@@ -33,7 +33,7 @@
       <homepage-slider
         class="mb-8"
         title="Best Deal Minggu Ini"
-        :items="items.mainOffers"
+        :items="items.banners"
         showButton
         :isCoupon="false"
         isBannerOnly
@@ -44,7 +44,7 @@
 
       <homepage-slider
         class="my-8"
-        title="History Voucher"
+        title="Main Offers"
         :items="items.mainOffers"
         :isCoupon="false"
       />
@@ -61,6 +61,16 @@
       <!-- BRANDS -->
       <!-- <homepage-brands :items="items.brands" /> -->
     </template>
+
+    <app-profile-dialog-email-verify
+      :dialog="state.dialogEmailVerify"
+      @on:close="closeCompleteProfileDialog()"
+    />
+
+    <app-profile-dialog-complete-profile
+      :dialog="state.dialogCompleteProfile"
+      @on:close="closeCompleteProfileDialog()"
+    />
   </div>
 </template>
 
@@ -75,25 +85,36 @@ export default {
   data: () => ({
     state: {
       isLoading: false,
+      dialogCompleteProfile: false,
+      dialogEmailVerify: false,
     },
     body: {},
     items: {
       mainOffers: [],
       specialOffers: [],
       couponOffers: [],
-      retails: [],
+      banners: [],
     },
-
     meta: {
       title: "LetsbuyAsia",
     },
   }),
 
-  created() {
-    this.fetchAll();
+  async created() {
+    await this.fetchAll();
+  },
+
+  mounted() {
+    this.state.dialogCompleteProfile =
+      !this.profile.isCompleteProfile && this.profile.emailVerified;
+    this.state.dialogEmailVerify = !this.profile.emailVerified;
   },
 
   computed: {
+    profile() {
+      return this.$store.getters["auth/profile"];
+    },
+
     handleSlideToShow() {
       if (this.isMobile) return 1;
       if (this.isTablet) return 2;
@@ -103,6 +124,9 @@ export default {
   },
 
   methods: {
+    closeCompleteProfileDialog() {
+      this.state.dialogCompleteProfile = false;
+    },
     async fetchAll() {
       this.state.isLoading = true;
 
@@ -117,23 +141,16 @@ export default {
         this.$api.promos.getList({ ...body, hasCoupon: true }),
         this.$api.promos.getList({ ...body, hasCoupon: false }),
         this.$api.promos.getList({ ...body, isSpecial: true }),
-        this.$api.partners.getList({ page: 1, limit: 12 }),
-        // this.$api.brands.getList({ page: 1, limit: 12 }),
+        this.$api.banners.getList({ ...body }),
       ];
 
-      let [
-        resCouponOffers,
-        resMainOffers,
-        resSpecialOffers,
-        resRetail,
-        resBrands,
-      ] = await Promise.all(api);
+      let [resCouponOffers, resMainOffers, resSpecialOffers, resBanners] =
+        await Promise.all(api);
 
       this.handleCouponOffers(resCouponOffers);
       this.handleMainOffers(resMainOffers);
       this.handleSpecialOffers(resSpecialOffers);
-      this.handleRetails(resRetail);
-      // this.handleBrands(resBrands);
+      this.handleBanners(resBanners);
 
       this.state.isLoading = false;
     },
@@ -178,9 +195,9 @@ export default {
       }
     },
 
-    handleRetails(res) {
+    handleBanners(res) {
       if (res.success) {
-        this.items.retails = res.data.list;
+        this.items.banners = res.data.list;
       }
 
       if (!res.success) {

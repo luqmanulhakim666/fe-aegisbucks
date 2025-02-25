@@ -11,8 +11,8 @@
             cover
             class="border-thin"
             :src="
-              profile.avatar_src
-                ? profile.avatar_src
+              profile.imageUrl
+                ? profile.imageUrl
                 : `${$config.API_URL}/file/0193df80-ee16-7774-bb9c-e0e1084cab49/file}`
             "
             alt="avatar"
@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { AVATAR } from "@/data/general";
 export default {
   props: {
     logo: String,

@@ -23,9 +23,8 @@ export default (ctx) => {
       return await $axios.get(`${url}/profile`);
     },
 
-    async verifyEmail(query = {}) {
-      let q = qs.stringify(query);
-      return await $axios.get(`${url}/verify-email?${q}`);
+    async verifyEmail(body) {
+      return await $axios.post(`${url}/email/verify`, body);
     },
 
     async sendVerifyEmail() {

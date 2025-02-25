@@ -8,16 +8,28 @@
       </v-footer>
       <snackbar />
     </v-main>
+
+    <!-- <app-profile-dialog-email-verify :dialog="state.dialogEmailVerify" /> -->
   </v-app>
 </template>
 
 <script>
 export default {
   name: "AppLayout",
-  data: () => ({}),
+  data: () => ({
+    state: {
+      dialogEmailVerify: false,
+    },
+  }),
 
-  created() {},
+  async created() {
+    const profile = await this.$store.getters["auth/profile"];
+    const emailVerified = profile.emailVerified;
 
+    if (!emailVerified) {
+      this.state.dialogEmailVerify = true;
+    }
+  },
   computed: {
     profile() {
       return this.$store.getters["auth/profile"];

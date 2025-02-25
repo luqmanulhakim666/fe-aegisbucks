@@ -1,9 +1,9 @@
 <template>
   <div class="promo_card">
     <template v-if="!isBannerOnly">
-      <v-card
-        flat
-        class="d-flex flex-column justify-space-between white rounded-xxl pa-4 fill-height pointer elevation-1"
+      <div
+        class="d-flex flex-column justify-space-between white rounded-xxl pa-4 fill-height elevation-1"
+        v-bind:class="{ pointer: !showButton }"
         @click="onDetail()"
       >
         <div class="promo_card-top">
@@ -14,7 +14,10 @@
             @error="onErrorImage"
           />
 
-          <p class="promo_card-top_title h7--xxsmall dark--text">{{ name }}</p>
+          <p class="promo_card-top_title h7--xxsmall dark--text">
+            {{ name }}
+            {{ showButton }}
+          </p>
         </div>
 
         <div class="mt-4">
@@ -25,16 +28,16 @@
             </p>
           </div>
 
-          <v-btn
+          <a
+            :href="ctaUrl"
             v-if="showButton"
-            x-small
-            block
-            depressed
-            class="text-capitalize h7--xxsmall mt-4 success dark--text lighten-1"
-            >Claim</v-btn
+            target="_blank"
+            class="text-capitalize h7--xxsmall mt-4 success dark--text lighten-1 v-btn v-btn--block v-btn--has-bg theme--light v-size--x-small"
           >
+            Claim
+          </a>
         </div>
-      </v-card>
+      </div>
     </template>
 
     <template v-if="isBannerOnly">
@@ -85,6 +88,7 @@ export default {
       default: false,
     },
     isBannerOnly: Boolean,
+    ctaUrl: String,
   },
 
   data: () => ({
@@ -112,6 +116,7 @@ export default {
       this.selectedImage = item;
     },
     onDetail() {
+      if (this.showButton) return;
       this.$router.push(this.slug);
     },
   },

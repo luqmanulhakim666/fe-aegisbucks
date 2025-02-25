@@ -36,12 +36,27 @@ export const SUPER_ADMIN = [
     ],
   },
   {
-    name: "Promo",
+    name: "App",
     menus: [
       {
         text: "Promo",
         icon: "mdi-tag-multiple",
         path: "/admin/promos",
+      },
+      {
+        text: "Product Scan",
+        icon: "mdi-cube-scan",
+        path: "/admin/products-scan",
+      },
+      {
+        text: "Verify Points",
+        icon: "mdi-hand-coin-outline",
+        path: "/admin/verify-point",
+      },
+      {
+        text: "Banners",
+        icon: "mdi-image",
+        path: "/admin/banners",
       },
     ],
   },
