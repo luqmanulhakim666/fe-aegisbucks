@@ -275,7 +275,7 @@ export default {
         this.stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: {
-              // exact: "environment",
+              exact: "environment",
             },
           },
         });
