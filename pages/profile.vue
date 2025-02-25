@@ -99,14 +99,14 @@
       <p class="h5--small dark--text">Lainnya</p>
     </div>
 
-    <div v-for="(item, index) in items" :key="index">
+    <div v-for="(item, index) in items" :key="index" @click="onAction(item)">
       <div class="d-flex align-center mb-6">
-        <v-icon size="24" class="mr-3 dark--text">{{ item.icon }}</v-icon>
-        <p class="text-default">{{ item.label }}</p>
+        <v-icon size="20" class="mr-3 dark--text">{{ item.icon }}</v-icon>
+        <p class="text-default hover-underline">{{ item.label }}</p>
       </div>
     </div>
     <div class="d-flex align-center mb-6 pointer" @click="onLogout()">
-      <v-icon size="24" class="mr-3 error--text"> mdi-logout</v-icon>
+      <v-icon size="20" class="mr-3 error--text"> mdi-logout</v-icon>
       <p class="text-default error--text">Logout</p>
     </div>
 
@@ -142,11 +142,13 @@ export default {
         label: "Hubungi Help Center (WhatsApp)",
         key: "whatsapp",
         icon: "mdi-whatsapp",
+        value: "https://wa.me/6285215845379",
       },
       {
         label: "Hubungi Help Center (Instagram)",
-        key: "whatsapp",
+        key: "instagram",
         icon: "mdi-face-agent",
+        value: "https://instagram.com/letsbuyasia",
       },
       {
         label: "Kebijakan Privasi",
@@ -175,6 +177,33 @@ export default {
   },
 
   methods: {
+    onAction(val) {
+      if (val.key === "whatsapp") {
+        const phoneNumber = "6285215845379";
+        const url = `https://wa.me/${phoneNumber}`;
+
+        // First, try window.open for other browsers
+        const newTab = window.open(url, "_blank");
+
+        // If window.open is blocked, fallback to location.href
+        if (!newTab || newTab.closed || typeof newTab.closed === "undefined") {
+          window.location.href = url; // This will navigate the current tab
+        }
+      }
+
+      if (val.key === "instagram") {
+        const url = val.value;
+
+        // First, try window.open for other browsers
+        const newTab = window.open(url, "_blank");
+
+        // If window.open is blocked, fallback to location.href
+        if (!newTab || newTab.closed || typeof newTab.closed === "undefined") {
+          window.location.href = url; // This will navigate the current tab
+        }
+      }
+    },
+
     goToReward() {
       this.$router.push("/my-rewards");
     },

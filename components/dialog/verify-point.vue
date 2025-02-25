@@ -8,7 +8,9 @@
 
       <div class="pa-6">
         <div>
-          <p class="h7--xxsmall dark--text">Bukti Upload Struk:</p>
+          <p class="h7--xxsmall dark--text text-center mb-4">
+            Bukti Upload Struk:
+          </p>
           <div class="d-flex mx-auto justify-center">
             <v-img max-height="300" contain :src="getImage(item)" />
           </div>
