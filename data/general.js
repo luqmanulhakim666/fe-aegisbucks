@@ -21,6 +21,7 @@ export const PROFESSIONS = [
   "Freelance",
   "Ibu Rumah tangga",
   "PNS",
+  "Wiraswasta/Entrepreneur",
   "Lainnya",
 ];
 
