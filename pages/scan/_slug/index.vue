@@ -13,6 +13,10 @@
               class="d-flex align-center mx-auto justify-center"
               ref="video"
               autoplay
+              muted
+              playsinline
+              disablePictureInPicture
+              controlslist="nodownload nofullscreen noremoteplayback"
             ></video>
           </div>
         </div>
@@ -176,30 +180,37 @@ export default {
       if (!this.$refs.video) return;
 
       const video = this.$refs.video;
-      const canvas = document.createElement("canvas");
+      video.focus(); // Ensure focus
 
-      // Set canvas size to match video resolution
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      requestAnimationFrame(() => {
+        if (video.videoWidth === 0 || video.videoHeight === 0) {
+          console.error("Video is not ready yet.");
+          return;
+        }
 
-      const ctx = canvas.getContext("2d");
+        // Create a canvas matching video resolution
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext("2d", { alpha: false });
 
-      // Draw the video frame onto the canvas
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      // Compress and convert to image (reduce quality to keep size under 2MB)
-      let quality = 1.0;
-      let imageData = canvas.toDataURL("image/jpeg", quality);
+        // Try PNG first for best quality
+        let imageData = canvas.toDataURL("image/png");
 
-      // Reduce quality until the file is below 2MB
-      while (imageData.length > 2 * 1024 * 1024 && quality > 0.1) {
-        quality -= 0.1;
-        imageData = canvas.toDataURL("image/jpeg", quality);
-      }
+        // If PNG is too large (>5MB), use JPEG with quality adjustments
+        if (imageData.length > 5 * 1024 * 1024) {
+          let quality = 1.0; // Start with 100% quality
+          do {
+            imageData = canvas.toDataURL("image/jpeg", quality);
+            quality -= 0.02; // Reduce in smaller 2% steps
+          } while (imageData.length > 5 * 1024 * 1024 && quality > 0.1);
+        }
 
-      this.capturedImage = imageData;
-
-      this.isTakenPicture = true;
+        this.capturedImage = imageData;
+        this.isTakenPicture = true;
+      });
     },
 
     retake() {
@@ -264,7 +275,7 @@ export default {
         this.stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: {
-              exact: "environment",
+              // exact: "environment",
             },
           },
         });

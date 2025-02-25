@@ -12,7 +12,7 @@
             contain
           />
 
-          <general-form-autocomplete
+          <general-form-select
             v-model="form.variant"
             :items="item.variants"
             item-text="name"

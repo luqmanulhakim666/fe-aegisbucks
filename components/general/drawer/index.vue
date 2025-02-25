@@ -5,24 +5,59 @@
       <div class="mt-4">
         <div v-for="(item, i) in menu" :key="i">
           <p class="h7--xxsmall ml-5">{{ item.name }}</p>
-          <v-list>
-            <v-list-item-group light>
+
+          <div v-for="(list, index) in item.menus" :key="index">
+            <v-list v-if="!list.sub_items">
+              <v-list-item-group light>
+                <v-list-item class="pointer" link :to="list.path">
+                  <v-icon class="dark--text mr-6">{{ list.icon }}</v-icon>
+                  <v-list-item-content>
+                    <v-list-item-title class="dark--text text--default">
+                      {{ list.text }}
+                      <p>{{ list.sub_items }}</p>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+
+            <v-list-group
+              class="mb-2"
+              no-action
+              v-if="list.sub_items"
+              active-class="v-list-item--active"
+            >
+              <template v-slot:activator>
+                <v-list-item-icon>
+                  <v-icon width="24">
+                    {{ list.icon }}
+                  </v-icon>
+                </v-list-item-icon>
+                <v-list-item-title class="dark--text text--default">{{
+                  list.text
+                }}</v-list-item-title>
+              </template>
+
               <v-list-item
-                v-for="(list, index) in item.menus"
+                v-for="(child, index) in list.sub_items"
                 :key="index"
-                class="pointer"
+                class="mb-4 mt-1 ml-n2"
                 link
-                :to="list.path"
+                active-class="v-list-item--active_child"
+                :to="child.path"
               >
-                <v-icon class="dark--text mr-6">{{ list.icon }}</v-icon>
-                <v-list-item-content>
-                  <v-list-item-title class="dark--text text--default">
-                    {{ list.text }}</v-list-item-title
-                  >
-                </v-list-item-content>
+                <v-avatar
+                  color="primary"
+                  size="8"
+                  class="drawer__groups__dots"
+                  v-if="path === child.text.toLowerCase()"
+                />
+                <v-list-item-title class="text--default dark--text">{{
+                  child.text
+                }}</v-list-item-title>
               </v-list-item>
-            </v-list-item-group>
-          </v-list>
+            </v-list-group>
+          </div>
         </div>
       </div>
     </v-navigation-drawer>
@@ -116,7 +151,7 @@ export default {
         min-height: 8px;
         position: absolute;
         border-radius: 100%;
-        background-color: var(--v-secondary-lighten5);
+        background-color: var(--v-dark-lighten5);
         left: 46px;
       }
     }

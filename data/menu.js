@@ -28,11 +28,6 @@ export const SUPER_ADMIN = [
         icon: "mdi-bullhorn",
         path: "/admin/campaigns",
       },
-      // {
-      //   text: "Template",
-      //   icon: "mdi-hammer-screwdriver",
-      //   path: "/admin/templates",
-      // },
     ],
   },
   {
@@ -44,19 +39,23 @@ export const SUPER_ADMIN = [
         path: "/admin/promos",
       },
       {
-        text: "Product Scan",
-        icon: "mdi-cube-scan",
-        path: "/admin/products-scan",
-      },
-      {
-        text: "Verify Points",
-        icon: "mdi-hand-coin-outline",
-        path: "/admin/verify-point",
-      },
-      {
         text: "Banners",
         icon: "mdi-image",
         path: "/admin/banners",
+      },
+      {
+        text: "Struk",
+        icon: "mdi-cube-scan",
+        sub_items: [
+          {
+            text: "Product Scan",
+            path: "/admin/products-scan",
+          },
+          {
+            text: "User Points",
+            path: "/admin/verify-point",
+          },
+        ],
       },
     ],
   },
@@ -89,22 +88,3 @@ export const CUSTOMER = [
     ],
   },
 ];
-
-// {
-//   text: "Parameter",
-//   icon: "mdi-layers",
-//   sub_items: [
-//     {
-//       text: "Batch",
-//       path: "//admin/assessment/batch",
-//     },
-//     {
-//       text: "Aspek Penilaian",
-//       path: "//admin/assessment/parameters",
-//     },
-//     {
-//       text: "Interview Online",
-//       path: "//admin/interview",
-//     },
-//   ],
-// },
