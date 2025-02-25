@@ -200,13 +200,13 @@ export default {
         let imageData = canvas.toDataURL("image/png");
 
         // If PNG is too large (>5MB), use JPEG with quality adjustments
-        if (imageData.length > 5 * 1024 * 1024) {
-          let quality = 1.0; // Start with 100% quality
-          do {
-            imageData = canvas.toDataURL("image/jpeg", quality);
-            quality -= 0.02; // Reduce in smaller 2% steps
-          } while (imageData.length > 5 * 1024 * 1024 && quality > 0.1);
-        }
+        // if (imageData.length > 5 * 1024 * 1024) {
+        //   let quality = 1.0; // Start with 100% quality
+        //   do {
+        //     imageData = canvas.toDataURL("image/jpeg", quality);
+        //     quality -= 0.02; // Reduce in smaller 2% steps
+        //   } while (imageData.length > 5 * 1024 * 1024 && quality > 0.1);
+        // }
 
         this.capturedImage = imageData;
         this.isTakenPicture = true;
