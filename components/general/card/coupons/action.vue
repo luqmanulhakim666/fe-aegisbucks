@@ -16,7 +16,6 @@
 
           <p class="promo_card-top_title h7--xxsmall dark--text">
             {{ name }}
-            {{ showButton }}
           </p>
         </div>
 

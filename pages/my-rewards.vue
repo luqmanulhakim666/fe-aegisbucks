@@ -62,6 +62,7 @@ import pipe from "@/mixins/pipe";
 export default {
   layout: "app",
   mixins: [pipe],
+  middleware: "userAuthenticated",
   data: () => ({
     body: {
       page: 1,

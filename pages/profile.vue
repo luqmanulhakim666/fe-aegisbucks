@@ -121,6 +121,7 @@
 import utils from "@/mixins/utils";
 export default {
   layout: "app",
+  middleware: "userAuthenticated",
   mixins: [utils],
   data: () => ({
     hasSentEmail: false,

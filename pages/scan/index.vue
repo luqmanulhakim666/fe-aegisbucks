@@ -3,7 +3,7 @@
     <div
       v-for="(item, index) in items"
       :key="index"
-      class="d-flex justify-space-between align-center border-thin rounded-xl py-2 px-6 mb-6"
+      class="d-sm-flex justify-space-between align-center border-thin rounded-xl py-2 px-6 mb-6"
     >
       <div class="d-flex align-center">
         <v-img
@@ -21,6 +21,7 @@
       </div>
 
       <v-btn
+        :block="isMobile"
         depressed
         small
         class="success lighten-1 text-capitalize h7--xxsmall dark--text"
@@ -39,10 +40,11 @@
 
 <script>
 import media from "@/mixins/media";
-import { state } from "../../store/auth";
+import screen from "@/mixins/screen";
 export default {
   layout: "app",
-  mixins: [media],
+  mixins: [media, screen],
+  middleware: "userAuthenticated",
   data: () => ({
     state: {
       isLoading: false,

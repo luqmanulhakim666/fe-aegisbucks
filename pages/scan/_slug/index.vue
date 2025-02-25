@@ -136,6 +136,7 @@
 <script>
 export default {
   layout: "app",
+  middleware: "userAuthenticated",
   data() {
     return {
       location: null,
