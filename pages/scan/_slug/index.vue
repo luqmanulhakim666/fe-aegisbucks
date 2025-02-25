@@ -288,7 +288,10 @@ export default {
 
     stopCamera() {
       if (this.stream) {
-        this.stream.getTracks().forEach((track) => track.stop());
+        this.stream.getTracks().forEach((track) => {
+          track.stop(); // Stop each track
+        });
+        this.stream = null; // Clear reference
       }
     },
 
