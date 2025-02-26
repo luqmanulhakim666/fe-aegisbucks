@@ -274,6 +274,8 @@ export default {
       try {
         this.stream = await navigator.mediaDevices.getUserMedia({
           video: {
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
             facingMode: {
               exact: "environment",
             },

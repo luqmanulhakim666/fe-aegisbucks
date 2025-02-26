@@ -126,7 +126,7 @@ export default {
     goBack() {
       this.state.isLoading.cancel = true;
 
-      this.$router.push("/admin/users");
+      this.$router.go(-1);
     },
   },
 

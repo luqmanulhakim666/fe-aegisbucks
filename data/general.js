@@ -5,7 +5,8 @@ export const SORT = [
 
 export const ROLES = [
   { name: "Admin", key: "admin" },
-  { name: "Customer", key: "customer" },
+  { name: "Customers", key: "cust" },
+  { name: "Clients", key: "customer" },
 ];
 
 export const CAMPAIGN_TYPES = [
