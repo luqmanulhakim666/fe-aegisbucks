@@ -254,12 +254,6 @@ export default {
       const url = this.$api.reports.export("user", this.body, token);
       window.open(url);
     },
-
-    // preventDelete(val) {
-    //   console.log(val);
-    //   const id = this.$store.getters["auth/profile"]["id"];
-    //   return id !== val;
-    // },
   },
 };
 </script>

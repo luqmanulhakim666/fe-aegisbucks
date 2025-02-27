@@ -195,7 +195,6 @@ export default {
     },
 
     handleDialogVerify(val) {
-      console.log("w", val);
       if (val?.id) {
         this.state.selectedItem = val;
       }

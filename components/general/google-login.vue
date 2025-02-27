@@ -50,9 +50,13 @@ export default {
         }
 
         // Set the callback URL to cookies (only on client)
-        Cookie.set("googleCallback", window.location.href);
+        Cookie.set("campaignUrl", window.location.href);
 
         localStorage.setItem("form", JSON.stringify(this.form));
+
+        window.location.href = this.$api.auth.googleLogin();
+
+        return;
 
         // Get the client ID from environment variables
         const clientId = process.env.GOOGLE_CLIENT_ID;

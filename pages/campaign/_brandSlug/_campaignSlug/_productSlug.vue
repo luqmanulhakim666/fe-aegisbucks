@@ -261,6 +261,10 @@ export default {
   async mounted() {
     const isRecaptcha = Cookie.get("recaptcha");
 
+    if (Cookie.get("campaignUrl")) {
+      Cookie.remove("campaignUrl");
+    }
+
     if (!isRecaptcha) {
       this.$recaptcha.init();
     }
@@ -434,8 +438,10 @@ export default {
         productId: this.product?.productId,
         name: this.profile.name,
         email: this.profile.email,
-        googleId: this.profile.sub,
-        phone: "081" + this.profile.sub,
+        googleId: this.profile.googleId,
+        phone: this.profile?.phone
+          ? this.profile?.phone
+          : "081" + this.profile.googleId,
         count: this.form.count,
         userInputs: this.form.userInputs?.map((x) => {
           let finalValue = x.defaultValue;

@@ -216,7 +216,6 @@ export default {
       return this.campaign?.ctaItems?.length > 0;
     },
     retailName() {
-      console.log("item", this.item);
       if (this.isRetailType) {
         return this.item.retail?.name;
       }

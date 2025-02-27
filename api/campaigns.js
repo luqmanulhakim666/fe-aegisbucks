@@ -30,9 +30,6 @@ export default (ctx) => {
     },
 
     async claimVoucher(body) {
-      // const token = store.getters["auth/token"];
-      // console.log(store);
-      // return;
       return await $axios.post(`${url}/claim-voucher-code`, body);
     },
 

@@ -1,24 +1,61 @@
 <template>
   <div>
     <general-loading v-if="state.isLoading" />
+
+    <v-dialog width="500" v-model="state.isDialog">
+      <div
+        class="white pa-6 rounded-xl d-flex flex-column align-center justify-center"
+      >
+        <v-icon size="62" color="error">mdi-close-octagon</v-icon>
+        <h5 class="text-center h5--small dark--text text-lighten-4 mt-8">
+          Email Business tidak diizinkan
+        </h5>
+        <h5 class="text-center h5--small dark--text text-lighten-4">
+          Harap login dengan akun @gmail.com
+        </h5>
+
+        <v-btn
+          @click="goBack()"
+          block
+          depressed
+          class="mt-8 secondary text-capitalize h7--xxsmall"
+          >Kembali</v-btn
+        >
+      </div>
+    </v-dialog>
   </div>
 </template>
 
 <script>
+const Cookie = process.client ? require("js-cookie") : undefined;
+import meta from "@/mixins/meta";
+
 export default {
+  mixins: [meta],
   layout: "empty",
 
   data: () => ({
     state: {
       isLoading: false,
+      isDialog: false,
+    },
+    meta: {
+      title: "Google Verifiying",
     },
   }),
 
   async mounted() {
-    console.log("callback");
     this.state.isLoading = true;
 
-    const token = this.$route.query?.token;
+    const token = await this.$route.query?.token;
+    let profile = null;
+    let emailVerified = null;
+
+    const campaignUrl = Cookie.get("campaignUrl");
+
+    if (!token) {
+      return this.$router.push("/login");
+    }
 
     if (token) {
       await this.$store.dispatch("auth/setToken", token);
@@ -27,21 +64,39 @@ export default {
         "auth/setRole",
         this.$store.getters["auth/profile"]["role"]
       );
+      await this.$store.dispatch("auth/setGoogleToken", token);
 
-      const profile = this.$store.getters["auth/profile"];
-      const emailVerified = profile.emailVerified;
+      profile = this.$store.getters["auth/profile"];
+      emailVerified = profile.emailVerified;
 
-      if (!emailVerified) {
-        await this.$api.auth.sendVerifyEmail();
+      await Cookie.set("googleProfile", JSON.stringify(profile));
+
+      if (!profile?.email?.includes("@gmail.com")) {
+        this.state.isDialog = true;
+        this.state.isLoading = false;
+        return;
       }
+    }
 
-      this.state.isLoading = false;
+    if (campaignUrl) {
+      window.location.href = `${campaignUrl}?success=true`;
+    }
+
+    if (!emailVerified) {
+      await this.$api.auth.sendVerifyEmail();
+    }
+
+    if (emailVerified) {
       return this.$router.push("/");
     }
 
-    if (!token) {
-      this.$router.push("/login");
-    }
+    this.state.isLoading = false;
+  },
+
+  methods: {
+    goBack() {
+      window.location.href = campaignUrl;
+    },
   },
 };
 </script>
