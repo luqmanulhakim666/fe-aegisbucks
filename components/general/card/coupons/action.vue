@@ -8,6 +8,7 @@
       >
         <div class="promo_card-top">
           <img
+            :lazy-src="`${getImage(image)}?auto=format,compress&w=200`"
             alt="img"
             class="full-width rounded-xl"
             :src="getImage(image)"

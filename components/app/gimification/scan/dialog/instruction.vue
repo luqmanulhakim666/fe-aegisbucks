@@ -5,6 +5,7 @@
       <div class="container py-10">
         <v-form v-model="state.isValid" ref="form">
           <v-img
+            :lazy-src="`${getImage(item)}?auto=format,compress&w=50`"
             class="d-flex mx-auto mb-8"
             max-width="200"
             max-height="200"

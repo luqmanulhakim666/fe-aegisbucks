@@ -7,6 +7,7 @@
     >
       <div class="d-flex align-center">
         <v-img
+          :lazy-src="`${getImage(item)}?auto=format,compress&w=50`"
           width="100"
           height="100"
           contain

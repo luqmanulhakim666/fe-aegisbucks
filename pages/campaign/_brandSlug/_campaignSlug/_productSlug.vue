@@ -436,12 +436,12 @@ export default {
         campaignId: this.campaign.id,
         retailId: this.form.retailId,
         productId: this.product?.productId,
-        name: this.profile.name,
-        email: this.profile.email,
-        googleId: this.profile.googleId,
-        phone: this.profile?.phone
-          ? this.profile?.phone
-          : "081" + this.profile.googleId,
+        // name: this.profile.name,
+        // email: this.profile.email,
+        // googleId: this.profile.googleId,
+        // phone: this.profile?.phone
+        //   ? this.profile?.phone
+        //   : "081" + this.profile.googleId,
         count: this.form.count,
         userInputs: this.form.userInputs?.map((x) => {
           let finalValue = x.defaultValue;

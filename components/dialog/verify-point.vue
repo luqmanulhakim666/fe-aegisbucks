@@ -12,7 +12,12 @@
             Bukti Upload Struk:
           </p>
           <div class="d-flex mx-auto justify-center">
-            <v-img max-height="300" contain :src="getImage(item)" />
+            <v-img
+              :lazy-src="`${getImage(item)}?auto=format,compress&w=50`"
+              max-height="300"
+              contain
+              :src="getImage(item)"
+            />
           </div>
         </div>
 
