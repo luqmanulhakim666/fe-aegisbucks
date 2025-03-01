@@ -5,9 +5,9 @@
       :key="index"
       class="d-sm-flex justify-space-between align-center border-thin rounded-xl py-2 px-6 mb-6"
     >
-      <div class="d-flex align-center">
+      <div class="d-flex flex-column align-center flex-sm-row">
         <v-img
-          :lazy-src="`${getImage(item)}?auto=format,compress&w=50`"
+          :lazy-src="`${getImage(item)}?auto=format,compress&w=10`"
           width="100"
           height="100"
           contain
@@ -16,7 +16,9 @@
         />
 
         <div class="ml-4">
-          <p class="h6--xsmall mb-2 dark--text">{{ item.name }}</p>
+          <p class="h6--xsmall mb-2 dark--text text-center text-sm-left">
+            {{ item.name }}
+          </p>
           <app-point :points="item.reward" />
         </div>
       </div>
@@ -25,7 +27,7 @@
         :block="isMobile"
         depressed
         small
-        class="success lighten-1 text-capitalize h7--xxsmall dark--text"
+        class="success lighten-1 text-capitalize h7--xxsmall dark--text mt-4 mt-sm-0"
         @click="onSeeInstruction(item)"
         >Lihat Petunjuk</v-btn
       >

@@ -261,10 +261,6 @@ export default {
   async mounted() {
     const isRecaptcha = Cookie.get("recaptcha");
 
-    if (Cookie.get("campaignUrl")) {
-      Cookie.remove("campaignUrl");
-    }
-
     if (!isRecaptcha) {
       this.$recaptcha.init();
     }

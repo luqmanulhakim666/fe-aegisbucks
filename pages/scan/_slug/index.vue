@@ -1,39 +1,29 @@
 <template>
   <div class="container scan">
-    <template v-if="location && cameraAccess">
-      <template v-if="!isTakenPicture">
-        <div class="scanner-container rounded-lg">
-          <div class="scanner-frame">
-            <div class="corner top-left"></div>
-            <div class="corner top-right"></div>
-            <div class="corner bottom-left"></div>
-            <div class="corner bottom-right"></div>
-
-            <video
-              class="d-flex align-center mx-auto justify-center"
-              ref="video"
-              autoplay
-              muted
-              playsinline
-              disablePictureInPicture
-              controlslist="nodownload nofullscreen noremoteplayback"
-            ></video>
-          </div>
-        </div>
-      </template>
-
-      <template v-if="isTakenPicture">
-        <v-img
-          class="rounded-xl d-flex mx-auto"
-          width="300"
-          height="300"
-          :src="capturedImage"
+    <template v-if="deviceType === 'pc'">
+      <div class="d-flex flex-column align-center justify-center">
+        <general-form-image-cropper
+          :form="form"
+          bold
+          required
+          acceptFile="image/png, image/jpg, image/jpeg"
+          @on:remove="onRemoveFile()"
         />
-      </template>
 
+        <v-btn
+          v-if="form.image.id"
+          depressed
+          small
+          class="success lighten-1 success--text text-capitalize h7--xxsmall mt-2"
+          :loading="isLoading"
+          @click="postImage()"
+        >
+          Upload Gambar</v-btn
+        >
+      </div>
       <div class="text-center">
         <p class="h5--small success--text lighten-1 mt-6 mb-4 text-center">
-          Scan Struk
+          Upload Struk
         </p>
         <p class="text--default dark--text mb-4 text-center">
           Pastikan seluruh tulisan pada struk terlihat jelas & bukan merupakan
@@ -52,45 +42,107 @@
           3. Foto pada bidang datar dengan pencahayaan yang jelas
         </p>
       </div>
+    </template>
 
-      <v-btn
-        v-if="isTakenPicture"
-        depressed
-        small
-        block
-        outlined
-        class="dark--text text-capitalize h7--xxsmall mt-8"
-        @click="retake()"
-      >
-        Ambil ulang Gambar</v-btn
-      >
+    <template v-else>
+      <template v-if="location && cameraAccess">
+        <template v-if="!isTakenPicture">
+          <div class="scanner-container rounded-lg">
+            <div class="scanner-frame">
+              <div class="corner top-left"></div>
+              <div class="corner top-right"></div>
+              <div class="corner bottom-left"></div>
+              <div class="corner bottom-right"></div>
 
-      <v-btn
-        v-if="isTakenPicture"
-        depressed
-        small
-        block
-        class="success lighten-1 success--text text-capitalize h7--xxsmall mt-2"
-        :loading="isLoading"
-        @click="uploadFile()"
-      >
-        Upload Gambar</v-btn
-      >
+              <video
+                class="d-flex align-center mx-auto justify-center"
+                ref="video"
+                autoplay
+                muted
+                playsinline
+                disablePictureInPicture
+                controlslist="nodownload nofullscreen noremoteplayback"
+              ></video>
+            </div>
+          </div>
+        </template>
 
-      <v-btn
-        v-if="!isTakenPicture"
-        depressed
-        small
-        block
-        class="success lighten-1 success--text text-capitalize h7--xxsmall mt-8"
-        @click="captureFrame()"
-      >
-        <v-icon class="mr-2">mdi-camera</v-icon>
-        Ambil Gambar</v-btn
-      >
+        <template v-if="isTakenPicture">
+          <v-img
+            class="rounded-xl d-flex mx-auto"
+            width="300"
+            height="300"
+            :src="capturedImage"
+          />
+        </template>
+
+        <div class="text-center">
+          <p class="h5--small success--text lighten-1 mt-6 mb-4 text-center">
+            Scan Struk
+          </p>
+          <p class="text--default dark--text mb-4 text-center">
+            Pastikan seluruh tulisan pada struk terlihat jelas & bukan merupakan
+            struk duplikasi
+          </p>
+
+          <p class="h5--small secondary--text my-4">Tips Scan Struk Belanja</p>
+
+          <p class="text--default dark--text">
+            1. Pastikan Struk dalam keadaan baik & terlihat jelas
+          </p>
+          <p class="text--default dark--text">
+            2. Seluruh tulisan masih terlihat jelas
+          </p>
+          <p class="text--default dark--text">
+            3. Foto pada bidang datar dengan pencahayaan yang jelas
+          </p>
+        </div>
+
+        <v-btn
+          v-if="isTakenPicture"
+          depressed
+          small
+          block
+          outlined
+          class="dark--text text-capitalize h7--xxsmall mt-8"
+          @click="retake()"
+        >
+          Ambil ulang Gambar</v-btn
+        >
+
+        <v-btn
+          v-if="isTakenPicture"
+          depressed
+          small
+          block
+          class="success lighten-1 success--text text-capitalize h7--xxsmall mt-2"
+          :loading="isLoading"
+          @click="uploadFile()"
+        >
+          Upload Gambar</v-btn
+        >
+
+        <v-btn
+          v-if="!isTakenPicture"
+          depressed
+          small
+          block
+          class="success lighten-1 success--text text-capitalize h7--xxsmall mt-8"
+          @click="captureFrame()"
+        >
+          <v-icon class="mr-2">mdi-camera</v-icon>
+          Ambil Gambar</v-btn
+        >
+      </template>
     </template>
     <!-- Dialog -->
-    <v-dialog persistent v-model="dialogVisible" class="dialog" width="300">
+    <v-dialog
+      v-if="deviceType !== 'pc'"
+      persistent
+      v-model="dialogVisible"
+      class="dialog"
+      width="300"
+    >
       <div class="white rounded-xl">
         <div class="container">
           <div class="d-flex flex-column align-center">
@@ -139,11 +191,18 @@
 
 <script>
 export default {
+  asyncData(context) {
+    const deviceType = context.$ua.deviceType();
+    return { deviceType };
+  },
   layout: "app",
   middleware: "userAuthenticated",
 
   data() {
     return {
+      form: {
+        image: {},
+      },
       location: null,
       cameraAccess: false,
       error: null,
@@ -158,6 +217,7 @@ export default {
   },
 
   async mounted() {
+    console.log("mount");
     await this.checkPermissions();
     if (!this.location || !this.cameraAccess) {
       this.dialogVisible = true;
@@ -176,6 +236,9 @@ export default {
   },
 
   methods: {
+    onRemoveFile() {
+      this.form.image = "";
+    },
     captureFrame() {
       if (!this.$refs.video) return;
 
@@ -217,6 +280,31 @@ export default {
       this.isTakenPicture = false;
       this.capturedImage = null;
       this.startCamera();
+    },
+
+    async postImage() {
+      this.isLoading = true;
+
+      const productScanId = this.$route.params?.slug;
+      const variantId = this.$route.query?.variantId;
+      const imageId = this.form.image?.id;
+      const payload = {
+        productScanId: productScanId,
+        imageId: imageId,
+        variantId: variantId,
+      };
+
+      const scan = await this.$api.userScan.post(payload);
+
+      if (scan.success) {
+        this.$router.push(`/scan/${scan.data.productScanId}/success`);
+      }
+
+      if (!scan.success) {
+        this.setFailedAlert(scan);
+      }
+
+      this.isLoading = false;
     },
 
     async uploadFile() {

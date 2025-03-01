@@ -70,6 +70,8 @@ export const actions = {
     let googleProfile;
     if (process.client) {
       role = Cookie.get("role");
+      googleToken = Cookie.get("googleProfile");
+      googleProfile = Cookie.get("googleToken");
 
       if (googleToken) {
         Cookie.remove("googleToken");

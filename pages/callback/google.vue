@@ -93,6 +93,12 @@ export default {
     this.state.isLoading = false;
   },
 
+  beforeDestroy() {
+    if (Cookie.get("campaignUrl")) {
+      Cookie.remove("campaignUrl");
+    }
+  },
+
   methods: {
     goBack() {
       window.location.href = campaignUrl;
