@@ -165,7 +165,7 @@ export const actions = {
    *
    */
   async loadAuth({ dispatch }) {
-    let token = Cookie.get("token");
+    let token = Cookie.get("token") || Cookie.get("googleToken");
 
     if (!token) {
       return false;
