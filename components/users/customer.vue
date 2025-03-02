@@ -14,17 +14,23 @@
         </div>
       </template>
 
+      <template v-slot:[`item.avatar`]="{ item }">
+        <general-avatar size="38" :image="item.imageUrl" />
+      </template>
+
       <template v-slot:[`item.age`]="{ item }">
         <p>{{ calculateAge(item.birthDate) }}</p>
       </template>
 
       <template v-slot:[`item.profession`]="{ item }">
-        <p>{{ item.profession }}</p>
+        <p>{{ item.profession ? item.profession : "-" }}</p>
+      </template>
+      <template v-slot:[`item.phone`]="{ item }">
+        <p>{{ item.phone ? item.phone : "-" }}</p>
       </template>
 
       <template v-slot:[`item.city`]="{ item }">
-        <!-- <p>{{ cityName(item.city) }}</p> -->
-        <p>kota</p>
+        <p>{{ cityName(item) }}</p>
       </template>
     </v-data-table>
   </div>
@@ -40,6 +46,12 @@ export default {
 
   data: () => ({
     headers: [
+      {
+        text: "Photo Profile",
+        value: "avatar",
+        sortable: false,
+        class: "dark--text h7--xxsmall ",
+      },
       {
         text: "Nama",
         value: "name",
@@ -87,9 +99,10 @@ export default {
 
   computed: {
     cityName() {
-      const name = (val) => {
-        return val?.name;
+      let name = (val) => {
+        return val?.city?.name || "-";
       };
+
       return name;
     },
   },
