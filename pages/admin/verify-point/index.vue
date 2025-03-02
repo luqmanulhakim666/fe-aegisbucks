@@ -5,6 +5,8 @@
       actionCreate="/admin/products-scan/create"
       @on:sort="onSort"
       @on:search="onSearch"
+      @fetch:verify-point="fetch"
+      filterByProductScan
       :exportReport="false"
       sort
     />
@@ -209,11 +211,12 @@ export default {
       this.body.sort = val?.sort || "desc";
     },
 
-    async fetch() {
+    async fetch(val) {
       this.state.isLoading = true;
 
       const res = await this.$api.products.scan.getListVerifyPoint({
         ...this.body,
+        productScanId: val?.id,
       });
 
       if (res.success) {

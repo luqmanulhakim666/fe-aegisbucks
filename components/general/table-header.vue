@@ -25,10 +25,26 @@
 
     <v-spacer></v-spacer>
 
+    <general-form-autocomplete
+      clearable
+      v-if="filterByProductScan"
+      v-model="form.productScan"
+      placeholder="Search Brand"
+      className="text-capitalize"
+      outlined
+      hide-details
+      :items="items.productScan"
+      item-text="name"
+      return-object
+      :loading="loading.productScan"
+      @keydown="fetchProductScan"
+      @change="selectProductScan"
+    />
+
     <!-- SORT YEAR -->
     <general-form-dropdown
       label="Tahun"
-      :defaultLabel="defaultLabelFilter"
+      :defltLabel="defaultLabelFilter"
       :list="getYearRange"
       :active="state.filterYear"
       @set:active="onSetFilterYear"
@@ -70,6 +86,10 @@ import screen from "@/mixins/screen";
 export default {
   mixins: [screen],
   props: {
+    filterByProductScan: {
+      type: Boolean,
+      default: false,
+    },
     showSearch: {
       type: Boolean,
       default: true,
@@ -110,16 +130,26 @@ export default {
 
   data: () => ({
     search: "",
+    form: {
+      productScan: "",
+    },
     state: {
       sortKey: "",
       filterYear: "",
     },
+    loading: {
+      productScan: false,
+    },
     items: {
       sort: SORT,
+      productScan: [],
     },
   }),
 
   created() {
+    if (this.filterByProductScan) {
+      this.fetchProductScan();
+    }
     this.setQuery();
   },
 
@@ -140,6 +170,35 @@ export default {
   },
 
   methods: {
+    selectProductScan(val) {
+      this.$emit("fetch:verify-point", val);
+    },
+
+    fetchProductScan: debounce(async function (val) {
+      const keyword = val?.target?._value;
+
+      this.loading.productScan = true;
+
+      const payload = {
+        keyword: keyword,
+        sort: "desc",
+        page: 1,
+        limit: 5,
+      };
+
+      const res = await this.$api.products.scan.getList({ ...payload });
+
+      if (res.success) {
+        this.items.productScan = res.data.list;
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+
+      this.loading.productScan = false;
+    }, 500),
+
     setQuery() {
       const query = this.$route?.query;
       const keyword = query.keyword;

@@ -34,18 +34,26 @@
 
         <v-divider class="my-8" />
 
-        <v-expansion-panels flat class="mb-4 border-thin rounded-lg" focusable>
+        <v-expansion-panels
+          den
+          flat
+          class="mb-4 border-thin rounded-lg"
+          focusable
+        >
           <v-expansion-panel>
             <v-expansion-panel-header class="grey lighten-3">
-              <span class="h6--xsmall">User</span>
+              <span class="h6--xsmall">
+                <v-icon small color="dark">mdi-account</v-icon>
+                User Information</span
+              >
             </v-expansion-panel-header>
-            <v-expansion-panel-content color="py-6">
+            <v-expansion-panel-content class="my-4">
               <p class="h7--xxsmall dark--text">Name</p>
               <p class="text--default dark--text">
                 {{ item.user.name }}
               </p>
 
-              <v-divider class="my-2" />
+              <v-divider class="my-4" />
               <p class="h7--xxsmall dark--text">Email</p>
 
               <p class="text--default dark--text">
