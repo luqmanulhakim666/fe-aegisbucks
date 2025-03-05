@@ -25,7 +25,7 @@
       label="Point"
       outlined
       bold
-      :rules="[required, number]"
+      :rules="[required]"
       @keypress="onDigits"
     />
 

@@ -21,6 +21,10 @@
         <p class="dark--text">{{ item.no }}</p>
       </template>
 
+      <template v-slot:[`item.reward`]="{ item }">
+        <p class="dark--text">{{ decimal(item.reward) }}</p>
+      </template>
+
       <template v-slot:[`item.thumbnail`]="{ item }">
         <general-thumbnail
           ratio="1"

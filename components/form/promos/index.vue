@@ -128,12 +128,10 @@
 
     <general-form-rich-editor
       class="mb-8"
-      required
       v-model="form.howToInfo"
       label="How To"
       outlined
       bold
-      :rules="[required]"
     />
     <general-form-rich-editor
       class="mb-8"
@@ -142,7 +140,6 @@
       label="Term and Conditions"
       outlined
       bold
-      :rules="[required]"
     />
 
     <general-form-rich-editor
@@ -152,7 +149,6 @@
       label="Help Center"
       outlined
       bold
-      :rules="[required]"
     />
 
     <general-form-rich-editor
@@ -162,7 +158,6 @@
       label="Wallet"
       outlined
       bold
-      :rules="[required]"
     />
 
     <v-row>

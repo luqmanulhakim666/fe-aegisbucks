@@ -11,10 +11,10 @@
             <p class="h5--small">Saldo Reward</p>
 
             <h4 class="h4--default success--text">
-              Rp {{ state.totalPoints }}
+              Rp {{ decimal(state.totalPoints) }}
             </h4>
             <p class="h7--xxsmall mt-2 dark--text">
-              Total Pendapatan: {{ state.totalPoints }}
+              Total Pendapatan: {{ decimal(state.totalPoints) }}
             </p>
           </div>
         </div>
@@ -33,13 +33,17 @@
               <p class="text--default dark--text">
                 {{ fullDateTime(item.createdAt, "-") }}
               </p>
+
+              <p class="text--default mt-2" v-if="item.description">
+                *{{ item.description }}
+              </p>
             </div>
 
-            <div class="d-flex flex-column justify-start align-start">
-              <p class="h8--supersmall">Rp {{ item.amount }}</p>
+            <div class="d-flex flex-column justify-end align-end">
+              <p class="h8--supersmall">Rp {{ decimal(item.amount) }}</p>
 
               <p
-                class="text--default text-capitalized"
+                class="text--small text-capitalize"
                 v-bind:class="{
                   'success--text': item.status === 'approved',
                   'error--texx': item.status === 'reject',

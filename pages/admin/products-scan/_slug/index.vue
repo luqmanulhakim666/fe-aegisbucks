@@ -40,8 +40,9 @@
 <script>
 import rules from "@/mixins/rules";
 import meta from "@/mixins/meta";
+import utils from "@/mixins/utils";
 export default {
-  mixins: [rules, meta],
+  mixins: [rules, meta, utils],
   middleware: ["authenticated", "authorized"],
   meta: {
     page: "admin",
@@ -129,7 +130,7 @@ export default {
           imageId: this.form.image?.id,
           isActive: this.form.isActive,
           description: this.form.description,
-          reward: Number(this.form.reward),
+          reward: this.toInt(this.form.reward),
           variants: this.form.variants?.map((x) => {
             return x?.name;
           }),
@@ -152,6 +153,14 @@ export default {
     },
     goBack() {
       this.$router.push("/admin/products-scan");
+    },
+  },
+
+  watch: {
+    "form.reward"(val) {
+      if (val) {
+        this.form.reward = this.decimal(val);
+      }
     },
   },
 };
