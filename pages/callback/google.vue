@@ -90,6 +90,8 @@ export default {
       return this.$router.push("/");
     }
 
+    this.$router.push("/");
+
     this.state.isLoading = false;
   },
 
