@@ -315,6 +315,7 @@
         </div>
         <general-form-text-field
           v-model="form.emailSender"
+          placeholder="info<info@letsbuyasia.id>"
           bold
           label="Email Sender"
           outlined
@@ -407,7 +408,7 @@ export default {
       this.sendEmailTestLoading = true;
       const payload = {
         receiver: this.emailReceiver,
-        sender: this.form.emailSender + "<info@letsbuyasia.id>",
+        sender: this.form.emailSender,
         host: this.form.emailHost,
         port: this.form.emailPort,
         secure: this.form.emailSecure,
@@ -481,7 +482,7 @@ export default {
         emailPassword: this.form.emailPassword,
         emailPort: Number(this.form.emailPort),
         emailSecure: this.form.emailSecure,
-        emailSender: this.form.emailSender + "<info@letsbuyasia.id>",
+        emailSender: this.form.emailSender,
         emailUser: this.form.emailUser,
         type: this.form.type,
       };

@@ -79,7 +79,7 @@ import meta from "@/mixins/meta";
 import alert from "@/mixins/alert";
 export default {
   layout: "app",
-  middleware: ["userAuthenticated"],
+  middleware: "userAuthenticated",
   mixins: [alert],
   meta: [meta],
   data: () => ({

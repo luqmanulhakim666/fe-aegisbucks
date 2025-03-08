@@ -1,13 +1,7 @@
-export default function ({ store, redirect, route }) {
-  const role = store.getters["auth/role"];
+export default function (context) {
+  const role = context.store.getters["auth/role"];
 
-  console.log("role", role);
-
-  if (!store.getters["auth/isLogin"]) {
-    redirect(`/login`);
-  }
-
-  if (role !== "cust") {
-    store.dispatch("auth/logout");
+  if (role !== "cust" || !context.store.getters["auth/isLogin"]) {
+    return context.redirect("auth/logout");
   }
 }
