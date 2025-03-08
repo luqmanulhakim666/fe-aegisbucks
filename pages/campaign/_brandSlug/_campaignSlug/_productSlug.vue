@@ -321,10 +321,10 @@ export default {
         });
 
         if (
-          type.includes("text") ||
-          type.includes("text_area") ||
-          type.includes("select") ||
-          type.includes("number")
+          type?.includes("text") ||
+          type?.includes("text_area") ||
+          type?.includes("select") ||
+          type?.includes("number")
         )
           label = "Isi data dan dapatkan vouchernya";
       }
