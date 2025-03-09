@@ -72,6 +72,18 @@
           />
 
           <general-form-select
+            label="Pendapatan"
+            v-model="item.income"
+            required
+            bold
+            outlined
+            :items="items.incomes"
+            item-value="name"
+            item-text="name"
+            :rules="[required]"
+          />
+
+          <general-form-select
             label="Jenis Kelamin"
             v-model="item.gender"
             required
@@ -117,7 +129,7 @@ import rules from "@/mixins/rules";
 import utils from "@/mixins/utils";
 import pipe from "@/mixins/pipe";
 import media from "@/mixins/media";
-import { PROFESSIONS, GENDERS } from "@/data/general";
+import { PROFESSIONS, GENDERS, INCOMES } from "@/data/general";
 import debounce from "lodash/debounce";
 
 export default {
@@ -132,6 +144,7 @@ export default {
       professions: PROFESSIONS,
       regencies: [],
       genders: GENDERS,
+      incomes: INCOMES,
     },
     state: {
       isLoading: false,
@@ -197,6 +210,7 @@ export default {
         cityId: this.item.city?.id,
         profession: this.item.profession,
         imageUrl: this.form.image,
+        income: this.item.income,
       };
 
       const res = await this.$api.users.updateUserProfile(payload);

@@ -91,9 +91,10 @@ import media from "@/mixins/media";
 import routes from "@/mixins/routes";
 import meta from "@/mixins/meta";
 import pipe from "@/mixins/pipe";
+import utils from "@/mixins/utils";
 
 export default {
-  mixins: [media, routes, meta, pipe],
+  mixins: [media, routes, meta, pipe, utils],
   middleware: ["authenticated", "authorized"],
   meta: {
     page: "admin",
@@ -174,12 +175,19 @@ export default {
   },
 
   methods: {
-    async onSubmit(status, reason) {
+    async onSubmit(status, form) {
       this.state.submitLoading = true;
 
       const body = {
         approve: status === "approved",
-        reason: reason,
+        reason: form.reason,
+        retailName: form.retailName,
+        address: form.address,
+        productName: form.productName,
+        qty: this.toInt(form.qty),
+        price: this.toInt(form.price),
+        totalPrice: this.toInt(form.totalPrice),
+        transacetionDate: this.toISOString(form.transactionDate),
       };
       const id = this.state.selectedItem?.id;
       const res = await this.$api.userScan.verify(id, body);
