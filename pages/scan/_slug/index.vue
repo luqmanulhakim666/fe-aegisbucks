@@ -356,7 +356,6 @@ export default {
           video: {
             width: { ideal: 1080 },
             height: { ideal: 1920 },
-            frameRate: { ideal: 60, max: 60 },
             facingMode: {
               exact: "environment",
             },
