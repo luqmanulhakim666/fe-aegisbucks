@@ -66,20 +66,10 @@ export const actions = {
    */
   async logout({ commit, dispatch }) {
     let role;
-    let googleToken;
-    let googleProfile;
     if (process.client) {
       role = Cookie.get("role");
-      googleToken = Cookie.get("googleProfile");
-      googleProfile = Cookie.get("googleToken");
-
-      if (googleToken) {
-        Cookie.remove("googleToken");
-      }
-
-      if (googleProfile) {
-        Cookie.remove("googleProfile");
-      }
+      Cookie.remove("googleToken");
+      Cookie.remove("googleProfile");
     }
 
     await dispatch("unsetToken");

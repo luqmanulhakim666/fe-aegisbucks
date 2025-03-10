@@ -63,7 +63,7 @@
           <p class="text--default dark--text">
             2. Seluruh tulisan masih terlihat jelas
           </p>
-          <p class="text--default dark--text">
+          <p class="text--default dark--text mb-8">
             3. Foto pada bidang datar dengan pencahayaan yang jelas
           </p>
         </div>
@@ -90,62 +90,11 @@
         </template>
 
         <template v-if="isTakenPicture">
-          <template v-if="cropper.isEdited">
-            <cropper ref="cropper" :src="cropper.imageUrl" class="cropper" />
-            <div class="d-flex align-center">
-              <v-btn
-                x-small
-                class="text--default mt-4 text-capitalize d-flex mx-auto"
-                text
-                depressed
-                color="secondary"
-                @click="cropImage"
-              >
-                <v-icon size="16" class="mr-1">mdi-crop</v-icon>
-                Crop
-              </v-btn>
-            </div>
-          </template>
-
-          <div v-if="cropper.croppedImage">
-            <v-img
-              :src="cropper.croppedImage"
-              class="rounded-xl d-flex mx-auto mt-8"
-              :aspect-ratio="9 / 16"
-            />
-            <v-btn
-              class="text--default mt-6 d-flex mx-auto"
-              small
-              depressed
-              plain
-              color="error"
-              @click="onResetImage"
-            >
-              <v-icon size="16" class="mr-1">mdi-restart</v-icon>
-              Reset
-            </v-btn>
-          </div>
-          <!-- <v-card width="full-width" height="fill-height" flat>
-            <cropper ref="cropper" :src="capturedImage" class="cropper" />
-
-            <v-btn
-              x-small
-              class="text--default mt-4 text-capitalize"
-              text
-              depressed
-              color="secondary"
-              @click="cropImage"
-            >
-              <v-icon size="16" class="mr-1">mdi-crop</v-icon>
-              Crop
-            </v-btn>
-          </v-card>
-
           <v-img
             class="rounded-xl d-flex mx-auto"
-            :src="capturedImage"
             :aspect-ratio="9 / 16"
-          /> -->
+            :src="capturedImage"
+          />
         </template>
 
         <v-btn
@@ -161,7 +110,7 @@
         >
 
         <v-btn
-          v-if="cropper.croppedImage && !cropper.isEdited"
+          v-if="isTakenPicture"
           depressed
           small
           block
@@ -240,8 +189,6 @@
 </template>
 
 <script>
-import Cropper from "vue-cropperjs";
-import "cropperjs/dist/cropper.css";
 export default {
   asyncData(context) {
     const deviceType = context.$ua.deviceType();
@@ -249,23 +196,9 @@ export default {
   },
   layout: "app",
   middleware: "userAuthenticated",
-  components: {
-    Cropper,
-  },
+
   data() {
     return {
-      cropper: {
-        isEdited: false,
-        media: {},
-        isLoading: false,
-        progress: 0,
-        imageUrl: null,
-        imageName: null,
-        croppedImage: null,
-        finalCroppedImage: null,
-        dialog: false,
-        hasImageId: null,
-      },
       form: {
         image: {},
       },
@@ -283,6 +216,7 @@ export default {
   },
 
   async mounted() {
+    console.log("mount");
     await this.checkPermissions();
     if (!this.location || !this.cameraAccess) {
       this.dialogVisible = true;
@@ -301,26 +235,14 @@ export default {
   },
 
   methods: {
-    onResetImage() {
-      this.$refs?.cropper?.reset();
-      this.cropper.isEdited = true;
-      this.cropper.croppedImage = null;
-    },
-
-    cropImage() {
-      const croppedDataUrl = this.$refs?.cropper.getCroppedCanvas().toDataURL();
-      this.cropper.croppedImage = croppedDataUrl;
-      this.capturedImage = croppedDataUrl;
-      this.cropper.isEdited = false;
-    },
     onRemoveFile() {
       this.form.image = "";
     },
+
     captureFrame() {
       if (!this.$refs.video) return;
 
       const video = this.$refs.video;
-      video.focus(); // Ensure focus
 
       requestAnimationFrame(() => {
         if (video.videoWidth === 0 || video.videoHeight === 0) {
@@ -328,30 +250,21 @@ export default {
           return;
         }
 
-        // Create a canvas matching video resolution
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        // Use OffscreenCanvas for performance
+        const canvas = new OffscreenCanvas(video.videoWidth, video.videoHeight);
         const ctx = canvas.getContext("2d", { alpha: false });
 
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // Try PNG first for best quality
-        let imageData = canvas.toDataURL("image/png");
-
-        // If PNG is too large (>5MB), use JPEG with quality adjustments
-        // if (imageData.length > 5 * 1024 * 1024) {
-        //   let quality = 1.0; // Start with 100% quality
-        //   do {
-        //     imageData = canvas.toDataURL("image/jpeg", quality);
-        //     quality -= 0.02; // Reduce in smaller 2% steps
-        //   } while (imageData.length > 5 * 1024 * 1024 && quality > 0.1);
-        // }
-
-        this.capturedImage = imageData;
-        this.cropper.imageUrl = imageData;
-        this.isTakenPicture = true;
-        this.cropper.isEdited = true;
+        // Convert to Blob for better quality control
+        canvas.convertToBlob({ type: "image/png" }).then((blob) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => {
+            this.capturedImage = reader.result;
+            this.isTakenPicture = true;
+          };
+        });
       });
     },
 
@@ -441,8 +354,9 @@ export default {
       try {
         this.stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            width: { ideal: 1920 },
-            height: { ideal: 1080 },
+            width: { ideal: 1080 },
+            height: { ideal: 1920 },
+            frameRate: { ideal: 60, max: 60 },
             facingMode: {
               exact: "environment",
             },
@@ -618,7 +532,7 @@ export default {
 .scanner-frame {
   position: relative;
   width: 320px; /* Set the desired width of the scanner */
-  height: 320px; /* Set the desired height of the scanner */
+  height: 520px; /* Set the desired height of the scanner */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -678,7 +592,7 @@ video {
   left: 50%;
   transform: translateX(-50%);
   width: 85%;
-  height: 80%;
+  height: 85%;
   object-fit: cover; /* Ensures the video fills the frame without distortion */
   border-radius: inherit; /* Matches the scanner-frame rounded corners */
 }
