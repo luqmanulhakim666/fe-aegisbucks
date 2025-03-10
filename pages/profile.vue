@@ -17,19 +17,19 @@
         <p class="h5--small dark--text">{{ profile.name }}</p>
         <p class="text--default dark--text">{{ profile.email }}</p>
 
-        <template v-if="!profile.isCompleteProfile">
-          <div class="d-flex align-center mt-2">
-            <v-btn
-              rounded
-              depressed
-              small
-              class="success text-capitalize h7--xxsmall mr-2"
-              @click="dialogProfile()"
-              >Lengkapi Profile</v-btn
-            >
-            <app-point :points="400" />
-          </div>
-        </template>
+        <div class="d-flex align-center mt-2">
+          <v-btn
+            rounded
+            depressed
+            small
+            class="success text-capitalize h7--xxsmall mr-2"
+            @click="dialogProfile()"
+            >{{
+              profile.isCompleteProfile ? "Ubah Profile" : "Lengkapi Profile"
+            }}</v-btn
+          >
+          <app-point v-if="!profile.isCompleteProfile" :points="400" />
+        </div>
       </v-col>
     </v-row>
 
@@ -64,6 +64,17 @@
         </div>
       </v-col>
     </v-row>
+
+    <div class="pa-2 dark lighten-3 mt-8">
+      <p class="h5--small dark--text">My Referral Code</p>
+    </div>
+
+    <div class="d-flex align-center pa-2 border-thin rounded-xl mt-2">
+      <p class="h6--xsmall dark--text mr-2">{{ profile.code }}</p>
+      <v-btn x-small icon @click="copyLink(profile.code)">
+        <v-icon> mdi-content-copy </v-icon>
+      </v-btn>
+    </div>
 
     <div class="pa-2 dark lighten-3 mt-8">
       <p class="h5--small dark--text">Akun</p>
@@ -177,6 +188,24 @@ export default {
   },
 
   methods: {
+    copyLink(code) {
+      navigator.clipboard.writeText(code).then(
+        () => {
+          this.$store.dispatch("snack", [
+            "Link copied to clipboard!",
+            "success lighten-2",
+            "mdi-check-circle",
+          ]);
+        },
+        (err) => {
+          this.$store.dispatch("snack", [
+            "Failed to copy link",
+            "error",
+            "mdi-close-circle",
+          ]);
+        }
+      );
+    },
     onAction(val) {
       if (val.key === "whatsapp") {
         const phoneNumber = "6285215845379";
