@@ -50,5 +50,13 @@ export default (ctx) => {
     googleLogin() {
       return "https://letsbuyasia.id/api/user/signin/google";
     },
+
+    postReferalCode(body) {
+      return $axios.post(`${url}/referral`, body);
+    },
+
+    getUserCustomerByReferalCode(code) {
+      return $axios.get(`${url}/user-customer-by-code/${code}`);
+    },
   };
 };

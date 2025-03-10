@@ -250,13 +250,24 @@ export default {
           return;
         }
 
-        // Use OffscreenCanvas for performance
-        const canvas = new OffscreenCanvas(video.videoWidth, video.videoHeight);
+        // Create a fixed portrait canvas (1080x1920)
+        const canvas = new OffscreenCanvas(1080, 1920);
         const ctx = canvas.getContext("2d", { alpha: false });
 
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        // Determine if the video needs rotation (some cameras may output landscape)
+        const isLandscape = video.videoWidth > video.videoHeight;
 
-        // Convert to Blob for better quality control
+        if (isLandscape) {
+          // Rotate landscape video to portrait
+          ctx.translate(1080, 0);
+          ctx.rotate(Math.PI / 2); // Rotate 90 degrees
+          ctx.drawImage(video, 0, 0, 1920, 1080);
+        } else {
+          // Normal portrait mode
+          ctx.drawImage(video, 0, 0, 1080, 1920);
+        }
+
+        // Convert to Blob for best quality control
         canvas.convertToBlob({ type: "image/png" }).then((blob) => {
           const reader = new FileReader();
           reader.readAsDataURL(blob);

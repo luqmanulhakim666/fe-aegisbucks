@@ -5,16 +5,45 @@
     >
       <general-logo class="d-flex mx-auto mb-10" :max_width="180" />
 
-      <!-- <general-form-text-field
-        v-model.trim="form.password"
-        label="Kode Referal"
-        optional
-        placeholder="Kode Referal"
-        appendButton
-        appendName="Gunakan"
-        outlined
-        bold
-      /> -->
+      <div>
+        <div class="d-flex align-center mb-2">
+          <span class="text-capitalize label-text h6--xsmall">
+            Kode Referal
+
+            <span
+              class="text-capitalize label-text ml-1 info--text text--lighten-2 h6--xsmall"
+            >
+              (Opsional)
+            </span>
+          </span>
+        </div>
+
+        <v-text-field
+          rounded
+          v-model.trim="form.referalCode"
+          class="border-thin"
+          dense
+          :disabled="state.isUsedReveralCode"
+          hide-details
+          v-bind="$attrs"
+          v-on="$listeners"
+          placeholder="Kode Referal"
+        >
+          <template v-slot:append>
+            <v-btn
+              @click="hanleReferalCode"
+              :loading="state.isLoading"
+              x-small
+              :disabled="!form.referalCode"
+              depressed
+              class="secondary lighten-1 rounded-pill h7--xxsmall text-capitalize my-2"
+            >
+              {{ !state.isUsedReveralCode ? "Gunakan" : "Ubah" }}
+            </v-btn>
+          </template>
+        </v-text-field>
+      </div>
+
       <div class="d-flex align-center">
         <v-divider />
         <p class="p--small mb-4 text-center mt-4 mx-2">Continue with:</p>
@@ -44,6 +73,7 @@
 <script>
 import rules from "@/mixins/rules";
 import meta from "@/mixins/meta";
+import { state } from "../../store/auth";
 export default {
   mixins: [rules, meta],
   middleware: "userUnauthenticated",
@@ -66,8 +96,24 @@ export default {
     state: {
       isValid: true,
       isLoading: false,
+      isUsedReveralCode: false,
     },
   }),
+
+  methods: {
+    async hanleReferalCode() {
+      this.state.isUsedReveralCode = !this.state.isUsedReveralCode;
+      if (this.state.isUsedReveralCode) {
+        return localStorage.setItem("referalCode", this.form.referalCode);
+      }
+
+      localStorage.removeItem("referalCode");
+    },
+  },
+
+  beforeDestroy() {
+    this.form.referalCode = "";
+  },
 };
 </script>
 
@@ -110,6 +156,19 @@ export default {
 
   &-social-media-login-btn span {
     font-weight: bold;
+  }
+}
+.text-field__prepend {
+  width: 61px;
+}
+
+.v-input--is-disabled {
+  background-color: var(--v-gray-lighten3) !important;
+}
+
+::v-deep {
+  .v-input__append-inner {
+    margin: auto !important;
   }
 }
 </style>

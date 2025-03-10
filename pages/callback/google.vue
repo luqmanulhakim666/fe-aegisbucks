@@ -47,6 +47,8 @@ export default {
   async mounted() {
     this.state.isLoading = true;
 
+    const referalCode = localStorage.getItem("referalCode");
+
     const token = await this.$route.query?.token;
     let profile = null;
     let emailVerified = null;
@@ -78,16 +80,24 @@ export default {
       }
     }
 
+    if (referalCode) {
+      const res = await this.$api.auth.getUserCustomerByReferalCode(
+        referalCode
+      );
+
+      if (res.success) {
+        this.$api.auth.postReferalCode({
+          userReferralId: res.data.id,
+        });
+      }
+    }
+
     if (campaignUrl) {
-      window.location.href = `${campaignUrl}?success=true`;
+      return (window.location.href = `${campaignUrl}?success=true`);
     }
 
     if (!emailVerified) {
       await this.$api.auth.sendVerifyEmail();
-    }
-
-    if (emailVerified) {
-      return this.$router.push("/");
     }
 
     this.$router.push("/");
@@ -96,6 +106,10 @@ export default {
   },
 
   beforeDestroy() {
+    if (localStorage.getItem("referalCode")) {
+      localStorage.removeItem("referalCode");
+    }
+
     if (Cookie.get("campaignUrl")) {
       Cookie.remove("campaignUrl");
     }
