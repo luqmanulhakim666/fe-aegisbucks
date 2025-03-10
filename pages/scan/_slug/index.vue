@@ -250,24 +250,32 @@ export default {
           return;
         }
 
-        // Create a fixed portrait canvas (1080x1920)
-        const canvas = new OffscreenCanvas(1080, 1920);
+        // Get the exact video frame size
+        let videoWidth = video.videoWidth;
+        let videoHeight = video.videoHeight;
+
+        // Create an OffscreenCanvas with the same video resolution
+        const canvas = new OffscreenCanvas(videoWidth, videoHeight);
         const ctx = canvas.getContext("2d", { alpha: false });
 
-        // Determine if the video needs rotation (some cameras may output landscape)
-        const isLandscape = video.videoWidth > video.videoHeight;
+        // Determine if the video is in landscape mode
+        const isLandscape = videoWidth > videoHeight;
 
         if (isLandscape) {
-          // Rotate landscape video to portrait
-          ctx.translate(1080, 0);
-          ctx.rotate(Math.PI / 2); // Rotate 90 degrees
-          ctx.drawImage(video, 0, 0, 1920, 1080);
+          // Rotate 90 degrees to match portrait orientation
+          canvas.width = videoHeight; // Swap width and height
+          canvas.height = videoWidth;
+          ctx.translate(videoHeight, 0);
+          ctx.rotate(Math.PI / 2); // Rotate 90 degrees clockwise
+          ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
         } else {
-          // Normal portrait mode
-          ctx.drawImage(video, 0, 0, 1080, 1920);
+          // Use normal portrait mode
+          canvas.width = videoWidth;
+          canvas.height = videoHeight;
+          ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
         }
 
-        // Convert to Blob for best quality control
+        // Convert to Blob for best quality
         canvas.convertToBlob({ type: "image/png" }).then((blob) => {
           const reader = new FileReader();
           reader.readAsDataURL(blob);
