@@ -90,6 +90,7 @@
         </template>
 
         <template v-if="isTakenPicture">
+          <!-- <v-img class="rounded-xl d-flex mx-auto" :src="capturedImage" /> -->
           <v-img
             class="rounded-xl d-flex mx-auto"
             :aspect-ratio="9 / 16"
@@ -240,50 +241,80 @@ export default {
     },
 
     captureFrame() {
-      if (!this.$refs.video) return;
-
       const video = this.$refs.video;
+      if (!video || video.videoWidth === 0 || video.videoHeight === 0) {
+        console.error("Video is not ready yet.");
+        return;
+      }
 
-      requestAnimationFrame(() => {
-        if (video.videoWidth === 0 || video.videoHeight === 0) {
-          console.error("Video is not ready yet.");
-          return;
-        }
+      requestAnimationFrame(async () => {
+        const videoWidth = video.videoWidth;
+        const videoHeight = video.videoHeight;
 
-        // Get the exact video frame size
-        let videoWidth = video.videoWidth;
-        let videoHeight = video.videoHeight;
+        // Target resolution: 9:16 aspect ratio (1080x1920)
+        const targetWidth = 1080;
+        const targetHeight = 1920;
+        const targetAspectRatio = targetWidth / targetHeight;
 
-        // Create an OffscreenCanvas with the same video resolution
-        const canvas = new OffscreenCanvas(videoWidth, videoHeight);
-        const ctx = canvas.getContext("2d", { alpha: false });
+        // Calculate scaling factor to maintain aspect ratio
+        const videoAspectRatio = videoWidth / videoHeight;
+        let drawWidth, drawHeight, offsetX, offsetY;
 
-        // Determine if the video is in landscape mode
-        const isLandscape = videoWidth > videoHeight;
-
-        if (isLandscape) {
-          // Rotate 90 degrees to match portrait orientation
-          canvas.width = videoHeight; // Swap width and height
-          canvas.height = videoWidth;
-          ctx.translate(videoHeight, 0);
-          ctx.rotate(Math.PI / 2); // Rotate 90 degrees clockwise
-          ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+        if (videoAspectRatio > targetAspectRatio) {
+          // Video is wider than 9:16, crop horizontally
+          drawHeight = videoHeight;
+          drawWidth = videoHeight * targetAspectRatio;
+          offsetX = (videoWidth - drawWidth) / 2;
+          offsetY = 0;
         } else {
-          // Use normal portrait mode
-          canvas.width = videoWidth;
-          canvas.height = videoHeight;
-          ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+          // Video is taller than 9:16, crop vertically
+          drawWidth = videoWidth;
+          drawHeight = videoWidth / targetAspectRatio;
+          offsetX = 0;
+          offsetY = (videoHeight - drawHeight) / 2;
         }
 
-        // Convert to Blob for best quality
-        canvas.convertToBlob({ type: "image/png" }).then((blob) => {
+        // Use OffscreenCanvas for high-performance rendering
+        const canvas = new OffscreenCanvas(targetWidth, targetHeight);
+        const ctx = canvas.getContext("2d", {
+          alpha: false,
+          willReadFrequently: true,
+        });
+
+        // Enable high-quality rendering
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+
+        // Draw the cropped and scaled video frame onto the canvas
+        ctx.drawImage(
+          video,
+          offsetX,
+          offsetY,
+          drawWidth,
+          drawHeight,
+          0,
+          0,
+          targetWidth,
+          targetHeight
+        );
+
+        try {
+          // Convert to PNG Blob for the best quality
+          const blob = await canvas.convertToBlob({
+            type: "image/png",
+            quality: 1.0,
+          });
+
+          // Convert Blob to Data URL
           const reader = new FileReader();
-          reader.readAsDataURL(blob);
           reader.onloadend = () => {
             this.capturedImage = reader.result;
             this.isTakenPicture = true;
           };
-        });
+          reader.readAsDataURL(blob);
+        } catch (error) {
+          console.error("Error capturing image:", error);
+        }
       });
     },
 
@@ -373,8 +404,16 @@ export default {
       try {
         this.stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            width: { ideal: 1080 },
-            height: { ideal: 1920 },
+            advanced: [
+              { width: { exact: 2560 } },
+              { width: { exact: 1920 } },
+              { width: { exact: 1280 } },
+              { width: { exact: 1024 } },
+              { width: { exact: 900 } },
+              { width: { exact: 800 } },
+              { width: { exact: 640 } },
+              { width: { exact: 320 } },
+            ],
             facingMode: {
               exact: "environment",
             },
