@@ -46,36 +46,6 @@
 
     <template v-else>
       <template v-if="location && cameraAccess">
-        <template v-if="!isTakenPicture">
-          <div class="scanner-container rounded-lg">
-            <div class="scanner-frame">
-              <div class="corner top-left"></div>
-              <div class="corner top-right"></div>
-              <div class="corner bottom-left"></div>
-              <div class="corner bottom-right"></div>
-
-              <video
-                class="d-flex align-center mx-auto justify-center"
-                ref="video"
-                autoplay
-                muted
-                playsinline
-                disablePictureInPicture
-                controlslist="nodownload nofullscreen noremoteplayback"
-              ></video>
-            </div>
-          </div>
-        </template>
-
-        <template v-if="isTakenPicture">
-          <v-img
-            class="rounded-xl d-flex mx-auto"
-            width="300"
-            height="300"
-            :src="capturedImage"
-          />
-        </template>
-
         <div class="text-center">
           <p class="h5--small success--text lighten-1 mt-6 mb-4 text-center">
             Scan Struk
@@ -98,6 +68,86 @@
           </p>
         </div>
 
+        <template v-if="!isTakenPicture">
+          <div class="scanner-container rounded-lg">
+            <div class="scanner-frame">
+              <div class="corner top-left"></div>
+              <div class="corner top-right"></div>
+              <div class="corner bottom-left"></div>
+              <div class="corner bottom-right"></div>
+
+              <video
+                class="d-flex align-center mx-auto justify-center"
+                ref="video"
+                autoplay
+                muted
+                playsinline
+                disablePictureInPicture
+                controlslist="nodownload nofullscreen noremoteplayback"
+              ></video>
+            </div>
+          </div>
+        </template>
+
+        <template v-if="isTakenPicture">
+          <template v-if="cropper.isEdited">
+            <cropper ref="cropper" :src="cropper.imageUrl" class="cropper" />
+            <div class="d-flex align-center">
+              <v-btn
+                x-small
+                class="text--default mt-4 text-capitalize d-flex mx-auto"
+                text
+                depressed
+                color="secondary"
+                @click="cropImage"
+              >
+                <v-icon size="16" class="mr-1">mdi-crop</v-icon>
+                Crop
+              </v-btn>
+            </div>
+          </template>
+
+          <div v-if="cropper.croppedImage">
+            <v-img
+              :src="cropper.croppedImage"
+              class="rounded-xl d-flex mx-auto mt-8"
+              :aspect-ratio="9 / 16"
+            />
+            <v-btn
+              class="text--default mt-6 d-flex mx-auto"
+              small
+              depressed
+              plain
+              color="error"
+              @click="onResetImage"
+            >
+              <v-icon size="16" class="mr-1">mdi-restart</v-icon>
+              Reset
+            </v-btn>
+          </div>
+          <!-- <v-card width="full-width" height="fill-height" flat>
+            <cropper ref="cropper" :src="capturedImage" class="cropper" />
+
+            <v-btn
+              x-small
+              class="text--default mt-4 text-capitalize"
+              text
+              depressed
+              color="secondary"
+              @click="cropImage"
+            >
+              <v-icon size="16" class="mr-1">mdi-crop</v-icon>
+              Crop
+            </v-btn>
+          </v-card>
+
+          <v-img
+            class="rounded-xl d-flex mx-auto"
+            :src="capturedImage"
+            :aspect-ratio="9 / 16"
+          /> -->
+        </template>
+
         <v-btn
           v-if="isTakenPicture"
           depressed
@@ -111,7 +161,7 @@
         >
 
         <v-btn
-          v-if="isTakenPicture"
+          v-if="cropper.croppedImage && !cropper.isEdited"
           depressed
           small
           block
@@ -190,6 +240,8 @@
 </template>
 
 <script>
+import Cropper from "vue-cropperjs";
+import "cropperjs/dist/cropper.css";
 export default {
   asyncData(context) {
     const deviceType = context.$ua.deviceType();
@@ -197,9 +249,23 @@ export default {
   },
   layout: "app",
   middleware: "userAuthenticated",
-
+  components: {
+    Cropper,
+  },
   data() {
     return {
+      cropper: {
+        isEdited: false,
+        media: {},
+        isLoading: false,
+        progress: 0,
+        imageUrl: null,
+        imageName: null,
+        croppedImage: null,
+        finalCroppedImage: null,
+        dialog: false,
+        hasImageId: null,
+      },
       form: {
         image: {},
       },
@@ -217,7 +283,6 @@ export default {
   },
 
   async mounted() {
-    console.log("mount");
     await this.checkPermissions();
     if (!this.location || !this.cameraAccess) {
       this.dialogVisible = true;
@@ -236,6 +301,18 @@ export default {
   },
 
   methods: {
+    onResetImage() {
+      this.$refs?.cropper?.reset();
+      this.cropper.isEdited = true;
+      this.cropper.croppedImage = null;
+    },
+
+    cropImage() {
+      const croppedDataUrl = this.$refs?.cropper.getCroppedCanvas().toDataURL();
+      this.cropper.croppedImage = croppedDataUrl;
+      this.capturedImage = croppedDataUrl;
+      this.cropper.isEdited = false;
+    },
     onRemoveFile() {
       this.form.image = "";
     },
@@ -272,7 +349,9 @@ export default {
         // }
 
         this.capturedImage = imageData;
+        this.cropper.imageUrl = imageData;
         this.isTakenPicture = true;
+        this.cropper.isEdited = true;
       });
     },
 
