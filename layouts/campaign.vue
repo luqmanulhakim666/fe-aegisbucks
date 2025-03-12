@@ -64,6 +64,23 @@ export default {
     };
   },
 
+  mounted() {
+    if (this.ua === "webview") {
+      const url = this.currentUrl;
+
+      if (this.$nuxt.$ua.isFromIos() || this.$nuxt.$ua.isFromIphone()) {
+        setTimeout(() => {
+          window.location.href = url; // Replace with your external link
+        }, 100);
+      } else if (this.$nuxt.$ua.isFromAndroid()) {
+        window.location.href = `intent://${url.replace(
+          "https://",
+          ""
+        )}#Intent;scheme=https;package=com.android.chrome;end;`;
+      }
+    }
+  },
+
   computed: {
     currentUrl() {
       const host = this.$config.API_URL.replace("/api", "");
@@ -97,27 +114,6 @@ export default {
          background-attachment: fixed;
           background-size: cover;`
         : "";
-    },
-  },
-  watch: {
-    $route: {
-      handler(val) {
-        if (this.ua === "webview") {
-          const url = this.currentUrl;
-
-          if (this.$nuxt.$ua.isFromIos() || this.$nuxt.$ua.isFromIphone()) {
-            setTimeout(() => {
-              window.location.href = url; // Replace with your external link
-            }, 100);
-          } else if (this.$nuxt.$ua.isFromAndroid()) {
-            window.location.href = `intent://${url.replace(
-              "https://",
-              ""
-            )}#Intent;scheme=https;package=com.android.chrome;end;`;
-          }
-        }
-      },
-      immediate: true,
     },
   },
 };
