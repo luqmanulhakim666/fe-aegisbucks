@@ -256,33 +256,64 @@ export default {
 
       // Normalize the text by replacing multiple spaces/newlines
       let text = this.item?.text
-        .replace(/\s{2,}/g, " ")
-        .replace(/\n/g, " ")
+        .replace(/\s{2,}/g, " ") // Replace multiple spaces with a single space
+        .replace(/\n/g, " ") // Replace newlines with spaces
         .trim();
 
       return {
-        retailName: text.match(/^(.*?)\/\d+/)?.[1]?.trim() || null, // Extracts store name before "/xxx"
-        address: text.match(/Jl\.?.+?, \d+/i)?.[0]?.trim() || null, // Extracts address (Jl. pattern)
-        dateTime: text.match(/\d{2}\.\d{2}\.\d{2}-\d{2}:\d{2}/)?.[0] || null, // Extracts date-time
+        retailName:
+          text
+            .match(
+              /^(?:PT\.?|Alfamidi|Alfamidiku|Toko|Alfamart|Indomaret|Superindo|Giant|Hypermart|Carrefour|.*?Mart|.*?Store)[^\d\n]+/i
+            )?.[0]
+            ?.trim() || null, // Extracts store name before digits
+
+        address:
+          text.match(/Jl\.?.+?,?\s?\d+/i)?.[0]?.trim() ||
+          text.match(/(RT|RW|Kel\.)[\s\S]+?\d+/i)?.[0]?.trim() ||
+          null, // Extracts address variations
+
+        dateTime:
+          text.match(/\d{2}[-\/]\d{2}[-\/]\d{4}\s\d{2}:\d{2}:\d{2}/)?.[0] ||
+          text.match(/\d{2}\.\d{2}\.\d{2}-\d{2}:\d{2}/)?.[0] ||
+          text.match(/\d{2}-\d{2}-\d{4} \d{2}:\d{2}/)?.[0] ||
+          null, // Extracts date-time in multiple formats
+
         items: [
           ...text.matchAll(
-            /([A-Za-z0-9\s\.\-]+(?: [A-Za-z0-9]+){0,})\s+(\d+)\s+(\d+)\s+([\d,]+)/g
+            /([A-Za-z0-9\s\.\-]+(?: [A-Za-z0-9]+){0,})\s+(\d+)\s+([\d,]+)\s+([\d,]+)/g
           ),
         ] // Extracts all items
           .map((m) => ({
             name: m[1].trim(), // Extracts item name
-            qty: m[2], // Extracts quantity
-            price: m[3], // Extracts price per item
-            totalPrice: m[4], // Extracts total price per item
+            qty: parseInt(m[2]), // Extracts quantity
+            price: parseFloat(m[3].replace(/,/g, "")), // Extracts price per item
+            totalPrice: parseFloat(m[4].replace(/,/g, "")), // Extracts total price per item
           })),
-        total: text.match(/TOTAL\s?:\s?([\d,]+)/i)?.[1] || null, // Extracts total price
-        cash: text.match(/TUNAI\s?:\s?([\d,]+)/i)?.[1] || null, // Extracts cash paid
-        change: text.match(/KEMBALI\s?:\s?([\d,]+)/i)?.[1] || null, // Extracts change
-        discount: text.match(/VOUCHER.*?:\s?\(?([\d,]+)/i)?.[1] || "0", // Extracts discount
-        tax: text.match(/PPN\s?:.*?([\d,]+)/i)?.[1] || null, // Extracts PPN (Tax)
+
+        total:
+          text.match(
+            /Total\s(?:Belanja|Iten|Tagihan)?\s?:?\s?([\d,]+)/i
+          )?.[1] || null, // Extracts total price
+
+        cash: text.match(/Tunai\s?:?\s?([\d,]+)/i)?.[1] || null, // Extracts cash paid
+
+        change: text.match(/Kembali\s?:?\s?([\d,]+)/i)?.[1] || null, // Extracts change
+
+        discount:
+          text.match(
+            /(?:Total Disc\.|VOUCHER|Pot BIKP).*?:?\s?\(?([\d,]+)/i
+          )?.[1] || "0", // Extracts discount
+
+        tax:
+          text.match(/PPN\s?(?:DPP)?:?.*?([\d,]+)/i)?.[1] ||
+          text.match(/PPN\s?:?.*?([\d,]+)/i)?.[1] ||
+          null, // Extracts PPN (Tax)
+
         npwp:
-          text.match(/NPWP:(\d{2}\.\d{3}\.\d{3}\.\d-\d{3}\.\d{3})/)?.[1] ||
-          null, // Extracts NPWP
+          text.match(
+            /NPWP\s?:?\s?(\d{2}\.\d{3}\.\d{3}\.\d-\d{3}\.\d{3})/
+          )?.[1] || null, // Extracts NPWP
       };
     },
   },
