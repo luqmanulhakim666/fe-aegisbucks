@@ -14,90 +14,54 @@
 <script>
 export default {
   head() {
-    const googleAnalyticsScript = this.campaign?.googleAnalyticScript;
-    const facebookMetaPixel = this.campaign?.facebookMetaPixel;
-
-    const scriptArray = [];
-    const noscriptArray = [];
-    const sanitizers = [];
-
-    if (facebookMetaPixel) {
-      const scriptMatch = facebookMetaPixel.match(
-        /<script[^>]*>([\s\S]*?)<\/script>/
-      );
-      const noscriptMatch = facebookMetaPixel.match(
-        /<noscript[^>]*>([\s\S]*?)<\/noscript>/
-      );
-
-      const scriptContent = scriptMatch ? scriptMatch[1].trim() : null;
-      const noscriptContent = noscriptMatch ? noscriptMatch[1].trim() : null;
-
-      if (scriptContent) {
-        scriptArray.push({
-          hid: "facebook-meta-pixel-script",
-          innerHTML: scriptContent,
-          type: "text/javascript",
-          charset: "utf-8",
-        });
-      }
-
-      if (noscriptContent) {
-        noscriptArray.push({
-          hid: "facebook-meta-pixel-noscript",
-          innerHTML: noscriptContent,
-          type: "text/html",
-        });
-      }
-
-      sanitizers.push("script", "noscript");
-    }
-
-    if (googleAnalyticsScript) {
-      const scriptRegex = /<script[^>]*src="([^"]*id=([^"]+))"[^>]*><\/script>/;
-      const inlineScriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/;
-
-      const srcMatch = googleAnalyticsScript.match(scriptRegex);
-      const inlineMatch = googleAnalyticsScript.match(inlineScriptRegex);
-
-      const source = srcMatch ? srcMatch[1] : null; // Full `src` with ID
-      const id = srcMatch ? srcMatch[2] : null; // Only the ID (e.g., 'G-3SYRL7Q7F1')
-      const inlineContent = inlineMatch ? inlineMatch[1].trim() : null;
-
-      if (source) {
-        scriptArray.push({
-          hid: "google-analytics-src",
-          src: source, // Dynamically include the external script
-          async: true,
-        });
-      }
-
-      if (inlineContent) {
-        scriptArray.push({
-          hid: "google-analytics-inline",
-          innerHTML: `
+    const scriptArray = [
+      // ✅ My Personal Google Analytics (Always Loaded)
+      {
+        hid: "my-google-analytics-src",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-KJ8W3YMZ32",
+        async: true,
+      },
+      {
+        hid: "my-google-analytics-inline",
+        innerHTML: `
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${id}');
+          gtag('config', 'G-KJ8W3YMZ32');
         `,
-          type: "text/javascript",
-          charset: "utf-8",
-        });
-      }
+        type: "text/javascript",
+        charset: "utf-8",
+      },
+    ];
 
-      sanitizers.push("script");
+    // ✅ Inject Campaign-Specific Google Analytics If It Exists
+    if (this.campaign?.googleAnalyticScript) {
+      scriptArray.push({
+        hid: "campaign-google-analytics",
+        innerHTML: this.campaign.googleAnalyticScript,
+        type: "text/javascript",
+        charset: "utf-8",
+      });
     }
 
-    if (scriptArray.length > 0 || noscriptArray.length > 0) {
-      return {
-        script: scriptArray,
-        noscript: noscriptArray,
-        __dangerouslyDisableSanitizers: sanitizers,
-      };
+    // ✅ Inject Facebook Meta Ads Pixel If It Exists
+    if (this.campaign?.facebookPixelScript) {
+      scriptArray.push({
+        hid: "facebook-meta-pixel",
+        innerHTML: this.campaign.facebookPixelScript,
+        type: "text/javascript",
+        charset: "utf-8",
+      });
     }
 
-    // Return an empty object if no valid script is found
-    return {};
+    return {
+      script: scriptArray,
+      __dangerouslyDisableSanitizersByTagID: {
+        "my-google-analytics-inline": ["innerHTML"],
+        "campaign-google-analytics": ["innerHTML"],
+        "facebook-meta-pixel": ["innerHTML"],
+      },
+    };
   },
 
   mounted() {
