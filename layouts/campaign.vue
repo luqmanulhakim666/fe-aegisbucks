@@ -69,18 +69,24 @@ export default {
       const url = this.currentUrl;
 
       if (this.$nuxt.$ua.isFromIos() || this.$nuxt.$ua.isFromIphone()) {
-        setTimeout(() => {
-          window.location.href = url; // Replace with your external link
-        }, 100);
-      } else if (this.$nuxt.$ua.isFromAndroid()) {
-        window.location.href = `intent://${url.replace(
-          "https://",
-          ""
-        )}#Intent;scheme=https;package=com.android.chrome;end;`;
+        // const ipPublic = "103.196.154.7";
+        // const bridge = window.open(url, "_self");
+        // const safari = `ftp://${ipPublic}/${bridge}`;
+        // window.open(safari, "_self");
+        // return;
+        // const ipAddress = `ftp://${ipPublic}/${url}`; // Assuming `url` is a valid path
+        // window.location.href = ipAddress; // Redirect directly to the FTP URL
+        // return;
       }
+
+      const intentUrl = `intent://${url.replace(
+        "https://",
+        ""
+      )}#Intent;scheme=https;end;`;
+
+      window.location.href = intentUrl;
     }
   },
-
   computed: {
     currentUrl() {
       const host = this.$config.API_URL.replace("/api", "");
