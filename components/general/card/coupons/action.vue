@@ -15,7 +15,7 @@
             @error="onErrorImage"
           />
 
-          <p class="promo_card-top_title h7--xxsmall dark--text">
+          <p class="promo_card-top_title h7--xxsmall dark--text elipsis-200">
             {{ name }}
           </p>
         </div>
@@ -125,7 +125,7 @@ export default {
 
 <style lang="scss" scoped>
 .promo_card {
-  max-width: 375px;
+  max-width: 265px;
   width: 100%;
 
   &-banner {
@@ -149,12 +149,6 @@ export default {
 
     &_title {
       height: 50px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      line-clamp: 2;
-      -webkit-box-orient: vertical;
     }
   }
 }

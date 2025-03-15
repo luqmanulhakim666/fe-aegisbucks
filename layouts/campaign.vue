@@ -3,6 +3,11 @@
     <v-main>
       <campaign-navbar :logo="logo" />
       <Nuxt class="campaign" />
+
+      <dialog-campaign-webview-ios-alert
+        :dialog="iosAlertDialog"
+        :url="currentUrl"
+      />
       <v-footer height="auto" class="dark lighten-3">
         <campaign-footer />
       </v-footer>
@@ -64,11 +69,20 @@ export default {
     };
   },
 
+  data: () => ({
+    iosAlertDialog: false,
+  }),
+
+  beforeDestroy() {
+    this.iosAlertDialog = false;
+  },
+
   mounted() {
     if (this.ua === "webview") {
       const url = this.currentUrl;
 
       if (this.$nuxt.$ua.isFromIos() || this.$nuxt.$ua.isFromIphone()) {
+        this.iosAlertDialog = true;
         // const ipPublic = "103.196.154.7";
         // const bridge = window.open(url, "_self");
         // const safari = `ftp://${ipPublic}/${bridge}`;

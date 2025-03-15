@@ -60,16 +60,14 @@ export default {
       }
     },
 
-    copyLink(val) {
-      let url = window.location.href;
+    copyLink(url, message) {
+      if (!url) return;
+      let msg = message || "Link copied to clipboard!";
 
-      if (val) {
-        url = val;
-      }
-      navigator.clipboard.writeText(url).then(
+      navigator?.clipboard?.writeText(url)?.then(
         () => {
           this.$store.dispatch("snack", [
-            "Link copied to clipboard!",
+            msg,
             "success lighten-2",
             "mdi-check-circle",
           ]);
