@@ -217,7 +217,6 @@ export default {
   },
 
   async mounted() {
-    console.log("mount");
     await this.checkPermissions();
     if (!this.location || !this.cameraAccess) {
       this.dialogVisible = true;

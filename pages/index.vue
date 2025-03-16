@@ -185,7 +185,6 @@ export default {
     },
 
     handleMainOffers(res) {
-      console.log("mainOffers", res);
       if (res.success) {
         this.items.mainOffers = res.data.list;
       }

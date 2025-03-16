@@ -12,6 +12,7 @@ import hubspot from "@/api/hubspot";
 import promos from "@/api/promos";
 import userScan from "@/api/userScan";
 import banners from "@/api/banners";
+import withdraw from "@/api/withdraw";
 
 export default (ctx, inject) => {
   let api = {};
@@ -29,5 +30,6 @@ export default (ctx, inject) => {
   api.promos = promos(ctx);
   api.userScan = userScan(ctx);
   api.banners = banners(ctx);
+  api.withdraw = withdraw(ctx);
   inject("api", api);
 };
