@@ -426,7 +426,11 @@ export default {
       }
 
       if (!res.success) {
-        this.setFailedAlert(res);
+        let msg = {
+          message:
+            "Voucher tidak dapat dihapus karena sudah ada yang digunakan",
+        };
+        this.setFailedAlert(msg);
       }
 
       this.state.isLoading = false;

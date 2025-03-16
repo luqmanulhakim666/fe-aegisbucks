@@ -2,8 +2,10 @@
   <div>
     <general-table-header
       sort
+      filterCampaignType
       actionCreate="/admin/campaigns/create"
       @on:search="onSearch"
+      @on:filterCampaignType="onFilterCampaignType"
       :exportReport="false"
       @on:sort="onSort"
     />
@@ -145,6 +147,7 @@ export default {
       limit: 10,
       keyword: "",
       sort: "desc",
+      type: "",
     },
 
     state: {
@@ -270,6 +273,7 @@ export default {
         this.body.page = Number(val.page) || this.body.page;
         this.body.limit = Number(val.limit) || this.body.limit;
         this.body.keyword = val.keyword || "";
+        this.body.type = val.campaignType || "";
         this.body.sort = val?.sort || "desc";
       }
     },
@@ -313,6 +317,13 @@ export default {
       }
 
       this.state.isLoading = false;
+    },
+
+    onFilterCampaignType(val) {
+      this.body.type = val;
+
+      this.fetch();
+      this.pushQuery("campaignType", val);
     },
 
     onSearch(val) {

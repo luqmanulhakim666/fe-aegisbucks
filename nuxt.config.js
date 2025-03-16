@@ -58,6 +58,10 @@ module.exports = {
       src: "@plugins/vue-timepicker",
       ssr: false,
     },
+    {
+      src: "@/plugins/vue-infinite-scroll",
+      mode: "client",
+    },
     "@/plugins/init.client",
     // always last
   ],

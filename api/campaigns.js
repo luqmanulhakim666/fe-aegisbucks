@@ -9,6 +9,11 @@ export default (ctx) => {
       return await $axios.get(`${url}?${q}`);
     },
 
+    async history(query = {}) {
+      let q = qs.stringify(query);
+      return await $axios.get(`${url}/user-claim?${q}`);
+    },
+
     async create(body) {
       return await $axios.post(`${url}`, body);
     },

@@ -49,14 +49,14 @@
         :isCoupon="false"
       />
 
-      <!-- <homepage-partners class="my-10" :items="items.retails" /> -->
-
-      <!-- <homepage-card
-        title="Penawaran Kupon"
-        :settings="settings.product"
-        :items="items.couponOffers"
-        isCoupon
-      /> -->
+      <homepage-slider
+        class="my-8"
+        title="History Voucher"
+        :items="items.voucherHistories"
+        :isCoupon="false"
+        hideDate
+        showButton
+      />
 
       <!-- BRANDS -->
       <!-- <homepage-brands :items="items.brands" /> -->
@@ -93,6 +93,7 @@ export default {
       mainOffers: [],
       specialOffers: [],
       couponOffers: [],
+      voucherHistories: [],
       banners: [],
     },
     meta: {
@@ -142,20 +143,49 @@ export default {
         this.$api.promos.getList({ ...body, hasCoupon: false }),
         this.$api.promos.getList({ ...body, isSpecial: true }),
         this.$api.banners.getList({ ...body }),
+        this.$api.campaigns.history({ ...body }),
       ];
 
-      let [resCouponOffers, resMainOffers, resSpecialOffers, resBanners] =
-        await Promise.all(api);
+      let [
+        resCouponOffers,
+        resMainOffers,
+        resSpecialOffers,
+        resBanners,
+        resHistory,
+      ] = await Promise.all(api);
 
       this.handleCouponOffers(resCouponOffers);
       this.handleMainOffers(resMainOffers);
       this.handleSpecialOffers(resSpecialOffers);
       this.handleBanners(resBanners);
+      this.handleVoucherHistories(resHistory);
 
       this.state.isLoading = false;
     },
 
+    handleVoucherHistories(res) {
+      const host = this.$config.API_URL.replace("/api", "");
+
+      if (res.success) {
+        this.items.voucherHistories = res.data.list?.map((x) => {
+          const splitUrl = x.url?.split("/");
+          return {
+            name: x.product?.name,
+            image: x.product?.image,
+            imageId: x.product?.image?.id,
+            ctaUrl: `${host}/campaign/${splitUrl[4]}/${x.campaignId}/${x.groupId}/success`,
+            id: x.id,
+          };
+        });
+      }
+
+      if (!res.success) {
+        this.setFailedAlert(res);
+      }
+    },
+
     handleMainOffers(res) {
+      console.log("mainOffers", res);
       if (res.success) {
         this.items.mainOffers = res.data.list;
       }

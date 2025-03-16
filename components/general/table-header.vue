@@ -43,12 +43,12 @@
 
     <!-- SORT YEAR -->
     <general-form-dropdown
-      label="Tahun"
+      label="Type"
       :defltLabel="defaultLabelFilter"
-      :list="getYearRange"
-      :active="state.filterYear"
-      @set:active="onSetFilterYear"
-      v-if="filterYear"
+      :list="items.campaign_types"
+      :active="state.campaignType"
+      @set:active="onSetCampaignType"
+      v-if="filterCampaignType"
       class="mr-3 ml-sm-0 mt-3 mt-md-0"
     />
     <!-- END SORT YEAR -->
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { SORT } from "@/data/general";
+import { SORT, CAMPAIGN_TYPES } from "@/data/general";
 import debounce from "lodash/debounce";
 import screen from "@/mixins/screen";
 
@@ -101,7 +101,7 @@ export default {
       default: "Search here...",
     },
     actionCreate: String,
-    filterYear: {
+    filterCampaignType: {
       type: Boolean,
       default: false,
     },
@@ -135,13 +135,14 @@ export default {
     },
     state: {
       sortKey: "",
-      filterYear: "",
+      campaignType: "",
     },
     loading: {
       productScan: false,
     },
     items: {
       sort: SORT,
+      campaign_types: CAMPAIGN_TYPES,
       productScan: [],
     },
   }),
@@ -153,21 +154,7 @@ export default {
     this.setQuery();
   },
 
-  computed: {
-    getYearRange() {
-      let startYear = 2023;
-      const currentYear = new Date().getFullYear();
-      let years = ["semua"];
-
-      while (startYear <= currentYear + 7) {
-        years.push(startYear++);
-      }
-
-      return years?.map((x) => {
-        return { name: x, key: x };
-      });
-    },
-  },
+  computed: {},
 
   methods: {
     selectProductScan(val) {
@@ -202,12 +189,12 @@ export default {
     setQuery() {
       const query = this.$route?.query;
       const keyword = query.keyword;
-      const year = query.year;
+      const campaignType = query.campaignType;
       const sort = query.sort;
 
       this.search = keyword || "";
       this.state.sortKey = sort || "";
-      this.state.filterYear = Number(year) || "";
+      this.state.campaignType = campaignType || "";
     },
 
     onSearch: debounce(function (val) {
@@ -217,6 +204,11 @@ export default {
     onSetSort(val) {
       this.state.sortKey = val.key;
       this.$emit("on:sort", val.key);
+    },
+
+    onSetCampaignType(val) {
+      this.state.campaignType = val.key;
+      this.$emit("on:filterCampaignType", val.key);
     },
 
     onEmitAction() {

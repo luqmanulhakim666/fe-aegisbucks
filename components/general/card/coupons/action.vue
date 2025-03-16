@@ -21,7 +21,7 @@
         </div>
 
         <div class="mt-4">
-          <div class="d-flex align-center mr-4">
+          <div class="d-flex align-center mr-4" v-if="!hideDate">
             <v-icon size="12" color="dark lighten-2">mdi-clock</v-icon>
             <p class="p--small ml-2 dark--text text-lighten-2">
               {{ diffDays }}
@@ -34,7 +34,7 @@
             target="_blank"
             class="text-capitalize h7--xxsmall mt-4 success dark--text lighten-1 v-btn v-btn--block v-btn--has-bg theme--light v-size--x-small"
           >
-            Claim
+            {{ buttonLabel }}
           </a>
         </div>
       </div>
@@ -79,6 +79,14 @@ export default {
     image: Object,
     name: String,
     expiredDate: String,
+    buttonLabel: {
+      type: String,
+      default: "Claim",
+    },
+    hideDate: {
+      type: Boolean,
+      default: false,
+    },
     partners: {
       type: Boolean,
       default: false,

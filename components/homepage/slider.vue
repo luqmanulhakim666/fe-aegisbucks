@@ -25,6 +25,7 @@
           <v-slide-item v-for="(item, index) in items" :key="index">
             <general-card-coupons-action
               class="mx-2"
+              :hideDate="hideDate"
               :slug="item.slug"
               :showButton="showButton"
               :image="item"
@@ -32,6 +33,7 @@
               :isBannerOnly="isBannerOnly"
               :expiredDate="item.expiredDate"
               :ctaUrl="item.ctaUrl"
+              :buttonLabel="hideDate ? 'Cek Voucher' : 'Claim'"
             />
           </v-slide-item>
 
@@ -75,6 +77,10 @@ export default {
   mixins: [screen],
 
   props: {
+    hideDate: {
+      type: Boolean,
+      default: false,
+    },
     settings: Object,
     items: Array,
     title: String,

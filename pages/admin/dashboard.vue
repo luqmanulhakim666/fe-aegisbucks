@@ -14,6 +14,10 @@
 <script>
 import meta from "@/mixins/meta";
 export default {
+  middleware: ["authenticated", "authorized"],
+  meta: {
+    page: "admin",
+  },
   mixins: [meta],
   data: () => ({
     meta: {

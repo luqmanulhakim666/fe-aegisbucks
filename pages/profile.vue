@@ -75,6 +75,15 @@
         <v-icon> mdi-content-copy </v-icon>
       </v-btn>
     </div>
+    <div
+      class="d-flex mt-2 align-center pointer"
+      @click="onShowHowToUserReferral()"
+    >
+      <v-icon small class="mr-2">mdi-help-circle-outline</v-icon>
+      <p class="text--default dark--text text-decoration-underline">
+        Cara Menggunakan Kode Referral
+      </p>
+    </div>
 
     <div class="pa-2 dark lighten-3 mt-8">
       <p class="h5--small dark--text">Akun</p>
@@ -121,6 +130,12 @@
       <p class="text-default error--text">Logout</p>
     </div>
 
+    <app-dialog-how-to-use-referral-code
+      @copy:referral="copyLink(profile.code)"
+      @on:close="onShowHowToUserReferral"
+      :isDialog="state.isDialogHowToUseReferral"
+    />
+
     <app-profile-dialog
       :dialog="state.isDialog"
       :item="editProfile"
@@ -132,19 +147,26 @@
 
 <script>
 import utils from "@/mixins/utils";
+import meta from "@/mixins/meta";
+
 export default {
   layout: "app",
   middleware: "userAuthenticated",
-  mixins: [utils],
+  mixins: [utils, meta],
   data: () => ({
+    meta: {
+      title: "Profile",
+    },
     hasSentEmail: false,
     editProfile: {},
     state: {
       isDialog: false,
+      isDialogHowToUseReferral: false,
       totalPoints: 0,
     },
     loading: {
       verifyEmail: false,
+
       submit: false,
       point: false,
     },
@@ -188,6 +210,10 @@ export default {
   },
 
   methods: {
+    onShowHowToUserReferral() {
+      this.state.isDialogHowToUseReferral =
+        !this.state.isDialogHowToUseReferral;
+    },
     copyLink(code) {
       navigator.clipboard.writeText(code).then(
         () => {

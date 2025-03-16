@@ -10,6 +10,7 @@ export const ROLES = [
 ];
 
 export const CAMPAIGN_TYPES = [
+  { name: "All", key: " " },
   { name: "Retail", key: "retail" },
   { name: "Merchant", key: "merchant" },
 ];
