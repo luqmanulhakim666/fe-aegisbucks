@@ -138,7 +138,10 @@ export default {
       brands: [],
       products: [],
       partners: [],
-      campaignTypes: CAMPAIGN_TYPES,
+      campaignTypes: [
+        { name: "Retail", key: "retail" },
+        { name: "Merchant", key: "merchant" },
+      ],
       tab_headers: [
         {
           name: "General",
