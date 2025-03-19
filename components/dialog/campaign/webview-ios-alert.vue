@@ -8,7 +8,7 @@
       <p class="text--default mt-4">1.Salin link dibawah ini</p>
 
       <v-card class="dark lighten-3 mt-2 pa-2 rounded-xl" flat>
-        <p class="h7--xxsmall dark--text text-center">{{ url }}</p>
+        <p class="h7--xxsmall dark--text text-center">{{ shortUrl }}</p>
       </v-card>
 
       <v-list-item @click="copyLink(url)">
@@ -39,6 +39,7 @@ export default {
   props: {
     dialog: Boolean,
     url: String,
+    shortUrl: String,
   },
 };
 </script>

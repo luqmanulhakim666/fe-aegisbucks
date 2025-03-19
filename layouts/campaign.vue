@@ -7,6 +7,7 @@
       <dialog-campaign-webview-ios-alert
         :dialog="iosAlertDialog"
         :url="currentUrl"
+        :shortUrl="shortUrl"
       />
       <v-footer height="auto" class="dark lighten-3">
         <campaign-footer />
@@ -102,6 +103,12 @@ export default {
     }
   },
   computed: {
+    shortUrl() {
+      const host = this.$config.API_URL.replace("/api", "");
+      const url = this.$route.path;
+
+      return `${host}${url}`;
+    },
     currentUrl() {
       const host = this.$config.API_URL.replace("/api", "");
       const url = this.$route.fullPath;
