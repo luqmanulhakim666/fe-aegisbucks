@@ -1,7 +1,13 @@
 export const SUPER_ADMIN = [
   {
     name: "",
-    menus: [{ text: "Home", icon: "mdi-home", path: "/admin/dashboard" }],
+    menus: [
+      {
+        text: "Dashboard",
+        icon: "mdi-view-dashboard",
+        path: "/admin/dashboard",
+      },
+    ],
   },
   {
     name: "Master Data",

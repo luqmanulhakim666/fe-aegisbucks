@@ -491,6 +491,7 @@ export default {
         this.setFailedAlert(res);
 
         if (res.error.message === "Mohon maaf voucher sudah habis") {
+          console.log(res);
           this.state.dialogMessage = true;
         }
       }

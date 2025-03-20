@@ -3,9 +3,9 @@
     <template v-if="totalPage">
       <div class="d-sm-flex justify-space-between align-center">
         <p v-if="pagingData" class="text--default dark--text">
-          Menampilkan {{ pagingData }} -
+          Menampilkan {{ decimal(pagingData) }} -
           {{ paging.next ? paging.limit * paging.page : total }}
-          dari {{ total }} data
+          dari {{ decimal(total) }} data
         </p>
 
         <v-pagination
@@ -27,7 +27,9 @@
   </div>
 </template>
 <script>
+import utils from "@/mixins/utils";
 export default {
+  mixins: [utils],
   props: {
     perPage: [Number, String],
     total: Number,
