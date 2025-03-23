@@ -1,16 +1,16 @@
 <template>
-  <v-dialog width="500" v-model="isDialog" persistent>
-    <div class="white rounded-xl">
+  <v-dialog width="500" v-model="isDialog" persistent scrollable>
+    <v-card flat class="white rounded-xl">
       <div class="d-flex success lighten-1 rounded-t-xl">
-        <div class="d-flex align-center py-3 ml-10">
+        <div class="d-flex align-center py-3 ml-sm-10 ml-2">
           <v-icon size="42" outline color="#FFFF00">mdi-lightbulb-on</v-icon>
-          <h5 class="text-center h5--small ml-3 dark--text text-lighten-4">
+          <h5 class="text-sm-center h5--small ml-3 dark--text text-lighten-4">
             Cara Menggunakan Kode Referral
           </h5>
         </div>
       </div>
 
-      <div class="container">
+      <v-card-text class="container">
         <div class="d-flex align-center mb-4">
           <v-avatar color="success lighten-1" size="30">
             <p class="h5--small success--text">1</p>
@@ -56,8 +56,8 @@
           class="mt-8 success lighten-1 success--text text-capitalize h7--xxsmall"
           >Salin Kode Referral Saya</v-btn
         >
-      </div>
-    </div>
+      </v-card-text>
+    </v-card>
   </v-dialog>
 </template>
 

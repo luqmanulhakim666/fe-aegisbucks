@@ -1,12 +1,12 @@
 <template>
-  <v-dialog v-model="dialog" persistent width="500" v-if="dialog">
-    <div class="white rounded-xl">
+  <v-dialog v-model="dialog" persistent width="500" v-if="dialog" scrollable>
+    <v-card flat class="white rounded-xl">
       <general-card-dialog-header
         :name="item.productScan.name"
         @close="onEmitClose()"
       />
 
-      <div class="pa-6">
+      <v-card-text class="pa-6">
         <v-expansion-panels
           den
           flat
@@ -185,8 +185,8 @@
             </v-col>
           </v-row>
         </template>
-      </div>
-    </div>
+      </v-card-text>
+    </v-card>
   </v-dialog>
 </template>
 

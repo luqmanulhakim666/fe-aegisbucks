@@ -1,8 +1,13 @@
 <template>
-  <v-dialog v-model="dialog" persistent max-width="600">
-    <div class="white rounded-xl">
-      <general-card-dialog-header name="Product" @close="onEmitClose" />
-      <div class="pa-4">
+  <v-dialog v-model="dialog" persistent max-width="600" scrollable>
+    <v-card flat class="white rounded-xl modal-content">
+      <general-card-dialog-header
+        class="modal-header"
+        name="Product"
+        @close="onEmitClose"
+      />
+
+      <v-card-text class="pa-6">
         <v-form v-model="state.isValid" ref="form">
           <div class="">
             <div class="d-flex align-center mb-2">
@@ -181,8 +186,8 @@
             </v-btn>
           </div>
         </v-form>
-      </div>
-    </div>
+      </v-card-text>
+    </v-card>
   </v-dialog>
 </template>
 

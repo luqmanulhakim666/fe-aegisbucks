@@ -1,6 +1,6 @@
 <template>
-  <v-dialog v-model="dialog" width="350" persistent>
-    <div class="white rounded-xl">
+  <v-dialog v-model="dialog" width="400" persistent scrollable>
+    <v-card flat class="white rounded-xl">
       <input
         class="d-none"
         ref="input"
@@ -11,7 +11,7 @@
 
       <general-card-dialog-header name="Edit Profile" @close="onEmitClose()" />
 
-      <div class="pa-6">
+      <v-card-text class="pa-6">
         <v-form v-model="state.isValid" ref="form">
           <general-avatar
             class="d-flex mx-auto justify-center"
@@ -119,8 +119,8 @@
           @click="onSubmit()"
           >Simpan</v-btn
         >
-      </div>
-    </div>
+      </v-card-text>
+    </v-card>
   </v-dialog>
 </template>
 

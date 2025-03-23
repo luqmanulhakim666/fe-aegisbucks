@@ -1,13 +1,13 @@
 <template>
-  <v-dialog v-model="dialog" persistent max-width="700">
-    <div class="white rounded-xl">
+  <v-dialog v-model="dialog" persistent max-width="700" scrollable>
+    <v-card flat class="white rounded-xl">
       <general-card-dialog-header
         name="Voucher"
         @close="onEmitClose"
         :loading="state.isLoading"
       />
 
-      <v-card class="pa-4">
+      <v-card-text class="pa-6">
         <v-form v-model="state.isValid" ref="form">
           <template v-if="isRetailType">
             <general-form-autocomplete
@@ -278,8 +278,8 @@
             </v-btn>
           </div>
         </v-form>
-      </v-card>
-    </div>
+      </v-card-text>
+    </v-card>
   </v-dialog>
 </template>
 

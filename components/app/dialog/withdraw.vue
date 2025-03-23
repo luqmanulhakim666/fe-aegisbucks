@@ -1,6 +1,6 @@
 <template>
-  <v-dialog width="500" v-model="isDialog" persistent>
-    <div class="white rounded-xl">
+  <v-dialog width="500" v-model="isDialog" persistent scrollable>
+    <v-card flat class="white rounded-xl">
       <div class="d-flex success lighten-1 rounded-t-xl">
         <div class="d-flex align-center py-3 ml-10">
           <v-icon size="42" outline color="">mdi-bank-circle-outline</v-icon>
@@ -10,7 +10,7 @@
         </div>
       </div>
 
-      <div class="container">
+      <v-card-text class="container">
         <v-form v-model="isValid" ref="form">
           <general-form-autocomplete
             v-model="form.bankCode"
@@ -86,8 +86,8 @@
             >
           </v-col>
         </v-row>
-      </div>
-    </div>
+      </v-card-text>
+    </v-card>
   </v-dialog>
 </template>
 
