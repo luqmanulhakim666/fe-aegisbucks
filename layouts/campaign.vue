@@ -51,10 +51,10 @@ export default {
     }
 
     // ✅ Inject Facebook Meta Ads Pixel If It Exists
-    if (this.campaign?.facebookPixelScript) {
+    if (this.campaign?.facebookMetaPixel) {
       scriptArray.push({
         hid: "facebook-meta-pixel",
-        innerHTML: this.campaign.facebookPixelScript,
+        innerHTML: this.campaign.facebookMetaPixel,
         type: "text/javascript",
         charset: "utf-8",
       });
