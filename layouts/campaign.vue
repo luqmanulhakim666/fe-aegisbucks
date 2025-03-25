@@ -21,7 +21,6 @@
 export default {
   head() {
     const scriptArray = [
-      // ✅ My Personal Google Analytics (Always Loaded)
       {
         hid: "my-google-analytics-src",
         src: "https://www.googletagmanager.com/gtag/js?id=G-KJ8W3YMZ32",
@@ -30,17 +29,16 @@ export default {
       {
         hid: "my-google-analytics-inline",
         innerHTML: `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-KJ8W3YMZ32');
-        `,
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KJ8W3YMZ32');
+      `,
         type: "text/javascript",
         charset: "utf-8",
       },
     ];
 
-    // ✅ Inject Campaign-Specific Google Analytics If It Exists
     if (this.campaign?.googleAnalyticScript) {
       scriptArray.push({
         hid: "campaign-google-analytics",
@@ -50,11 +48,22 @@ export default {
       });
     }
 
-    // ✅ Inject Facebook Meta Ads Pixel If It Exists
     if (this.campaign?.facebookMetaPixel) {
       scriptArray.push({
         hid: "facebook-meta-pixel",
-        innerHTML: this.campaign.facebookMetaPixel,
+        innerHTML: `
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+
+        fbq('init', '${this.campaign.facebookMetaPixel}');
+        fbq('track', 'PageView');
+      `,
         type: "text/javascript",
         charset: "utf-8",
       });
