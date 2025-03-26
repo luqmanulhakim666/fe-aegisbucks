@@ -23,7 +23,24 @@ export default {
     const googleAnalyticsScript = this.campaign?.googleAnalyticScript;
     const facebookMetaPixel = this.campaign?.facebookMetaPixel;
 
-    const scriptArray = [];
+    const scriptArray = [
+      {
+        hid: "my-google-analytics-src",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-KJ8W3YMZ32",
+        async: true,
+      },
+      {
+        hid: "my-google-analytics-inline",
+        innerHTML: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-KJ8W3YMZ32');
+        `,
+        type: "text/javascript",
+        charset: "utf-8",
+      },
+    ];
     const noscriptArray = [];
     const sanitizers = [];
 
@@ -115,7 +132,6 @@ export default {
   },
 
   mounted() {
-    console.log("fbtrack");
     if (this.ua === "webview") {
       const url = this.currentUrl;
 
