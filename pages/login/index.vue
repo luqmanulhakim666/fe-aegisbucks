@@ -87,6 +87,8 @@ export default {
     ],
     meta: {
       title: "Login",
+      description:
+        "Unlocking Audience Insights, Empowering Conversions: LetsBuyAsia's Data-Driven Tracking Solutions",
     },
     form: {
       email: "",
