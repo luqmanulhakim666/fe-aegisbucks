@@ -93,7 +93,11 @@ export default {
     }
 
     if (campaignUrl) {
-      return (window.location.href = `${campaignUrl}?success=true`);
+      const isAlreadySuccess = campaignUrl?.includes("success");
+
+      return (window.location.href = isAlreadySuccess
+        ? campaignUrl
+        : `${campaignUrl}?success=true`);
     }
 
     if (!emailVerified) {

@@ -73,7 +73,6 @@
 <script>
 import rules from "@/mixins/rules";
 import meta from "@/mixins/meta";
-import { state } from "../../store/auth";
 export default {
   mixins: [rules, meta],
   middleware: "userUnauthenticated",
