@@ -1,7 +1,12 @@
 import qs from "query-string";
 
-export default function ({ store, $axios, redirect, route, env }) {
-  $axios.onRequest((res) => {});
+export default function ({ $axios, redirect, $config }) {
+  // ✅ Set the base URL from runtime config
+  $axios.setBaseURL($config.API_URL);
+
+  $axios.onRequest((res) => {
+    // You can log requests here if needed
+  });
 
   $axios.onResponse((res) => {
     return res.data;
@@ -24,6 +29,7 @@ export default function ({ store, $axios, redirect, route, env }) {
   $axios.setHeader("Accept", "application/json; charset=utf-8");
   $axios.setHeader("X-Requested-With", "XMLHttpRequest");
   $axios.setHeader("no-cache", 1);
+
   $axios.defaults.paramsSerializer = (params) => {
     if (params.attributes)
       params.attributes = JSON.stringify(params.attributes);
