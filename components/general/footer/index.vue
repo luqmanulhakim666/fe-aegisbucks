@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto">
     <span class="h8--supersmall dark--text text--lighten-5">
-      Letsbuyasia &copy; {{ year }}</span
+      Aegisbucks &copy; {{ year }}</span
     >
   </div>
 </template>

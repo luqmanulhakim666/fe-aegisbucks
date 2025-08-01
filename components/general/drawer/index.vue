@@ -151,7 +151,7 @@ export default {
         min-height: 8px;
         position: absolute;
         border-radius: 100%;
-        background-color: var(--v-dark-lighten5);
+        background-color: var(--v-error-base);
         left: 46px;
       }
     }

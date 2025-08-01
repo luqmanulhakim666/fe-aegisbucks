@@ -359,7 +359,7 @@ export default {
       );
     },
     goToInstagramMessage() {
-      window.location.href = "https://www.instagram.com/letsbuyasia";
+      window.location.href = "https://www.instagram.com/Aegisbucks";
     },
     async onVerifyCaptcha() {
       try {

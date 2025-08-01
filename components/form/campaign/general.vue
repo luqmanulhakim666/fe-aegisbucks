@@ -315,7 +315,7 @@
         </div>
         <general-form-text-field
           v-model="form.emailSender"
-          placeholder="info<info@letsbuyasia.id>"
+          placeholder="info<info@aegisbucks.com>"
           bold
           label="Email Sender"
           outlined

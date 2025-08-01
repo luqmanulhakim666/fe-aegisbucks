@@ -40,7 +40,7 @@
         >
         <p class="h6--xsmall dark--text ml-4">
           lengkapi profil untuk bisa mendapatkan lebih banyak reward dari
-          LetsbuyAsia
+          Aegisbucks
         </p>
       </div>
     </template>
@@ -181,7 +181,7 @@ export default {
         label: "Hubungi Help Center (Instagram)",
         key: "instagram",
         icon: "mdi-face-agent",
-        value: "https://instagram.com/letsbuyasia",
+        value: "https://instagram.com/Aegisbucks",
       },
       {
         label: "Kebijakan Privasi",

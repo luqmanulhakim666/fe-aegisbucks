@@ -97,7 +97,7 @@ export default {
       banners: [],
     },
     meta: {
-      title: "LetsbuyAsia",
+      title: "Aegisbucks",
     },
   }),
 
