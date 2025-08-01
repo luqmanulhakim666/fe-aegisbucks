@@ -16,7 +16,7 @@
       </p>
 
       <p class="text--default dark--text text-center">
-        Kami mengirimkan instruksi untuk melanjutkan ke home page letsbuyAsia.id
+        Kami mengirimkan instruksi untuk melanjutkan ke home page aegisbucks.com
       </p>
 
       <div class="d-flex justify-center mt-6">
