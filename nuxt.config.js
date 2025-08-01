@@ -18,8 +18,8 @@ module.exports = {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: "LetsbuyAsia - %s",
-    title: "LetsbuyAsia",
+    titleTemplate: "Aegisbucks - %s",
+    title: "Aegisbucks",
     htmlAttrs: {
       lang: "en",
     },
@@ -92,20 +92,19 @@ module.exports = {
       themes: {
         light: {
           primary: {
+            base: "#DC1F30",
+            lighten4: "#9A1919",
+            lighten3: "#FFC3C3",
+            lighten2: "#FF6060",
+            lighten1: "#EF3030",
+          },
+          secondary: {
             base: "#2962ff",
             lighten5: "#F3F8FF",
             lighten4: "#CFE5F9",
             lighten3: "#A1CAF4",
             lighten2: "#6DA0DE",
             lighten1: "#007bff",
-          },
-          secondary: {
-            base: "#E27106",
-            lighten5: "#FFB300",
-            lighten4: "#FDEECC",
-            lighten3: "#FCD899",
-            lighten2: "#F6BB66",
-            lighten1: "#ED9D40",
           },
           success: {
             base: "#338A17",
@@ -115,13 +114,12 @@ module.exports = {
             lighten2: "#20C933",
             lighten1: "#C0ED54",
           },
-          accent: {
-            base: "#338A17",
-            lighten5: "#21E766",
-            lighten4: "#588096",
-            lighten3: "#93E088",
-            lighten2: "#20C933",
-            lighten1: "#E5F0F6",
+          error: {
+            base: "#DC1F30",
+            lighten4: "#9A1919",
+            lighten3: "#FFC3C3",
+            lighten2: "#FF6060",
+            lighten1: "#EF3030",
           },
           info: {
             base: "#2750AE",
@@ -136,13 +134,6 @@ module.exports = {
             lighten3: "#FFE3DA",
             lighten2: "#FFB094",
             lighten1: "#FA622D",
-          },
-          error: {
-            base: "#9A1919",
-            lighten4: "#FFEEEE",
-            lighten3: "#FFC3C3",
-            lighten2: "#FF6060",
-            lighten1: "#EF3030",
           },
           dark: {
             base: "#585858",
