@@ -238,7 +238,7 @@ export default {
           key: "report",
           text: "Report",
           icon: "mdi-chart-pie",
-          textColor: "secondary--text",
+          textColor: "primary--text",
         },
       ],
       paging: {},

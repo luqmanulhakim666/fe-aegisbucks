@@ -128,7 +128,7 @@
                   class="h8--supersmall primary-create-btn"
                   :loading="mixins.state.isLoading"
                   @click="onOpenFile"
-                  >{{ !getSignature ? 'Upload' : 'Upload Ulang' }}</v-btn
+                  >{{ !getSignature ? "Upload" : "Upload Ulang" }}</v-btn
                 >
 
                 <general-form-text-field
@@ -145,7 +145,7 @@
         <div class="d-flex justify-end mt-4">
           <v-btn
             depressed
-            class="text-capitalize h6--xsmall secondary lighten-5"
+            class="text-capitalize h6--xsmall primary lighten-5"
             :loading="loading"
             @click="onEmitSubmit"
             >Simpan</v-btn
@@ -157,9 +157,9 @@
 </template>
 
 <script>
-import rules from '@/mixins/rules'
-import media from '@/mixins/media'
-import pipe from '@/mixins/pipe'
+import rules from "@/mixins/rules";
+import media from "@/mixins/media";
+import pipe from "@/mixins/pipe";
 
 export default {
   mixins: [rules, media, pipe],
@@ -170,49 +170,49 @@ export default {
     role: String,
     progress: [String, Number],
     uploadLoading: Boolean,
-    avatarUrl: [String, Object]
+    avatarUrl: [String, Object],
   },
 
   computed: {
     getSignature() {
-      return this.form.signature?.url || ''
-    }
+      return this.form.signature?.url || "";
+    },
   },
 
   data: () => ({
     state: {
       isValid: true,
-      showUpload: false
-    }
+      showUpload: false,
+    },
   }),
 
   methods: {
     handleShowUpload() {
-      this.state.showUpload = !this.state.showUpload
+      this.state.showUpload = !this.state.showUpload;
     },
 
     onEmitUpload() {
-      this.$emit('on:upload')
+      this.$emit("on:upload");
     },
 
     onEmitClose() {
-      this.$emit('on:close')
+      this.$emit("on:close");
     },
 
     async onEmitSubmit() {
-      let valid = await this.validate(this.state.isValid)
+      let valid = await this.validate(this.state.isValid);
 
       if (valid) {
-        this.$emit('on:submit')
+        this.$emit("on:submit");
       }
-    }
+    },
   },
   watch: {
-    'mixins.state.media'(val) {
-      this.form.signature = val
-    }
-  }
-}
+    "mixins.state.media"(val) {
+      this.form.signature = val;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

@@ -47,8 +47,8 @@ export default {
       {
         name: "Claimed",
         value: 0,
-        color: "secondary lighten-2",
-        textColor: "secondary--text text--lighten-2",
+        color: "primary lighten-2",
+        textColor: "primary--text text--lighten-2",
       },
       {
         name: "Used",

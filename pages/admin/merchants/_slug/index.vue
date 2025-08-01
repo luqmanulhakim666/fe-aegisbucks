@@ -34,7 +34,7 @@
         </v-btn>
         <v-btn
           :loading="state.isLoading"
-          class="secondary lighten-5 text-capitalize ml-2 h7--xxsmall"
+          class="primary lighten-5 text-capitalize ml-2 h7--xxsmall"
           depressed
           @click="onSubmit()"
         >

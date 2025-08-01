@@ -94,7 +94,7 @@ export default {
 
   .v-list-item--active {
     border-radius: 8px;
-    background: var(--v-secondary-lighten2);
+    background: var(--v-primary-lighten2);
   }
 }
 </style>

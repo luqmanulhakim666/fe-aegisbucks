@@ -10,12 +10,12 @@
 
     <div
       v-if="getMediaName()"
-      class="grey lighten-3 secondary--text text--lighten-5 d-flex justify-space-between align-center py-1 pa-4 rounded-lg"
+      class="grey lighten-3 primary--text text--lighten-5 d-flex justify-space-between align-center py-1 pa-4 rounded-lg"
     >
       <p class="text--default pointer hover-underline" @click="onPreview()">
         {{ getMediaName() }}
       </p>
-      <v-btn @click="onEmitRemove()" x-small color="secondary lighten-5" icon
+      <v-btn @click="onEmitRemove()" x-small color="primary lighten-5" icon
         ><v-icon small>mdi-close</v-icon></v-btn
       >
     </div>

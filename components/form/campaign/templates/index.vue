@@ -56,13 +56,13 @@
 
               <div class="shadow-base d-inline mt-8 rounded-xl">
                 <p class="text--default my-4">
-                  <b>Secondary Color:</b> {{ form.secondaryColor }}
+                  <b>primary Color:</b> {{ form.primaryColor }}
                 </p>
                 <v-color-picker
                   class="d-inline-block"
                   hide-mode-switch
                   mode="hexa"
-                  v-model="form.secondaryColor"
+                  v-model="form.primaryColor"
                 />
               </div>
             </v-expansion-panel-content>
@@ -218,7 +218,7 @@
 
       <v-btn
         :loading="state.isLoading"
-        class="secondary lighten-5 text-capitalize ml-2 h7--xxsmall"
+        class="primary lighten-5 text-capitalize ml-2 h7--xxsmall"
         depressed
         @click="onSubmit()"
       >

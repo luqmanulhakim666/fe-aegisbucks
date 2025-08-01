@@ -134,7 +134,7 @@
             @click="goToCtaLink(index)"
             block
             large
-            :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
+            :style="`background:${campaign.primaryColor};color:${campaign.primaryColor}`"
             class="text-capitalize h6--xsmall mt-8"
             >{{ item.label ? item.label : "Click Here" }}</v-btn
           >

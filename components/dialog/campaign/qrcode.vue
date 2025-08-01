@@ -25,7 +25,7 @@
           <v-btn
             small
             depressed
-            class="secondary text-capitalize h7--xxsmall mx-auto d-flex mt-10"
+            class="primary text-capitalize h7--xxsmall mx-auto d-flex mt-10"
             @click="onDownload()"
           >
             <v-icon small class="mr-2">mdi-download</v-icon>

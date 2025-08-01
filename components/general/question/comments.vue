@@ -26,7 +26,7 @@
               class="h8--supersmall dark--text pointer"
               @click="onShowComments()"
             >
-              {{ state.isHidden ? 'Lihat' : 'Sembunyikan' }}
+              {{ state.isHidden ? "Lihat" : "Sembunyikan" }}
               {{ state.paging.count }} Balasan
             </p>
           </div>
@@ -68,7 +68,7 @@
           />
           <v-btn
             depressed
-            color="secondary lighten-5"
+            color="primary lighten-5"
             class="text-capitalize h8--supersmall"
             :loading="state.isLoading"
             :disabled="!form.content"
@@ -82,120 +82,120 @@
 </template>
 
 <script>
-import pipe from '@/mixins/pipe'
-import alert from '@/mixins/alert'
+import pipe from "@/mixins/pipe";
+import alert from "@/mixins/alert";
 
 export default {
   mixins: [pipe, alert],
   props: {
     item: {
-      type: Object
+      type: Object,
     },
-    isAllowPost: Boolean
+    isAllowPost: Boolean,
   },
 
   data: () => ({
     form: {
-      content: ''
+      content: "",
     },
 
     body: {
       skip: 1,
       limit: 2,
-      sort: 'latest',
-      parent: '',
-      key: ''
+      sort: "latest",
+      parent: "",
+      key: "",
     },
 
     items: {
-      childComment: []
+      childComment: [],
     },
 
     state: {
       isHidden: true,
       isReplied: false,
       isLoading: false,
-      paging: {}
-    }
+      paging: {},
+    },
   }),
 
   created() {
-    this.fetchChild()
+    this.fetchChild();
   },
 
   methods: {
     async fetchChild() {
       let payload = {
         ...this.body,
-        parent: this.item?.id
-      }
-      let res = await this.$api.forumComment.getList(this.forumId, payload)
+        parent: this.item?.id,
+      };
+      let res = await this.$api.forumComment.getList(this.forumId, payload);
 
       if (res.success) {
-        this.items.childComment = res.data.list
-        this.state.paging = res.data.paging
+        this.items.childComment = res.data.list;
+        this.state.paging = res.data.paging;
       }
 
       if (!res.success) {
-        this.setFailedAlert(res)
+        this.setFailedAlert(res);
       }
     },
 
     async onSubmit() {
-      this.state.isLoading = true
+      this.state.isLoading = true;
 
       let payload = {
         parent: this.item?.id,
-        content: this.form.content
-      }
+        content: this.form.content,
+      };
 
-      let res = await this.$api.forumComment.create(this.forumId, payload)
+      let res = await this.$api.forumComment.create(this.forumId, payload);
 
       if (res.success) {
-        this.fetchChild()
-        this.form.content = ''
+        this.fetchChild();
+        this.form.content = "";
         if (this.state.isHidden) {
-          this.state.isHidden = !this.state.isHidden
+          this.state.isHidden = !this.state.isHidden;
         }
       }
 
       if (!res.success) {
-        this.setFailedAlert(res)
+        this.setFailedAlert(res);
       }
 
-      this.state.isLoading = false
+      this.state.isLoading = false;
     },
 
     onLoadComment() {
-      this.body.skip += 2
-      this.fetchChild()
+      this.body.skip += 2;
+      this.fetchChild();
     },
 
     onShowComments() {
-      this.state.isHidden = !this.state.isHidden
+      this.state.isHidden = !this.state.isHidden;
     },
 
     onReply() {
-      this.state.isReplied = !this.state.isReplied
+      this.state.isReplied = !this.state.isReplied;
     },
 
     getAvatar(val) {
-      return val.user?.image?.url || ''
-    }
+      return val.user?.image?.url || "";
+    },
   },
 
   computed: {
     forumId() {
-      return this.$route?.params?.slug
+      return this.$route?.params?.slug;
     },
 
     profile() {
-      return this.$store.getters['auth/profile']
+      return this.$store.getters["auth/profile"];
     },
 
     getAvatarIsLogin() {
-      return this.profile?.image
-    }
-  }
-}
+      return this.profile?.image;
+    },
+  },
+};
 </script>

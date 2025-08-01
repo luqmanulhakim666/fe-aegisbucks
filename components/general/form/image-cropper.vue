@@ -79,7 +79,7 @@
     <template v-if="!cropper.isLoading">
       <v-btn
         v-if="!getMediaName()"
-        class="grey lighten-3 secondary--text text--lighten-5 text-capitalize h7--xxsmall"
+        class="grey lighten-3 primary--text text--lighten-5 text-capitalize h7--xxsmall"
         depressed
         @click="onOpenFile"
       >
@@ -128,7 +128,7 @@
               small
               outlined
               depressed
-              color="secondary"
+              color="primary"
               @click="onEditImage()"
             >
               <v-icon size="16" class="mr-1">mdi-crop</v-icon>
@@ -163,7 +163,7 @@
                   class="text--default mt-4 text-capitalize"
                   text
                   depressed
-                  color="secondary"
+                  color="primary"
                   @click="cropImage"
                 >
                   <v-icon size="16" class="mr-1">mdi-check</v-icon>

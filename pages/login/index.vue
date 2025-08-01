@@ -36,7 +36,7 @@
               x-small
               :disabled="!form.referalCode"
               depressed
-              class="secondary lighten-1 rounded-pill h7--xxsmall text-capitalize my-2"
+              class="primary lighten-1 rounded-pill h7--xxsmall text-capitalize my-2"
             >
               {{ !state.isUsedReveralCode ? "Gunakan" : "Ubah" }}
             </v-btn>

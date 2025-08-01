@@ -14,7 +14,7 @@
     />
 
     <v-btn
-      class="secondary lighten-5 h7--xxsmall text-capitalize mt-3 mt-md-2 ml-0 ml-md-2"
+      class="primary lighten-5 h7--xxsmall text-capitalize mt-3 mt-md-2 ml-0 ml-md-2"
       small
       depressed
       v-if="exportReport"
@@ -69,7 +69,7 @@
       v-if="isCreated"
       depressed
       small
-      class="secondary lighten-5 h7--xxsmall text-capitalize mt-3 mt-md-0"
+      class="primary h7--xxsmall text-capitalize mt-3 mt-md-0"
       @click="onEmitAction()"
     >
       <v-icon small class="mr-2">mdi-plus</v-icon>

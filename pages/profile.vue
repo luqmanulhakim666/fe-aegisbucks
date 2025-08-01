@@ -35,7 +35,7 @@
 
     <template v-if="!profile.isCompleteProfile">
       <div class="d-flex align-center dark lighten-3 justify-center pa-2 mt-10">
-        <v-icon size="34" color="secondary lighten-2"
+        <v-icon size="34" color="primary lighten-2"
           >mdi-lightbulb-on-outline</v-icon
         >
         <p class="h6--xsmall dark--text ml-4">
@@ -90,7 +90,7 @@
     </div>
 
     <p class="h7--xxsmall mt-4">Email</p>
-    <p class="text--default secondary--text mb-2" v-if="!profile.emailVerified">
+    <p class="text--default primary--text mb-2" v-if="!profile.emailVerified">
       Akun belum terverifikasi
     </p>
     <div

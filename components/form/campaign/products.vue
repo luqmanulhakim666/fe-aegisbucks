@@ -4,7 +4,7 @@
       <v-form class="white pa-6 rounded-xl" v-model="state.isValid" ref="form">
         <v-btn
           depressed
-          class="secondary lighten-5 h7--xxsmall text-capitalize"
+          class="primary lighten-5 h7--xxsmall text-capitalize"
           x-small
           @click="handleDialog"
         >
@@ -115,7 +115,7 @@
 
         <v-btn
           :loading="state.isLoading"
-          class="secondary lighten-5 text-capitalize ml-2 h7--xxsmall"
+          class="primary lighten-5 text-capitalize ml-2 h7--xxsmall"
           depressed
           @click="onSubmit()"
         >

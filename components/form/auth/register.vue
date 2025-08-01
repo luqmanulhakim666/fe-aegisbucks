@@ -104,7 +104,7 @@
     <v-btn
       depressed
       large
-      class="text-capitalize white--text secondary lighten-5 h6--xsmall"
+      class="text-capitalize white--text primary lighten-5 h6--xsmall"
       block
       :loading="loading"
       :disabled="!state.isChecked"

@@ -54,7 +54,7 @@
         </template>
         <v-date-picker
           range
-          color="secondary"
+          color="primary"
           v-model="dateRange"
           @input="onSelectDateRange()"
           :max="maxDate"

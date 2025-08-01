@@ -48,7 +48,7 @@ export default {
 ::v-deep .v-text-field.v-input--has-state {
   .v-input__control {
     .v-input__slot:before {
-      border-color: var(--v-secondary-lighten1) !important;
+      border-color: var(--v-primary-lighten1) !important;
     }
   }
 }

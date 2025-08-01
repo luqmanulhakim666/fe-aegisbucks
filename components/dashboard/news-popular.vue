@@ -52,7 +52,7 @@
                   <v-btn
                     depressed
                     x-small
-                    class="secondary lighten-5 text-capitalize text--small ml-sm-6"
+                    class="primary lighten-5 text-capitalize text--small ml-sm-6"
                     @click="onDetail(item.id)"
                   >
                     Lihat Detail
@@ -70,7 +70,7 @@
           x-small
           depressed
           outlined
-          color="secondary lighten-5"
+          color="primary lighten-5"
           min-width="32"
           min-height="34"
           class="card__news-arrow mr-2"
@@ -84,7 +84,7 @@
           x-small
           depressed
           outlined
-          color="secondary"
+          color="primary"
           min-width="32"
           min-height="34"
           class="card__news-arrow"
@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import pipe from '@/mixins/pipe'
+import pipe from "@/mixins/pipe";
 export default {
   mixins: [pipe],
   data: () => ({
@@ -110,101 +110,101 @@ export default {
     body: {
       skip: 1,
       limit: 5,
-      keyword: '',
-      sort: 'popular',
-      key: '',
-      published: true
+      keyword: "",
+      sort: "popular",
+      key: "",
+      published: true,
     },
 
     items: {
-      forum: []
+      forum: [],
     },
 
     state: {
-      isLoading: false
-    }
+      isLoading: false,
+    },
   }),
 
   created() {
-    this.fetch()
+    this.fetch();
   },
 
   computed: {
     isEmpty() {
-      return this.items.forum?.length === 0
-    }
+      return this.items.forum?.length === 0;
+    },
   },
 
   methods: {
     async fetch() {
-      this.state.isLoading = true
+      this.state.isLoading = true;
 
       const payload = {
-        ...this.body
-      }
+        ...this.body,
+      };
 
-      let res = await this.$api.forum.getList(payload)
+      let res = await this.$api.forum.getList(payload);
 
       if (res.success) {
         this.items.forum = res.data.list?.sort((a, b) => {
-          if (a?.totalComment > b?.totalComment) return -1
-          if (a?.totalComment < b?.totalComment) return 1
-          return 0
-        })
+          if (a?.totalComment > b?.totalComment) return -1;
+          if (a?.totalComment < b?.totalComment) return 1;
+          return 0;
+        });
       }
 
       if (!res.success) {
-        this.setFailedAlert(res)
+        this.setFailedAlert(res);
       }
 
-      this.state.isLoading = false
+      this.state.isLoading = false;
     },
 
     getFullDate(val) {
       if (val) {
-        return this.$dayjs(val).format(`DD MMMM YYYY`)
+        return this.$dayjs(val).format(`DD MMMM YYYY`);
       }
-      return ''
+      return "";
     },
 
     getUserName(val) {
-      return val.user?.name || ''
+      return val.user?.name || "";
     },
 
     onDetail(id) {
-      this.$router.push(`/e-learning/forum/${id}/detail`)
+      this.$router.push(`/e-learning/forum/${id}/detail`);
     },
 
     nextButton() {
-      this.stepNo += 1
-      this.prev = false
+      this.stepNo += 1;
+      this.prev = false;
     },
 
     prevButton() {
-      this.stepNo -= 1
+      this.stepNo -= 1;
     },
 
     getImage(val) {
-      return val?.image?.url || ''
-    }
+      return val?.image?.url || "";
+    },
   },
 
   watch: {
     stepNo(newStep, oldStep) {
-      const lastIndex = this.items.forum.length - 1
+      const lastIndex = this.items.forum.length - 1;
 
       if (lastIndex - 1 === oldStep) {
-        this.next = true
-        this.prev = false
+        this.next = true;
+        this.prev = false;
       }
 
       if (this.stepNo < 1) {
-        this.next = false
-        this.prev = true
+        this.next = false;
+        this.prev = true;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

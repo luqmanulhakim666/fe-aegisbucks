@@ -170,7 +170,7 @@
         <v-btn
           small
           depressed
-          class="text-capitalize mt-2 mb-4 secondary h7--xxsmall white--text"
+          class="text-capitalize mt-2 mb-4 primary h7--xxsmall white--text"
           @click="onAddCTA()"
         >
           <v-icon color="white" class="mr-2" small>mdi-plus-circle</v-icon>
@@ -248,7 +248,7 @@
               small
               outlined
               depressed
-              color="secondary"
+              color="primary"
               @click="onEditImage()"
             >
               <v-icon size="16" class="mr-1">mdi-crop</v-icon>
@@ -283,7 +283,7 @@
                   class="text--default mt-4 text-capitalize"
                   text
                   depressed
-                  color="secondary"
+                  color="primary"
                   @click="cropImage"
                 >
                   <v-icon size="16" class="mr-1">mdi-check</v-icon>
@@ -352,7 +352,7 @@ export default {
   },
   props: {
     primaryColor: String,
-    secondaryColor: String,
+    primaryColor: String,
     bold: {
       type: Boolean,
       default: false,

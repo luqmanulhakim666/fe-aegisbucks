@@ -10,7 +10,7 @@
 
         <v-pagination
           class="mt-6 mt-sm-0"
-          color="secondary lighten-5"
+          color="primary lighten-5"
           v-model="paging.page"
           :length="totalPage"
           :total-visible="5"

@@ -12,9 +12,7 @@
         <div class="white rounded-xl">
           <div class="pa-6 d-md-flex justify-md-space-between align-center">
             <div class="d-flex">
-              <v-icon color="secondary lighten-5" size="44"
-                >mdi-bullhorn</v-icon
-              >
+              <v-icon color="primary lighten-5" size="44">mdi-bullhorn</v-icon>
               <div class="ml-4">
                 <div class="d-flex align-start">
                   <div>
@@ -201,7 +199,7 @@
       />
 
       <v-btn
-        class="grey lighten-3 secondary--text text--lighten-5 text-capitalize h7--xxsmall"
+        class="grey lighten-3 primary--text text--lighten-5 text-capitalize h7--xxsmall"
         depressed
         :loading="state.loading.hubspot"
         @click="onOpenFile"

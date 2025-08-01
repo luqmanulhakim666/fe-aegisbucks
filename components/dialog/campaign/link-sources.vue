@@ -91,7 +91,7 @@
             @click="onSubmit()"
             small
             depressed
-            class="secondary lighten-5 text-capitalize h8--supersmall mb-6"
+            class="primary lighten-5 text-capitalize h8--supersmall mb-6"
           >
             Save</v-btn
           >

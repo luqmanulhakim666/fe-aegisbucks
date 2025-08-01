@@ -11,7 +11,7 @@
         v-bind:class="{
           'dark--text text--lighten-5 pointer hover-underline ':
             !getLastIndex(index),
-          'info--text text--lighten-2': getLastIndex(index),
+          'primary--text text--lighten-2': getLastIndex(index),
         }"
       >
         {{ item.text }}
@@ -23,7 +23,7 @@
       >
         <v-icon
           :color="
-            !getLastIndex(index + 2) ? 'info lighten-2' : 'dark lighten-5'
+            !getLastIndex(index + 2) ? 'primary lighten-2' : 'dark lighten-5'
           "
           >mdi-chevron-right</v-icon
         >

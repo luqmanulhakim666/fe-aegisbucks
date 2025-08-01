@@ -86,7 +86,7 @@ module.exports = {
             lighten2: "#6DA0DE",
             lighten1: "#007bff",
           },
-          secondary: {
+          primary-: {
             base: "#E27106",
             lighten5: "#FFB300",
             lighten4: "#FDEECC",

@@ -102,7 +102,7 @@ export default {
       gmailPassword: "",
       templateId: "1",
       primaryColor: "#2962ff",
-      secondaryColor: "#E27106",
+      primaryColor: "#E27106",
       backgroundImageId: "",
       coverSection: [],
       headerSection: [],
@@ -290,8 +290,8 @@ export default {
         this.form.primaryColor = "#2962ff";
       }
 
-      if (!res.data.secondaryColor) {
-        this.form.secondaryColor = "#E27106";
+      if (!res.data.primaryColor) {
+        this.form.primaryColor = "#E27106";
       }
 
       if (!res.data.additionalInformation) {

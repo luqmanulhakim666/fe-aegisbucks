@@ -18,7 +18,7 @@
           @click="goBack()"
           block
           depressed
-          class="mt-8 secondary text-capitalize h7--xxsmall"
+          class="mt-8 primary text-capitalize h7--xxsmall"
           >Kembali</v-btn
         >
       </div>

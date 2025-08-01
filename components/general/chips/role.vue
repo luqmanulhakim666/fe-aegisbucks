@@ -13,33 +13,33 @@
 <script>
 export default {
   props: {
-    role: String
+    role: String,
   },
 
   computed: {
     humanizeRole() {
-      if (this.role === 'incubator') return 'Inkubator'
-      if (this.role === 'tenant') return 'Tenant'
-      return 'LPDB'
+      if (this.role === "incubator") return "Inkubator";
+      if (this.role === "tenant") return "Tenant";
+      return "LPDB";
     },
     colors() {
       let item = {
-        bgColor: 'accent lighten-1',
-        txtColor: 'primary--text lighten-4'
+        bgColor: "accent lighten-1",
+        txtColor: "primary--text lighten-4",
+      };
+
+      if (this.role === "incubator") {
+        item.bgColor = "primary lighten-4";
+        item.txtColor = "primary--text";
       }
 
-      if (this.role === 'incubator') {
-        item.bgColor = 'primary lighten-4'
-        item.txtColor = 'primary--text'
+      if (this.role === "tenant") {
+        item.bgColor = "primary lighten-4";
+        item.txtColor = "primary--text";
       }
 
-      if (this.role === 'tenant') {
-        item.bgColor = 'secondary lighten-4'
-        item.txtColor = 'secondary--text'
-      }
-
-      return item
-    }
-  }
-}
+      return item;
+    },
+  },
+};
 </script>

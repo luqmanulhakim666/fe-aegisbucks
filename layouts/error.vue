@@ -6,7 +6,7 @@
           <general-logo-lpdb :max_width="200" class="mr-2" />
           <general-logo-ridi :max_width="100" class="ml-2" />
         </div>
-        <h4 class="h4--default text-center secondary--text mt-8 mb-4">
+        <h4 class="h4--default text-center primary--text mt-8 mb-4">
           {{ message }}
         </h4>
 

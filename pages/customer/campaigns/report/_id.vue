@@ -11,7 +11,7 @@
       <v-col cols="12" lg="7">
         <div class="white rounded-xl">
           <div class="pa-6 d-flex">
-            <v-icon color="secondary lighten-5" size="44">mdi-bullhorn</v-icon>
+            <v-icon color="primary lighten-5" size="44">mdi-bullhorn</v-icon>
             <div class="ml-4">
               <div class="d-flex align-start">
                 <div>

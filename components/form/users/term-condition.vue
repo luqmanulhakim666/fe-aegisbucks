@@ -18,19 +18,19 @@
 
       <div
         v-if="getMediaName()"
-        class="grey lighten-3 secondary--text text--lighten-5 d-flex justify-space-between align-center py-1 px-2 rounded-lg"
+        class="grey lighten-3 primary--text text--lighten-5 d-flex justify-space-between align-center py-1 px-2 rounded-lg"
       >
         <p class="text--default hover-underline" @click="onPreview()">
           {{ getMediaName() }}
         </p>
-        <v-btn @click="onEmitRemove()" x-small color="secondary lighten-5" icon
+        <v-btn @click="onEmitRemove()" x-small color="primary lighten-5" icon
           ><v-icon small>mdi-close</v-icon></v-btn
         >
       </div>
 
       <v-btn
         v-if="!getMediaName()"
-        class="grey lighten-3 secondary--text text--lighten-5 text-capitalize h7--xxsmall"
+        class="grey lighten-3 primary--text text--lighten-5 text-capitalize h7--xxsmall"
         depressed
         :loading="mixins.state.isLoading"
         @click="onOpenFile"
@@ -42,31 +42,31 @@
 </template>
 
 <script>
-import media from '@/mixins/media'
-import alert from '@/mixins/alert'
+import media from "@/mixins/media";
+import alert from "@/mixins/alert";
 export default {
   mixins: [media, alert],
   props: {
-    form: Object
+    form: Object,
   },
 
   methods: {
     onEmitRemove() {
-      this.$emit('on:remove')
+      this.$emit("on:remove");
     },
     getMediaName() {
-      return this.form?.termConditionFile?.name || null
+      return this.form?.termConditionFile?.name || null;
     },
     onPreview() {
-      let url = this.form?.termConditionFile?.url
-      window.open(url)
-    }
+      let url = this.form?.termConditionFile?.url;
+      window.open(url);
+    },
   },
   watch: {
-    'mixins.state.media'(val) {
-      this.form.termConditionFile = val
-      this.$emit('on:save')
-    }
-  }
-}
+    "mixins.state.media"(val) {
+      this.form.termConditionFile = val;
+      this.$emit("on:save");
+    },
+  },
+};
 </script>

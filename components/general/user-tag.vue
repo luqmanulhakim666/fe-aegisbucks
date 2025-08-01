@@ -4,7 +4,7 @@
       flat
       :class="[
         'rounded-lg py-2 px-3 mx-1 full-width',
-        target === 'incubator' ? 'primary lighten-4' : 'secondary lighten-4'
+        target === 'incubator' ? 'primary lighten-4' : 'primary lighten-4',
       ]"
     >
       <p
@@ -12,7 +12,7 @@
           'h6--xsmall text-center',
           target === 'incubator'
             ? 'primary--text'
-            : 'secondary--text text--lighten-5'
+            : 'primary--text text--lighten-5',
         ]"
       >
         {{ humanizeRole(target) }}
@@ -22,11 +22,11 @@
 </template>
 
 <script>
-import pipe from '@/mixins/pipe'
+import pipe from "@/mixins/pipe";
 export default {
   mixins: [pipe],
   props: {
-    target: String
-  }
-}
+    target: String,
+  },
+};
 </script>

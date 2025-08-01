@@ -14,7 +14,7 @@
       <v-btn
         depressed
         block
-        class="mt-6 text-capitalize h7--xxsmall secondary"
+        class="mt-6 text-capitalize h7--xxsmall primary"
         @click="onEmitClose()"
         >Tutup</v-btn
       >

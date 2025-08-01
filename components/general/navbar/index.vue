@@ -28,7 +28,7 @@
         :dialog="isDialog"
         @on:close="handleDialog"
         @on:submit="onLogin()"
-        color="secondary lighten-5"
+        color="primary lighten-5"
         actionText="Login"
         icon="mdi-alert-decagram"
         title="Silahkan login terlebih dahulu untuk mengakses E-Learning"

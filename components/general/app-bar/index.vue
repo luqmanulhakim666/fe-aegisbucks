@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar fixed app class="app-bar dark darken-1 px-sm-7 px-2" flat>
+  <v-app-bar fixed app class="app-bar primary px-sm-7 px-2" flat>
     <v-icon
       size="18"
       class="mr-5 pointer white--text"

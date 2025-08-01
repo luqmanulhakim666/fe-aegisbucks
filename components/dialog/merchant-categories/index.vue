@@ -21,7 +21,7 @@
         <v-btn
           depressed
           block
-          class="secondary text-capitalize h7--xxsmall"
+          class="primary text-capitalize h7--xxsmall"
           :loading="state.isLoading"
           @click="onSubmit()"
           >Submit</v-btn

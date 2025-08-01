@@ -16,7 +16,7 @@
         Batal
       </v-btn>
       <v-btn
-        class="secondary lighten-5 text-capitalize ml-2 h7--xxsmall"
+        class="primary lighten-5 text-capitalize ml-2 h7--xxsmall"
         depressed
         :loading="state.isLoading.submit"
         @click="onSubmit()"

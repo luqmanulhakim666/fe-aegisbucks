@@ -207,7 +207,7 @@
       <v-btn
         large
         depressed
-        class="secondary lighten-5 white--text h5--small text-capitalize mt-8"
+        class="primary lighten-5 white--text h5--small text-capitalize mt-8"
         @click="onEmitAgree()"
         >Setuju</v-btn
       >
@@ -219,13 +219,13 @@
 export default {
   props: {
     dialog: Boolean,
-    loading: Boolean
+    loading: Boolean,
   },
 
   methods: {
     onEmitAgree() {
-      this.$emit('on:agree')
-    }
-  }
-}
+      this.$emit("on:agree");
+    },
+  },
+};
 </script>

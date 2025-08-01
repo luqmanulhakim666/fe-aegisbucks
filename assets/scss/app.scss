@@ -231,8 +231,8 @@ th {
 }
 
 .primary-create-btn {
-  border: 1px solid var(--v-secondary-lighten5) !important;
-  color: var(--v-secondary-lighten5) !important;
+  border: 1px solid var(--v-primary--lighten5) !important;
+  color: var(--v-primary--lighten5) !important;
   background: #ffff !important;
   text-transform: capitalize !important;
 }
@@ -273,7 +273,7 @@ th {
 .v-pagination__navigation,
 .v-pagination__item {
   background: #fff !important;
-  color: var(--v-secondary-lighten5) !important;
+  color: var(--v-primary--lighten5) !important;
   box-shadow: none !important;
 }
 
@@ -282,7 +282,7 @@ th {
 }
 
 .v-pagination__navigation i {
-  color: var(--v-secondary-lighten5) !important;
+  color: var(--v-primary--lighten5) !important;
 }
 
 .media {

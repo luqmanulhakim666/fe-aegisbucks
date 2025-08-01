@@ -16,7 +16,7 @@
       <div class="d-flex justify-end">
         <v-btn
           depressed
-          class="h7--xxsmall white--text text-capitalize secondary lighten-5"
+          class="h7--xxsmall white--text text-capitalize primary lighten-5"
           :loading="state.isLoading"
           :disabled="!form.content"
           @click="onSubmit()"
@@ -36,89 +36,89 @@
 </template>
 
 <script>
-import alert from '@/mixins/alert'
+import alert from "@/mixins/alert";
 
 export default {
   mixins: [alert],
   props: {
-    isAllowPost: Boolean
+    isAllowPost: Boolean,
   },
   data: () => ({
     form: {
-      content: ''
+      content: "",
     },
 
     body: {
       skip: 1,
       limit: 10,
-      sort: 'latest',
-      parent: 'null',
-      key: ''
+      sort: "latest",
+      parent: "null",
+      key: "",
     },
 
     items: {
-      parentComment: []
+      parentComment: [],
     },
 
     state: {
-      isLoading: false
-    }
+      isLoading: false,
+    },
   }),
 
   created() {
-    this.getOne()
+    this.getOne();
   },
 
   methods: {
     async getOne() {
-      let res = await this.$api.forumComment.getList(this.forumId, this.body)
+      let res = await this.$api.forumComment.getList(this.forumId, this.body);
 
       if (res.success) {
-        this.items.parentComment = res.data.list
+        this.items.parentComment = res.data.list;
       }
 
       if (!res.success) {
-        this.setFailedAlert(res)
+        this.setFailedAlert(res);
       }
 
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
 
     async onSubmit() {
-      this.state.isLoading = true
+      this.state.isLoading = true;
 
       let payload = {
         parent: null,
-        content: this.form.content
-      }
+        content: this.form.content,
+      };
 
-      let res = await this.$api.forumComment.create(this.forumId, payload)
+      let res = await this.$api.forumComment.create(this.forumId, payload);
 
       if (res.success) {
-        this.form.content = ''
-        this.getOne()
+        this.form.content = "";
+        this.getOne();
       }
 
       if (!res.success) {
-        this.setFailedAlert(res)
+        this.setFailedAlert(res);
       }
 
-      this.state.isLoading = false
-    }
+      this.state.isLoading = false;
+    },
   },
 
   computed: {
     forumId() {
-      return this.$route?.params?.slug
+      return this.$route?.params?.slug;
     },
 
     profile() {
-      return this.$store.getters['auth/profile']
+      return this.$store.getters["auth/profile"];
     },
 
     getAvatar() {
-      return this.profile?.image
-    }
-  }
-}
+      return this.profile?.image;
+    },
+  },
+};
 </script>

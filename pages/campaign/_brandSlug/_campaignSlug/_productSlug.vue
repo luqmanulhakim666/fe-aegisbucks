@@ -19,7 +19,7 @@
           <v-btn
             v-if="product.limitClaim > 1"
             x-small
-            :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
+            :style="`background:${campaign.primaryColor};color:${campaign.primaryColor}`"
             icon
             @click="handleQuantity('decrease')"
             ><v-icon color="white">mdi-minus</v-icon></v-btn
@@ -32,7 +32,7 @@
           </p>
           <v-btn
             v-if="product.limitClaim > 1"
-            :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
+            :style="`background:${campaign.primaryColor};color:${campaign.primaryColor}`"
             x-small
             icon
             @click="handleQuantity('increase')"
@@ -104,7 +104,7 @@
             class="text-capitalize h6--xsmall get_voucher-btn"
             @click="onSubmit()"
             :loading="state.isLoading"
-            :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
+            :style="`background:${campaign.primaryColor};color:${campaign.primaryColor}`"
           >
             Dapatkan Voucher Sekarang
           </v-btn>
@@ -119,7 +119,7 @@
         class="text-capitalize h6--xsmall get_voucher-btn"
         @click="onSubmit()"
         :loading="state.isLoading"
-        :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
+        :style="`background:${campaign.primaryColor};color:${campaign.primaryColor}`"
       >
         Dapatkan Voucher Sekarang
       </v-btn>
@@ -141,7 +141,7 @@
           @click="onCloseDialog()"
           block
           depressed
-          class="mt-8 secondary text-capitalize h7--xxsmall"
+          class="mt-8 primary text-capitalize h7--xxsmall"
           >Tutup</v-btn
         >
       </div>
@@ -177,7 +177,7 @@
           @click="goToInstagramMessage()"
           block
           depressed
-          class="mt-8 secondary text-capitalize h7--xxsmall"
+          class="mt-8 primary text-capitalize h7--xxsmall"
           >Dapatkan Voucher Baru</v-btn
         >
       </div>

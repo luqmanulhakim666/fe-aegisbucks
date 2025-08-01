@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-navigation-drawer floating v-model="drawer" fixed app class="drawer">
-      <general-logo class="mx-auto mt-2" :max_width="200" />
+      <general-logo class="mx-auto mt-2" :max_width="160" />
       <div class="mt-4">
         <div v-for="(item, i) in menu" :key="i">
           <p class="h7--xxsmall ml-5">{{ item.name }}</p>
@@ -131,15 +131,15 @@ export default {
   z-index: 1;
   &--active {
     // background: var(--v-primary-base);
-    border-left: 3px solid var(--v-dark-darken1);
-    color: var(--v-dark-darken1) !important;
+    border-left: 3px solid var(--v-primary-base);
+    color: var(--v-primary-base) !important;
 
     .v-list-item__title {
-      color: var(--v-dark-darken1) !important;
+      color: var(--v-primary-base) !important;
     }
 
     .v-icon {
-      color: var(--v-dark-darken1) !important;
+      color: var(--v-primary-base) !important;
     }
 
     &_child {

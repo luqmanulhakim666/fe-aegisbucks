@@ -188,7 +188,7 @@
           </p>
           <v-btn
             depressed
-            class="text-capitalize h6--xsmall secondary lighten-5 mt-5 mt-sm-0"
+            class="text-capitalize h6--xsmall primary lighten-5 mt-5 mt-sm-0"
             :loading="loading"
             :block="xs"
             @click="onEmitSubmit"
@@ -201,10 +201,10 @@
 </template>
 
 <script>
-import rules from '@/mixins/rules'
-import utils from '@/mixins/utils'
-import pipe from '@/mixins/pipe'
-import screen from '@/mixins/screen'
+import rules from "@/mixins/rules";
+import utils from "@/mixins/utils";
+import pipe from "@/mixins/pipe";
+import screen from "@/mixins/screen";
 
 export default {
   mixins: [rules, utils, pipe, screen],
@@ -215,7 +215,7 @@ export default {
     role: String,
     progress: [String, Number],
     uploadLoading: Boolean,
-    avatarUrl: [String, Object]
+    avatarUrl: [String, Object],
   },
 
   data: () => ({
@@ -223,59 +223,59 @@ export default {
       isValid: true,
       showUpload: false,
       loading: {
-        province: false
-      }
+        province: false,
+      },
     },
-    provincies: []
+    provincies: [],
   }),
 
   created() {
-    this.getProvincies()
+    this.getProvincies();
   },
 
   methods: {
     async getProvincies(val) {
-      this.state.loading.province = true
+      this.state.loading.province = true;
       let payload = {
         // keyword: val,
-        limit: 0
-      }
+        limit: 0,
+      };
 
-      let res = await this.$api.general.provincies(payload)
+      let res = await this.$api.general.provincies(payload);
 
       if (res.success) {
         let asc = res?.data?.list?.sort((a, b) => {
-          if (a?.name < b?.name) return -1
-          if (a?.name > b?.name) return 1
-          return 0
-        })
-        this.provincies = asc
+          if (a?.name < b?.name) return -1;
+          if (a?.name > b?.name) return 1;
+          return 0;
+        });
+        this.provincies = asc;
       }
 
-      this.state.loading.province = false
+      this.state.loading.province = false;
     },
 
     handleShowUpload() {
-      this.state.showUpload = !this.state.showUpload
+      this.state.showUpload = !this.state.showUpload;
     },
 
     onEmitUpload() {
-      this.$emit('on:upload')
+      this.$emit("on:upload");
     },
 
     onEmitClose() {
-      this.$emit('on:close')
+      this.$emit("on:close");
     },
 
     async onEmitSubmit() {
-      let valid = await this.validate(this.state.isValid)
+      let valid = await this.validate(this.state.isValid);
 
       if (valid) {
-        this.$emit('on:submit')
+        this.$emit("on:submit");
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

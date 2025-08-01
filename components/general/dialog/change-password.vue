@@ -39,7 +39,7 @@
         <div class="d-flex justify-end mt-4">
           <v-btn
             depressed
-            class="text-capitalize h6--xsmall secondary lighten-5"
+            class="text-capitalize h6--xsmall primary lighten-5"
             :loading="state.isLoading"
             @click="onEmitSubmit()"
             >Change</v-btn

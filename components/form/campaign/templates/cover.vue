@@ -118,7 +118,7 @@
               small
               outlined
               depressed
-              color="secondary"
+              color="primary"
               @click="onEditImage()"
             >
               <v-icon size="16" class="mr-1">mdi-crop</v-icon>
@@ -162,7 +162,7 @@
                   class="text--default mt-4 text-capitalize"
                   text
                   depressed
-                  color="secondary"
+                  color="primary"
                   @click="cropImage"
                 >
                   <v-icon size="16" class="mr-1">mdi-check</v-icon>

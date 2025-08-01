@@ -30,7 +30,7 @@
           struk duplikasi
         </p>
 
-        <p class="h5--small secondary--text my-4">Tips Scan Struk Belanja</p>
+        <p class="h5--small primary--text my-4">Tips Scan Struk Belanja</p>
 
         <p class="text--default dark--text">
           1. Pastikan Struk dalam keadaan baik & terlihat jelas
@@ -55,7 +55,7 @@
             struk duplikasi
           </p>
 
-          <p class="h5--small secondary--text my-4">Tips Scan Struk Belanja</p>
+          <p class="h5--small primary--text my-4">Tips Scan Struk Belanja</p>
 
           <p class="text--default dark--text">
             1. Pastikan Struk dalam keadaan baik & terlihat jelas
