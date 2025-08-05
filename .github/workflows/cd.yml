@@ -1,11 +1,11 @@
 name: CD
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-# on: workflow_dispatch
+on: workflow_dispatch
 
 jobs:
   build-and-deploy:
@@ -17,8 +17,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.14.0'
-          
+          node-version: "20.14.0"
+
       - name: Inject .env
         continue-on-error: true
         run: |
