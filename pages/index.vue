@@ -61,6 +61,7 @@
       <!-- <homepage-brands :items="items.brands" /> -->
     </template>
 
+    <!-- comment -->
     <app-profile-dialog-email-verify
       :dialog="state.dialogEmailVerify"
       @on:close="state.dialogEmailVerify = false"
