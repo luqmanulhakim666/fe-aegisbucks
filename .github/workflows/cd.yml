@@ -8,44 +8,29 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 📦 Checkout code
+      - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      - name: 🟢 Use Node.js 22.18.0
+      - name: 🟢 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22.18.0"
+          node-version: "22"
 
-      - name: 🧪 Confirm Node.js version
-        run: node -v
-
-      - name: 🔐 Inject .env
-        continue-on-error: true
+      - name: 🧪 Inject .env
         run: |
-          cat << EOF > .env
-          ${{ secrets.ENV }}
-          EOF
+          echo "${{ secrets.ENV }}" > .env
 
-      - name: 📥 Install dependencies
+      - name: 📦 Install dependencies
         run: npm install
 
-      - name: 🏗️ Build project
+      - name: 🏗️ Build Nuxt project
         run: |
           npm run build
           npm install --omit=dev
 
-      - name: 📦 Archive production files
-        run: |
-          tar -czf build.tar.gz \
-            .nuxt \
-            node_modules \
-            .env \
-            static \
-            nuxt.config.* \
-            package.json \
-            ecosystem.config.js || true
+      - name: 📦 Archive build
+        run: tar -czf build.tar.gz .nuxt node_modules .env static nuxt.config.js
 
       - name: 🚀 Upload to server
         uses: appleboy/scp-action@v0.1.7
@@ -54,23 +39,21 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: ./build.tar.gz
-          target: /app/fe
+          target: /app/fe/
 
-      - name: 🔁 Restart PM2 on server
+      - name: 🔁 Deploy on server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /app/fe
+            # Make sure Node.js is in PATH
+            export PATH=$PATH:/usr/bin:/usr/local/bin
 
-            echo "🧹 Cleaning old build..."
+            # Extract and restart
+            cd /app/fe
             pm2 stop fe || true
             rm -rf .nuxt node_modules build.tar.gz
-
-            echo "📦 Extracting new build..."
             tar -xzf build.tar.gz
-
-            echo "🚀 Restarting app with PM2..."
             pm2 start node_modules/nuxt/bin/nuxt.js -i max --name fe -- start
