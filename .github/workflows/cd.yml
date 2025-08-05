@@ -30,7 +30,7 @@ jobs:
           npm install --omit=dev
 
       - name: 📦 Archive build
-        run: tar -czf build.tar.gz .nuxt node_modules .env static nuxt.config.js
+        run: tar -czf build.tar.gz .nuxt node_modules .env static nuxt.config.js package.json
 
       - name: 🚀 Upload to server
         uses: appleboy/scp-action@v0.1.7
