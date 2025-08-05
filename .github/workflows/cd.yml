@@ -51,9 +51,20 @@ jobs:
             # Make sure Node.js is in PATH
             export PATH=$PATH:/usr/bin:/usr/local/bin
 
-            # Extract and restart
+            echo "📁 Entering project directory"
             cd /app/fe
+
+            echo "🛑 Stopping existing app"
             pm2 stop fe || true
-            rm -rf .nuxt node_modules build.tar.gz
+
+            echo "🧹 Cleaning old build files"
+            rm -rf .nuxt node_modules
+
+            echo "📦 Extracting new build"
             tar -xzf build.tar.gz
+
+            echo "🗑️ Removing build archive"
+            rm -f build.tar.gz
+
+            echo "🚀 Restarting app with PM2"
             pm2 start node_modules/nuxt/bin/nuxt.js -i max --name fe -- start
