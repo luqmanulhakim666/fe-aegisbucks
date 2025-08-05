@@ -8,7 +8,6 @@
           <general-skeleton-promo-card />
         </v-col>
       </v-row>
-      <!-- test -->
       <general-skeleton-promo-card class="my-8" />
 
       <v-row>
