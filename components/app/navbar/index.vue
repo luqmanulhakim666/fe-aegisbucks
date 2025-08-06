@@ -1,9 +1,9 @@
 <template>
   <div class="shadow-base app-navbar">
     <div class="app-navbar_wrapper mx-auto px-10 py-4">
-      <div class="d-flex justify-space-between">
+      <div class="d-flex align-center justify-space-between">
         <div class="pointer" @click="goHome()">
-          <general-logo :max_width="isMobile ? 150 : 200" />
+          <general-logo :max_width="isMobile ? 80 : 100" />
         </div>
 
         <v-avatar size="44" dark class="pointer" @click="goToProfile()">
