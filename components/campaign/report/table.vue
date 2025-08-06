@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-md-flex align-center mb-6">
-      <p class="h4--default primary--text mt-4 text--lighten-1">
+      <p class="h4--default dark--text mt-4 text--lighten-1">
         {{ label }}
       </p>
       <v-spacer />

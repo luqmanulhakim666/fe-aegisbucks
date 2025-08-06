@@ -85,15 +85,13 @@
             class="d-flex fill-height justify-space-between"
             style="gap: 20px"
           >
-            <div class="pa-6 rounded-xl full-width primary lighten-1">
-              <p class="h6--xsmall white--text text--lighten-5">
-                Total Page Views
-              </p>
-              <h1 class="h1--xxlarge white--text text--lighten-1">
+            <div class="pa-6 rounded-xl full-width info lighten-3">
+              <p class="h6--xsmall info--text">Total Page Views</p>
+              <h1 class="h1--xxlarge info--text">
                 {{ decimal(getTotalPageView) }}
               </h1>
             </div>
-            <div class="pa-6 full-width rounded-xl primary lighten-2">
+            <div class="pa-6 full-width rounded-xl success lighten-3">
               <p class="h6--xsmall white--text text--lighten-5">
                 Total Vouchers
               </p>

@@ -53,7 +53,7 @@
                 <v-list-item-icon class="mr-2">
                   <v-icon
                     size="14"
-                    :color="menu.key === 'edit' ? 'primary ' : 'error'"
+                    :color="menu.key === 'edit' ? 'dark ' : 'error'"
                     >{{ menu.icon }}</v-icon
                   >
                 </v-list-item-icon>
@@ -61,7 +61,7 @@
                 <v-list-item-content>
                   <v-list-item-title
                     :class="[
-                      menu.key === 'edit' ? 'primary--text ' : 'error--text',
+                      menu.key === 'edit' ? 'dark--text ' : 'error--text',
                       'h8--supersmall',
                     ]"
                     >{{ menu.text }}</v-list-item-title

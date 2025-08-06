@@ -1,8 +1,6 @@
 <template>
   <div class="white pa-6 rounded-xl">
-    <h4 class="h4--default primary--text text--lighten-1 mb-4">
-      Voucher Status
-    </h4>
+    <h4 class="h4--default dark--text text--lighten-1 mb-4">Voucher Status</h4>
     <v-row>
       <v-col align-self="center" cols="12" lg="6">
         <div class="d-flex justify-space-around" style="gap: 24px">
