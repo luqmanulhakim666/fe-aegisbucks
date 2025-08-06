@@ -19,7 +19,7 @@
           <v-btn
             v-if="product.limitClaim > 1"
             x-small
-            :style="`background:${campaign.primaryColor};color:${campaign.primaryColor}`"
+            :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
             icon
             @click="handleQuantity('decrease')"
             ><v-icon color="white">mdi-minus</v-icon></v-btn
@@ -32,7 +32,7 @@
           </p>
           <v-btn
             v-if="product.limitClaim > 1"
-            :style="`background:${campaign.primaryColor};color:${campaign.primaryColor}`"
+            :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
             x-small
             icon
             @click="handleQuantity('increase')"
@@ -104,7 +104,7 @@
             class="text-capitalize h6--xsmall get_voucher-btn"
             @click="onSubmit()"
             :loading="state.isLoading"
-            :style="`background:${campaign.primaryColor};color:${campaign.primaryColor}`"
+            :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
           >
             Dapatkan Voucher Sekarang
           </v-btn>
@@ -119,7 +119,7 @@
         class="text-capitalize h6--xsmall get_voucher-btn"
         @click="onSubmit()"
         :loading="state.isLoading"
-        :style="`background:${campaign.primaryColor};color:${campaign.primaryColor}`"
+        :style="`background:${campaign.primaryColor};color:${campaign.secondaryColor}`"
       >
         Dapatkan Voucher Sekarang
       </v-btn>
@@ -491,7 +491,6 @@ export default {
         this.setFailedAlert(res);
 
         if (res.error.message === "Mohon maaf voucher sudah habis") {
-          console.log(res);
           this.state.dialogMessage = true;
         }
       }

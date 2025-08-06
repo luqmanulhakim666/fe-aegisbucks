@@ -11,7 +11,7 @@
       <v-btn
         depressed
         class="h7--xxsmall text-capitalize mt-6"
-        :style="`color: ${items.primaryColor} !important`"
+        :style="`color: ${items.secondaryColor} !important`"
         block
         large
         :color="items.primaryColor"

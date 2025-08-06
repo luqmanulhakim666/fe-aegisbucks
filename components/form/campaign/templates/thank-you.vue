@@ -352,7 +352,7 @@ export default {
   },
   props: {
     primaryColor: String,
-    primaryColor: String,
+    secondaryColor: String,
     bold: {
       type: Boolean,
       default: false,

@@ -16,6 +16,27 @@
 <script>
 export default {
   name: "AppLayout",
+  head() {
+    const scriptArray = [
+      {
+        hid: "my-google-analytics-src",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-K8JNM11H94",
+        async: true,
+      },
+      {
+        hid: "my-google-analytics-inline",
+        innerHTML: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-K8JNM11H94');
+        `,
+        type: "text/javascript",
+        charset: "utf-8",
+      },
+    ];
+  },
+
   data: () => ({
     state: {
       dialogEmailVerify: false,

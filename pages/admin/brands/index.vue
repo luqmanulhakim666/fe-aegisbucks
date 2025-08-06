@@ -42,10 +42,8 @@
           <v-list>
             <v-list-item @click="onEdit(item.id)">
               <v-list-item-title class="d-flex align-center">
-                <v-icon size="16" class="mr-3 primary--text">
-                  mdi-pencil
-                </v-icon>
-                <span class="h8--supersmall primary--text h8--supersmall"
+                <v-icon size="16" class="mr-3 dark--text"> mdi-pencil </v-icon>
+                <span class="h8--supersmall dark--text h8--supersmall"
                   >Ubah
                 </span>
               </v-list-item-title>

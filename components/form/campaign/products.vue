@@ -69,10 +69,10 @@
               <v-list>
                 <v-list-item @click="handleDialog(item, index)">
                   <v-list-item-title class="d-flex align-center">
-                    <v-icon size="16" class="mr-3 primary--text">
+                    <v-icon size="16" class="mr-3 dark--text">
                       mdi-pencil
                     </v-icon>
-                    <span class="h8--supersmall primary--text h8--supersmall"
+                    <span class="h8--supersmall dark--text h8--supersmall"
                       >Edit
                     </span>
                   </v-list-item-title>

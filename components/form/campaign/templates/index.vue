@@ -56,13 +56,13 @@
 
               <div class="shadow-base d-inline mt-8 rounded-xl">
                 <p class="text--default my-4">
-                  <b>primary Color:</b> {{ form.primaryColor }}
+                  <b>Secondary Color:</b> {{ form.secondaryColor }}
                 </p>
                 <v-color-picker
                   class="d-inline-block"
                   hide-mode-switch
                   mode="hexa"
-                  v-model="form.primaryColor"
+                  v-model="form.secondaryColor"
                 />
               </div>
             </v-expansion-panel-content>
