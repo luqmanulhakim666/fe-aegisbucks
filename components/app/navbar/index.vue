@@ -43,7 +43,7 @@ export default {
     },
 
     onErrorImg(event) {
-      event.target.src = `${this.$config.API_URL}/file/0193df80-ee16-7774-bb9c-e0e1084cab49/file`;
+      event.target.src = "/images/avatar.png";
     },
   },
 };
