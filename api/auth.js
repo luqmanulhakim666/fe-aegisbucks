@@ -48,7 +48,7 @@ export default (ctx) => {
     },
 
     googleLogin() {
-      return "https://aegisbucks.id/api/user/signin/google";
+      return "https://aegisbucks.com/api/user/signin/google";
     },
 
     postReferalCode(body) {

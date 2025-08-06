@@ -26,7 +26,7 @@ export default {
     const scriptArray = [
       {
         hid: "my-google-analytics-src",
-        src: "https://www.googletagmanager.com/gtag/js?id=G-KJ8W3YMZ32",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-K8JNM11H94",
         async: true,
       },
       {
@@ -35,7 +35,7 @@ export default {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', 'G-KJ8W3YMZ32');
+          gtag('config', 'G-K8JNM11H94');
         `,
         type: "text/javascript",
         charset: "utf-8",
