@@ -410,7 +410,7 @@ export default {
         receiver: this.emailReceiver,
         sender: this.form.emailSender,
         host: this.form.emailHost,
-        port: this.form.emailPort,
+        port: Number(this.form.emailPort),
         secure: this.form.emailSecure,
         user: this.form.emailUser,
         password: this.form.emailPassword,
