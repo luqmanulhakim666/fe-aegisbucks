@@ -32,7 +32,7 @@
             :href="ctaUrl"
             v-if="showButton"
             target="_blank"
-            class="text-capitalize h7--xxsmall mt-4 success dark--text lighten-1 v-btn v-btn--block v-btn--has-bg theme--light v-size--x-small"
+            class="text-capitalize h7--xxsmall mt-4 primary white--text lighten-1 v-btn v-btn--block v-btn--has-bg theme--light v-size--x-small"
           >
             {{ buttonLabel }}
           </a>

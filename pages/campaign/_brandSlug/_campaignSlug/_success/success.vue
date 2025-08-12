@@ -6,7 +6,7 @@
       <general-skeleton-promo-card />
     </template>
 
-    <div class="white pa-6" v-else>
+    <div :class="['white pa-6', smAndUp ? 'mb-16' : '']" v-else>
       <campaign-slider
         v-if="getImages"
         class="mb-4"
@@ -148,9 +148,10 @@
 import VueBarcode from "vue-barcode";
 import pipe from "@/mixins/pipe";
 import meta from "@/mixins/meta";
+import screen from "@/mixins/screen";
 
 export default {
-  mixins: [pipe, meta],
+  mixins: [pipe, meta, screen],
   async asyncData({ store, route, app, redirect }) {
     const campaignId = route.params.campaignSlug;
     const groupId = route.params.success;

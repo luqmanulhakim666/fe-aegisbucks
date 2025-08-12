@@ -9,7 +9,7 @@
         <v-avatar size="44" dark class="pointer" @click="goToProfile()">
           <img
             cover
-            class="border-thin"
+            class="border-thin pointer"
             :src="
               profile.imageUrl
                 ? profile.imageUrl

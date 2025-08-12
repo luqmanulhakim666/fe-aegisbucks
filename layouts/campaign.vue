@@ -9,11 +9,7 @@
         :url="currentUrl"
         :shortUrl="shortUrl"
       />
-      <v-footer
-        :absolute="!smAndDown"
-        height="auto"
-        class="dark mt-10 lighten-3"
-      >
+      <v-footer :absolute="!smAndDown" height="auto" class="dark lighten-3">
         <campaign-footer />
       </v-footer>
       <snackbar />

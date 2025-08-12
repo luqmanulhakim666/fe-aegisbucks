@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex align-center justify-space-between">
-      <p class="h5--small success--text">{{ title }}</p>
+      <p class="h5--small primary--text">{{ title }}</p>
       <!-- <p @click="onSeeMore()" class="h7--xxsmall pointer dark--text">
         Lihat Semua
       </p> -->
