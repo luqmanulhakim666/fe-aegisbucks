@@ -9,7 +9,11 @@
         :url="currentUrl"
         :shortUrl="shortUrl"
       />
-      <v-footer height="auto" class="dark lighten-3">
+      <v-footer
+        :absolute="!smAndDown"
+        height="auto"
+        class="dark mt-10 lighten-3"
+      >
         <campaign-footer />
       </v-footer>
       <snackbar />
@@ -18,7 +22,9 @@
 </template>
 
 <script>
+import screen from "@/mixins/screen";
 export default {
+  mixins: [screen],
   head() {
     const googleAnalyticsScript = this.campaign?.googleAnalyticScript;
     const facebookMetaPixel = this.campaign?.facebookMetaPixel;
@@ -201,9 +207,17 @@ export default {
 
 <style lang="scss" scoped>
 .campaign {
-  max-width: 500px;
+  // height: 100vh;
+  max-width: 480px;
   width: 100%;
   z-index: 0;
+  position: relative;
   margin: auto;
+
+  &-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
 }
 </style>

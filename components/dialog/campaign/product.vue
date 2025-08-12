@@ -293,7 +293,22 @@ export default {
         key: "{{retailName}}",
       },
     ],
+    headerImage: "",
+    brandLogo: "",
   }),
+
+  async mounted() {
+    if (this.campaign?.emailHeaderImageId) {
+      const res = await this.$api.media.getOne(
+        this.campaign?.emailHeaderImageId
+      );
+      this.headerImage = res.data?.url;
+    }
+    if (this.campaign?.brand?.logoId) {
+      const res = await this.getOneMedia(this.campaign?.brand?.logoId);
+      this.brandLogo = res.data?.url;
+    }
+  },
 
   computed: {
     formattedTemplate() {
@@ -302,8 +317,8 @@ export default {
         userEmail: "johndoe@gmail.com",
         voucherBarcode: "./images/dummy/barcode.png",
         productName: this.form.productId?.name,
-        headerImage: this.getImage({ id: this.campaign?.emailHeaderImageId }),
-        brandLogo: this.getImage({ id: this.campaign?.brand?.logoId }),
+        headerImage: this.headerImage,
+        brandLogo: this.brandLogo,
         brandName: this.campaign.brand?.name,
         promoLabel: this.form.promoLabel,
         campaignName: this.campaign.name,
