@@ -8,7 +8,8 @@
           pointer: $route.name !== 'campaign-brandSlug-campaignSlug-success',
         }"
         :logo="logo"
-        max_width="50"
+        min_width="75"
+        max_width="75"
       />
       <v-spacer />
       <v-menu bottom left>

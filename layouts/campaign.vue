@@ -2,18 +2,19 @@
   <v-app :style="setBackground">
     <v-main>
       <campaign-navbar :logo="logo" />
-      <Nuxt class="campaign" />
+      <Nuxt :class="['campaign', smAndDown ? 'mb-0' : '']" />
 
       <dialog-campaign-webview-ios-alert
         :dialog="iosAlertDialog"
         :url="currentUrl"
         :shortUrl="shortUrl"
       />
-      <v-footer :absolute="!smAndDown" height="auto" class="dark lighten-3">
-        <campaign-footer />
-      </v-footer>
+
       <snackbar />
     </v-main>
+    <v-footer :absolute="!smAndDown" height="auto" class="dark lighten-3">
+      <campaign-footer />
+    </v-footer>
   </v-app>
 </template>
 
@@ -209,6 +210,7 @@ export default {
   z-index: 0;
   position: relative;
   margin: auto;
+  margin-bottom: 84px;
 
   &-footer {
     position: absolute;
