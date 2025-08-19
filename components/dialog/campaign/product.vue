@@ -302,11 +302,16 @@ export default {
       const res = await this.$api.media.getOne(
         this.campaign?.emailHeaderImageId
       );
-      this.headerImage = res.data?.url;
+      if (res.success) {
+        this.headerImage = res.data?.url;
+      }
     }
+
     if (this.campaign?.brand?.logoId) {
-      const res = await this.getOneMedia(this.campaign?.brand?.logoId);
-      this.brandLogo = res.data?.url;
+      let res = await this.$api.media.getOne(this.campaign.brand?.logoId);
+      if (res.success) {
+        this.brandLogo = res.data?.url;
+      }
     }
   },
 
