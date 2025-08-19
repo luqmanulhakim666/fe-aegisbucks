@@ -79,17 +79,6 @@ import meta from "@/mixins/meta";
 import alert from "@/mixins/alert";
 export default {
   layout: "app",
-  head() {
-    return {
-      script: [
-        {
-          src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4589795486176408",
-          async: true,
-          crossorigin: "anonymous",
-        },
-      ],
-    };
-  },
   middleware: "userAuthenticated",
   mixins: [alert],
   meta: [meta],
