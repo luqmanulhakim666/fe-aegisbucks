@@ -15,7 +15,7 @@ jobs:
 
       - name: Debug token
         run: |
-        curl -H "Authorization: token ${{ secrets.PLATINUM_TOKEN }}" https://api.github.com/user
+          curl -H "Authorization: token ${{ secrets.PLATINUM_TOKEN }}" https://api.github.com/user
 
       - name: Push to GitHub A
         run: |
