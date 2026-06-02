@@ -1,0 +1,20 @@
+name: Mirror to GitHub A
+
+on:
+  push:
+    branches:
+      - main # sesuaikan dengan branch Anda
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Push to GitHub A
+        run: |
+          git remote add target https://x-access-token:${{ secrets.TARGET_TOKEN }}@github.com/[username-A]/[nama-repo-A].git
+          git push target main --force
