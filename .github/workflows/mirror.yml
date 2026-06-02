@@ -13,10 +13,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # - name: Debug token
-      #   run: |
-      #     curl -H "Authorization: token ${{ secrets.PLATINUM_TOKEN }}" https://api.github.com/user
-
       - name: Push to GitHub A
         run: |
           git remote add target https://x-access-token:${{ secrets.PLATINUM_TOKEN }}@github.com/platinum-cineplex/fe-aegisbucks.git
