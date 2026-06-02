@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main # sesuaikan dengan branch Anda
-#jobs
 jobs:
   mirror:
     runs-on: ubuntu-latest
